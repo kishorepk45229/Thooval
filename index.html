@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Manglish Writer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <main class="app-container">
+        <header class="app-header">
+            <div class="brand">
+                <h1>എഴുത്ത് <span>Canvas</span></h1>
+            </div>
+            <div class="toolbar">
+                <button id="btn-voice" class="action-btn" title="Start Voice Typing">
+                    <span class="icon">🎤</span> Voice
+                </button>
+                <button id="btn-copy" class="action-btn" title="Copy to Clipboard">
+                    <span class="icon">📋</span> Copy
+                </button>
+                <button id="btn-clear" class="action-btn" title="Clear Canvas">
+                    <span class="icon">🗑️</span> Clear
+                </button>
+                <button id="btn-theme" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+            </div>
+        </header>
+
+        <section class="editor-wrapper">
+            <textarea id="editor" placeholder="Type in Manglish (e.g., 'namaskaram') and press space..."></textarea>
+            <div class="status-bar">
+                <span id="save-status">All changes saved locally</span>
+                <span id="char-count">0 characters</span>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
