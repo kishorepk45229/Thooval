@@ -3,412 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manglish - മലയാളം എഴുതാം</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Thooval | Modern Manglish Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
-            --primary-bg: #f8f9fa;
-            --sidebar-bg: #fff;
-            --main-bg: #fff;
-            --text-color: #333;
-            --accent-color: #34a853; /* Google Green for accent */
-            --border-color: #e0e0e0;
-            --primary-button-bg: #fff;
-            --primary-button-text: #5f6368;
-            --selected-button-bg: #e6f7ff;
-            --selected-button-text: #000;
-            --toolbar-icon-color: #5f6368;
-            --status-button-bg: #f5f5f5;
-            --primary-bg: #121212;
-            --sidebar-bg: #1e1e1e;
-            --main-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --border-color: #333;
-            --primary-button-text: #aaa;
-            --toolbar-icon-color: #aaa;
-            --status-button-bg: #2d2d2d;
+            /* Lemon Green Theme */
+            --accent-color: #a3e635; /* Fresh Lemon Green */
+            --accent-hover: #84cc16;
+            --accent-light: #ecfccb; /* Pale lemon background */
+            --text-on-accent: #1a2e05; /* Dark text for contrast on green */
+            
+            --bg-main: #ffffff;
+            --bg-sidebar: #fafafa;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --radius: 8px;
         }
 
-        * {
-            box-sizing: border-color;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .app-window {
-            width: 1000px;
-            height: 650px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100vw;
             overflow: hidden;
             display: flex;
-            position: relative;
         }
 
-        /* Side Bar (Left) */
+        /* --- LEFT SIDEBAR --- */
         .sidebar {
-            width: 180px;
-            background-color: var(--sidebar-bg);
+            width: 260px;
+            height: 100vh;
+            background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            justify-content: space-between;
-        }
-
-        .sidebar-top {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            padding: 24px 20px;
+            flex-shrink: 0;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 1.1rem;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-primary);
         }
 
         .brand-logo {
-            width: 24px;
-            height: 24px;
-            background-color: #f1f3f4;
-            color: #333;
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-color);
+            color: var(--text-on-accent);
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 6px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4);
         }
 
         .new-file-btn {
             background-color: var(--accent-color);
-            color: #fff;
+            color: var(--text-on-accent);
             border: none;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: var(--radius);
             cursor: pointer;
-            font-weight: 500;
-            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            transition: 0.2s;
         }
 
-        .new-file-btn:hover {
-            opacity: 0.9;
-        }
+        .new-file-btn:hover { background-color: var(--accent-hover); }
 
-        .drafts-section {
+        .file-list {
+            flex-grow: 1;
+            margin-top: 25px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .section-header {
-            font-size: 0.8rem;
-            color: #888;
-            font-weight: 500;
+        .list-header {
+            font-size: 0.75rem;
             text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
 
-        .draft-item {
+        .file-item {
+            padding: 10px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
         }
 
-        .draft-item.selected {
-            background-color: var(--selected-button-bg);
-            border: 1px solid var(--accent-color);
+        .file-item.active {
+            background-color: var(--accent-light);
+            color: var(--text-on-accent);
+            border-color: var(--accent-color);
         }
 
-        .draft-icon {
-            color: var(--accent-color);
-        }
-
-        .draft-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* User Profile Section (at bottom of sidebar) */
+        /* User Profile */
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
 
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background-color: #e0e0e0;
+            background-color: var(--accent-color);
+            color: var(--text-on-accent);
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 600;
-            color: #fff;
-            background-image: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            font-size: 0.8rem;
-        }
-
-        .user-name {
-            font-weight: 600;
-        }
-
-        .user-role {
-            color: #888;
-        }
-
-        /* Main Workspace (Right) */
-        .main-workspace {
-            flex: 1;
-            background-color: var(--main-bg);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Top Header & Toolbar */
-        .header-toolbar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--border-color);
-            gap: 5px;
-        }
-
-        .toolbar-group {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .toolbar-divider {
-            width: 1px;
-            height: 20px;
-            background-color: var(--border-color);
-            margin: 0 5px;
-        }
-
-        .font-dropdown, .font-size {
             font-size: 0.9rem;
-            border: 1px solid transparent;
-            padding: 5px 8px;
-            border-radius: 4px;
+        }
+
+        .user-details { display: flex; flex-direction: column; }
+        .user-name { font-weight: 600; font-size: 0.85rem; }
+        .user-role { font-size: 0.75rem; color: var(--text-secondary); }
+
+
+        /* --- MAIN WORKSPACE --- */
+        .workspace {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-main);
+            height: 100vh;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            height: 60px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 5px;
-            cursor: pointer;
+            padding: 0 30px;
+            gap: 15px;
         }
 
-        .font-dropdown:hover, .font-size:hover {
-            border-color: var(--border-color);
-            background-color: #f1f3f4;
-        }
-
-        .toolbar-button {
+        .tool-btn {
             background: none;
             border: none;
-            padding: 5px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+        }
+        .tool-btn:hover { background-color: var(--bg-sidebar); color: var(--text-primary); }
+        .divider { width: 1px; height: 24px; background-color: var(--border-color); }
+
+        .select-format {
+            border: 1px solid transparent;
+            font-family: 'Inter', sans-serif;
+            padding: 5px 8px;
             border-radius: 4px;
             cursor: pointer;
-            color: var(--toolbar-icon-color);
+            font-size: 0.9rem;
+        }
+        .select-format:hover { background-color: var(--bg-sidebar); }
+
+        /* Suggestion Dictionary Bar */
+        .suggestion-bar {
+            padding: 12px 30px;
             display: flex;
-            justify-content: center;
+            gap: 10px;
             align-items: center;
+            min-height: 56px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
         }
-
-        .toolbar-button:hover {
-            background-color: #f1f3f4;
-        }
-
-        .toolbar-icon {
+        
+        .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
+        
+        .suggestion-item {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Manjari', sans-serif;
             font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        .suggestion-item.active, .suggestion-item:hover {
+            background: var(--accent-color);
+            color: var(--text-on-accent);
+            border-color: var(--accent-color);
         }
 
-        /* Main Text Area */
-        .text-area {
-            flex: 1;
+        /* Text Area */
+        #editor {
+            flex-grow: 1;
+            width: 100%;
             padding: 30px;
             border: none;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-color);
             resize: none;
             outline: none;
+            font-family: 'Manjari', sans-serif;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: var(--text-primary);
         }
 
         /* Bottom Status Bar */
         .status-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
+            height: 60px;
             border-top: 1px solid var(--border-color);
-            background-color: #fff;
-            gap: 15px;
-            position: relative;
-        }
-
-        .language-toggles {
             display: flex;
             align-items: center;
-            background-color: var(--status-button-bg);
+            justify-content: space-between;
+            padding: 0 30px;
+            background-color: var(--bg-main);
+        }
+
+        .status-group { display: flex; gap: 10px; align-items: center; }
+
+        .action-btn {
+            padding: 8px 16px;
             border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
+        
+        .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
+        .btn-dtp:hover { background-color: var(--accent-color); }
+
+        .lang-toggle {
+            display: flex;
+            background: var(--bg-sidebar);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            border: 1px solid var(--border-color);
         }
-
-        .lang-toggle-button {
-            background: none;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            color: var(--primary-button-text);
+        .lang-btn {
+            padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.9rem;
         }
-
-        .lang-toggle-button.selected {
-            background-color: var(--selected-button-bg);
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .action-button {
-            background-color: #fff;
-            border: 1px solid var(--border-color);
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--primary-button-text);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .action-button:hover {
-            background-color: #f1f3f4;
-        }
-
-        .status-button-caret {
-            position: absolute;
-            right: 20px;
-            color: var(--toolbar-icon-color);
-            cursor: pointer;
-        }
-
-        /* Caret icon */
-        .caret {
-            margin-top: -2px;
-        }
+        .lang-btn.active { background: var(--accent-color); color: var(--text-on-accent); font-weight: 600; }
     </style>
 </head>
 <body>
 
-<div class="app-window">
     <aside class="sidebar">
-        <div class="sidebar-top">
-            <div class="brand">
-                <div class="brand-logo">&#129671;</div> Manglish
+        <div class="brand">
+            <div class="brand-logo">തൂ</div>
+            Thooval
+        </div>
+
+        <button class="new-file-btn">
+            <span>➕</span> New File
+        </button>
+
+        <div class="file-list">
+            <div class="list-header">Today</div>
+            <div class="file-item active">
+                <span>📄</span> Draft_01.txt
             </div>
-            <button class="new-file-btn">
-                <span>&#10010;</span>
-                New File
-            </button>
-            <div class="drafts-section">
-                <div class="section-header">Today</div>
-                <div class="draft-item selected">
-                    <span class="draft-icon">&#128196;</span>
-                    <span class="draft-title">New File</span>
-                </div>
+            <div class="file-item">
+                <span>📄</span> Chapter_2_Notes
             </div>
         </div>
 
         <div class="user-profile">
-            <div class="avatar">KM</div>
+            <div class="avatar">KK</div>
             <div class="user-details">
-                <span class="user-name">Kiran Mathew</span>
-                <span class="user-role">User</span>
+                <span class="user-name">Kishore Krishnan</span>
+                <span class="user-role">Workspace User</span>
             </div>
         </div>
     </aside>
 
-    <main class="main-workspace">
-        <header class="header-toolbar">
-            <div class="toolbar-group">
-                <button class="toolbar-button" title="Undo"><span class="toolbar-icon caret">&#10554;</span></button>
-                <button class="toolbar-button" title="Redo"><span class="toolbar-icon caret">&#10555;</span></button>
-            </div>
-            <div class="toolbar-divider"></div>
-            <div class="toolbar-group">
-                <div class="font-dropdown">Default <span class="caret">&#9662;</span></div>
-                <div class="font-size">12 <span class="caret">&#9662;</span></div>
-            </div>
-            <div class="toolbar-divider"></div>
-            <div class="toolbar-group">
-                <button class="toolbar-button" title="Bold"><b>B</b></button>
-                <button class="toolbar-button" title="Italic"><i>I</i></button>
-                <button class="toolbar-button" title="Underline"><u>U</u></button>
-                <button class="toolbar-button" title="Text Color"><span class="toolbar-icon">A</span></button>
-            </div>
-            <div class="toolbar-divider"></div>
-            <div class="toolbar-group">
-                <button class="toolbar-button" title="More options"><span class="toolbar-icon">&#10247;</span></button>
-            </div>
-        </header>
+    <main class="workspace">
+        
+        <div class="toolbar">
+            <button class="tool-btn">↩️</button>
+            <button class="tool-btn">↪️</button>
+            <div class="divider"></div>
+            <select class="select-format">
+                <option>Default Font</option>
+            </select>
+            <select class="select-format">
+                <option>12</option>
+                <option>14</option>
+                <option>16</option>
+            </select>
+            <div class="divider"></div>
+            <button class="tool-btn"><b>B</b></button>
+            <button class="tool-btn"><i>I</i></button>
+            <button class="tool-btn"><u>U</u></button>
+        </div>
 
-        <textarea class="text-area">ഇവിടെ മലയാളം എഴുതാം...</textarea>
+        <div class="suggestion-bar" id="suggestion-bar">
+            <span class="suggestion-placeholder">Type in English (e.g., 'namaskaram')...</span>
+        </div>
 
-        <footer class="status-bar">
-            <div class="language-toggles">
-                <button class="lang-toggle-button selected">മലയാളം</button>
-                <button class="lang-toggle-button">English</button>
+        <textarea id="editor" placeholder="ഇവിടെ മലയാളം എഴുതാം..."></textarea>
+
+        <div class="status-bar">
+            <div class="status-group">
+                <div class="lang-toggle">
+                    <button class="lang-btn active">മലയാളം</button>
+                    <button class="lang-btn">English</button>
+                </div>
+                <button class="action-btn">🎤 Voice Typing</button>
             </div>
-            <button class="action-button">
-                <span>&#127897;</span>
-                Voice Typing
-            </button>
-            <button class="action-button">
-                <span>&#128203;</span>
-                Copy
-            </button>
-            <span class="status-button-caret caret">&#9662;</span>
-        </footer>
+            
+            <div class="status-group">
+                <button class="action-btn" id="btn-copy-uni">📋 Copy Unicode</button>
+                <button class="action-btn btn-dtp" id="btn-copy-fml">📄 Copy FML-TT</button>
+            </div>
+        </div>
+
     </main>
-</div>
 
+    <script>
+        $(document).ready(function() {
+            const $editor = $('#editor');
+            const $suggestionBar = $('#suggestion-bar');
+            let currentMatchStart = -1;
+            let currentMatchEnd = -1;
+
+            // --- 1. Real-time Typing & Dictionary ---
+            $editor.on('input', function() {
+                let text = $editor.val();
+                let cursorPos = $editor[0].selectionStart;
+                let textBeforeCursor = text.substring(0, cursorPos);
+                let match = textBeforeCursor.match(/([a-zA-Z]+)$/);
+
+                if (match) {
+                    currentMatchStart = match.index;
+                    currentMatchEnd = cursorPos;
+                    fetchSuggestions(match[1]);
+                } else {
+                    clearSuggestions();
+                }
+            });
+
+            $editor.on('keydown', function(e) {
+                let $active = $('.suggestion-item.active');
+                if ($('.suggestion-item').length > 0) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if ($active.length) $active.click(); 
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        let $next = $active.next('.suggestion-item');
+                        if ($next.length) { $active.removeClass('active'); $next.addClass('active'); }
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        let $prev = $active.prev('.suggestion-item');
+                        if ($prev.length) { $active.removeClass('active'); $prev.addClass('active'); }
+                    }
+                }
+            });
+
+            function fetchSuggestions(word) {
+                $.get(`https://inputtools.google.com/request?text=${word}&itc=ml-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8`, function(res) {
+                    if (res[0] === 'SUCCESS') renderSuggestions(res[1][0][1]);
+                });
+            }
+
+            function renderSuggestions(words) {
+                $suggestionBar.empty();
+                words.forEach((word, index) => {
+                    let activeClass = index === 0 ? 'active' : '';
+                    let $badge = $(`<span class="suggestion-item ${activeClass}">${word}</span>`);
+                    $badge.on('click', function() { replaceWord(word); });
+                    $suggestionBar.append($badge);
+                });
+            }
+
+            function replaceWord(malayalamWord) {
+                let text = $editor.val();
+                let before = text.substring(0, currentMatchStart);
+                let after = text.substring(currentMatchEnd);
+                $editor.val(before + malayalamWord + " " + after);
+                let newPos = currentMatchStart + malayalamWord.length + 1;
+                $editor[0].setSelectionRange(newPos, newPos);
+                clearSuggestions();
+                $editor.focus();
+            }
+
+            function clearSuggestions() {
+                $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
+            }
+
+            // --- 2. FML-TT Conversion Engine (The "കിഷോർ" Fix) ---
+            $('#btn-copy-fml').on('click', function() {
+                let text = $editor.val();
+                
+                // STAGE 1: Split compound vowels into left and right components
+                text = text.replace(/ൊ/g, "ൊ"); 
+                text = text.replace(/ോ/g, "ോ"); 
+                text = text.replace(/ൌ/g, "ൌ"); 
+
+                // STAGE 2: Physically move left-vowels BEFORE the preceding consonant group
+                // This ensures 'ി' in 'കി' becomes 'ിക', rendering perfectly in DTP.
+                const consGroup = "([ക-ഹൺ-ൿ](?:്[ക-ഹൺ-ൿ])*)"; // Matches consonants + conjuncts
+                const leftVowels = "([െേൈിീ])"; // Matches left-side modifiers
+                const regexMove = new RegExp(consGroup + leftVowels, "g");
+                text = text.replace(regexMove, "$2$1");
+
+                // STAGE 3: Convert characters to FML ASCII Mapping
+                // Note: You can tweak these specific ASCII characters to perfectly match your DTP font's keyboard layout.
+                const fmlMap = {
+                    // Left Vowels (already moved to the correct position)
+                    'ി': 'n', 'ീ': 'o', 'െ': 's', 'േ': 't', 'ൈ': 'S',
+                    // Right/Bottom Vowels
+                    'ാ': 'm', 'ു': 'u', 'ൂ': 'w', 'ൃ': 'r', 'ൗ': 'w',
+                    // Chillus
+                    'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³',
+                    // Consonants
+                    'ക': 'I', 'ഖ': 'J', 'ഗ': 'K', 'ഘ': 'L', 'ങ': 'M',
+                    'ച': 'N', 'ഛ': 'O', 'ജ': 'P', 'ഝ': 'Q', 'ഞ': 'R',
+                    'ട': 'S', 'ഠ': 'T', 'ഡ': 'U', 'ഢ': 'V', 'ണ': 'W',
+                    'ത': 'X', 'ഥ': 'Y', 'ദ': 'Z', 'ധ': 'a', 'ന': 'b',
+                    'പ': 'c', 'ഫ': 'd', 'ബ': 'e', 'ഭ': 'f', 'മ': 'g',
+                    'യ': 'h', 'ര': 'i', 'ല': 'j', 'വ': 'k', 'ശ': 'l',
+                    'ഷ': 'µ', 'സ': 'n', 'ഹ': 'o', 'ള': 'p', 'ഴ': 'q', 'റ': 'r',
+                    // Vowels
+                    'അ': 'A', 'ആ': 'B', 'ഇ': 'C', 'ഈ': 'D', 'ഉ': 'E',
+                    // Virama
+                    '്': 'v'
+                };
+
+                let fmlOutput = "";
+                for (let i = 0; i < text.length; i++) {
+                    fmlOutput += fmlMap[text[i]] || text[i];
+                }
+
+                // Copy to clipboard
+                navigator.clipboard.writeText(fmlOutput);
+                let $btn = $(this);
+                $btn.html('✅ Copied FML');
+                setTimeout(() => $btn.html('📄 Copy FML-TT'), 2000);
+            });
+
+            // Standard Copy
+            $('#btn-copy-uni').on('click', function() {
+                navigator.clipboard.writeText($editor.val());
+                let $btn = $(this);
+                $btn.html('✅ Copied!');
+                setTimeout(() => $btn.html('📋 Copy Unicode'), 2000);
+            });
+        });
+    </script>
 </body>
 </html>
