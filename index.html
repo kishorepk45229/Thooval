@@ -8,7 +8,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
-            /* Lemon Green Theme */
             --accent-color: #a3e635; 
             --accent-hover: #84cc16;
             --accent-light: #ecfccb; 
@@ -34,7 +33,7 @@
             display: flex;
         }
 
-        /* --- LEFT SIDEBAR (Mobile Responsive) --- */
+        /* --- LEFT SIDEBAR --- */
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -295,7 +294,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">അമ്മ</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">വ</div> Thooval</div>
         <button class="new-file-btn"><span>➕</span> New File</button>
         <div class="file-list">
             <div class="list-header">Today</div>
@@ -363,7 +362,7 @@
                     <span>FML-TT Converted Text</span>
                     <button class="close-modal" id="close-modal">&times;</button>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted mapping all complex conjuncts from the PDF. Review before pasting.</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted using your custom ML-TT Keyboard mapping.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
             </div>
@@ -566,7 +565,7 @@
                 }
             });
 
-            // --- DEEP RESEARCH FML-TT DICTIONARY ENGINE ---
+            // --- MASTER USER-PROVIDED FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $editor.val();
                 
@@ -575,8 +574,7 @@
                 text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); // ോ -> േ + ാ
                 text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); // ൌ -> െ + ൗ
 
-                // 2. Pre-map Comprehensive Koottaksharangal (Conjuncts) based on PDF research
-                // താങ്കൾ നൽകിയ ക്ക്വ = ¡z, കം = Iw എന്നിവയെല്ലാം ഇതിലുണ്ട്.
+                // 2. Map Koottaksharangal (Conjuncts) based on your custom list
                 const conjuncts = {
                     'ക്ക': '¡', 'ക്ല': '¢', 'ക്ഷ': '£', 'ഗ്ഗ': '¤', 'ഗ്ന': '¥',
                     'ങ്ങ': '§', 'ച്ച': '¨', 'ജ്ജ': '©', 'ഞ്ഞ': 'ª', 'ട്ട': '«',
@@ -587,7 +585,7 @@
                     'ക്യ': 'Iy', 'ക്ര': '{I', 'ക്വ': 'Iz', 'ച്ഛ': 'b', 'ജ്ഞ': 'P',
                     'ഡ്ഡ': '«', 'ദ്ധ': '²', 'സ്ഥ': 'Ø', 'സ്ക': 'kv', 'സ്ത': 'kvX',
                     'സ്ന': 'kv\\', 'സ്പ': 'kv]', 'സ്മ': 'kvv', 'സ്വ': 'kzt',
-                    'ത്ര': '{X', 'പ്യ': 'cy', 'പ്വ': 'cz', 'പ്ല': 'v', 'പ്ര': '{]',
+                    'ത്ര': '{X', 'പ്യ': ']y', 'പ്വ': ']z', 'പ്ല': ']v', 'പ്ര': '{]', 
                     'ർഗ': 'ÀK', 'ന്റ': '³v', '്യ': 'y', '്ര': '{', '്വ': 'z'
                 };
                 
@@ -600,24 +598,43 @@
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
                 text = text.replace(new RegExp(consGroup + leftVowels, "g"), "$2$1");
 
-                // 4. Complete FML Character Map (Vowels & Consonants)
+                // 4. Complete FML Character Map (Exactly mapped to your provided sequence: A-Z, [-l, etc.)
                 const fmlMap = {
-                    '\u0D46': 's', '\u0D47': 't', '\u0D48': 'S', // Left: െ, േ, ൈ
-                    '\u0D3F': 'n', '\u0D40': 'o', '\u0D41': 'p', '\u0D42': 'q', '\u0D43': 'r', '\u0D3E': 'm', '\u0D57': 'u', // Right: ി, ീ, ു, ൂ, ൃ, ാ, ൗ (കൗ=Iu)
-                    '\u0D4D': 'v', '\u0D02': 'w', '\u0D03': 'x', // Virama(്)=v, Anusvaram(ം)=w, Visargam(ഃ)=x
+                    // Vowels
+                    'അ': 'A', 'ആ': 'B', 'ഇ': 'C', 'ഈ': 'Cu', 'ഉ': 'D', 
+                    'ഊ': 'Du', 'ഋ': 'E', 'എ': 'F', 'ഏ': 'G', 'ഐ': 'sF', 
+                    'ഒ': 'H', 'ഓ': 'Hm', 'ഔ': 'Hu', 
                     
-                    'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³', 
-                    
+                    // Consonants
                     'ക': 'I', 'ഖ': 'J', 'ഗ': 'K', 'ഘ': 'L', 'ങ': 'M',
                     'ച': 'N', 'ഛ': 'O', 'ജ': 'P', 'ഝ': 'Q', 'ഞ': 'R',
                     'ട': 'S', 'ഠ': 'T', 'ഡ': 'U', 'ഢ': 'V', 'ണ': 'W',
-                    'ത': 'X', 'ഥ': 'Y', 'ദ': 'Z', 'ധ': 'a', 'ന': 'b',
-                    'പ': 'c', 'ഫ': 'd', 'ബ': 'e', 'ഭ': 'f', 'മ': 'g',
+                    'ത': 'X', 'ഥ': 'Y', 'ദ': 'Z', 'ധ': '[', 'ന': '\\',
+                    'പ': ']', 'ഫ': '^', 'ബ': '_', 'ഭ': '`', 'മ': 'a',
+                    'യ': 'b', 'ര': 'c', 'റ': 'd', 'ല': 'e', 'ള': 'f', 
+                    'ഴ': 'g', 'വ': 'h', 'ശ': 'i', 'ഷ': 'j', 'സ': 'k', 'ഹ': 'l',
                     
-                    'വ': 'h', 'ശ': 'i', 'ഷ': 'j', 'സ': 'k', 'ഹ': 'l', 
-                    'ള': 'z', 'ഴ': '{', 'റ': '|', 'യ': 'e', 'ര': 'f', 'ല': 'g', 
+                    // Left Modifiers
+                    '\u0D46': 's', // െ
+                    '\u0D47': 't', // േ
+                    '\u0D48': 'ss', // ൈ (Fallback for double 's' character)
                     
-                    'അ': 'A', 'ആ': 'B', 'ഇ': 'C', 'ഉ': 'D', 'ഊ': 'E', 'ഋ': 'F', 'എ': 'G', 'ഏ': 'H'
+                    // Right/Bottom Modifiers
+                    '\u0D3F': 'n', // ി
+                    '\u0D40': 'o', // ീ
+                    '\u0D41': 'p', // ു
+                    '\u0D42': 'q', // ൂ
+                    '\u0D43': 'r', // ൃ
+                    '\u0D3E': 'm', // ാ
+                    '\u0D57': 'u', // ൗ 
+                    
+                    // Special Signs
+                    '\u0D4D': 'v', // ് (Virama)
+                    '\u0D02': 'w', // ം (Anusvaram)
+                    '\u0D03': 'x', // ഃ (Visargam)
+                    
+                    // Chillus
+                    'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³'
                 };
 
                 let fmlOutput = "";
