@@ -295,7 +295,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">ള</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">തൂ</div> Thooval</div>
         <button class="new-file-btn"><span>➕</span> New File</button>
         <div class="file-list">
             <div class="list-header">Today</div>
@@ -363,7 +363,7 @@
                     <span>FML-TT Converted Text</span>
                     <button class="close-modal" id="close-modal">&times;</button>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted using advanced Kuttipencil/Manglish mapping. Review before pasting.</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted using your custom mapping. Review before pasting.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
             </div>
@@ -511,7 +511,7 @@
                 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
                 recognition = new SpeechRec();
                 recognition.continuous = true;
-                recognition.interimResults = true; // Enables live real-time feedback
+                recognition.interimResults = true; 
 
                 recognition.onstart = function() {
                     isRecording = true;
@@ -530,12 +530,10 @@
                         }
                     }
                     
-                    // Insert confirmed speech instantly
                     if (finalTranscript !== '') {
                         insertTextAtCursor(finalTranscript + " ");
                     }
                     
-                    // Show live listening feedback in the suggestion bar
                     if (interimTranscript !== '') {
                         $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
                     } else {
@@ -545,7 +543,7 @@
 
                 recognition.onerror = function(event) {
                     if (event.error === 'not-allowed') {
-                        alert("Microphone access blocked. You must run this via Local Server (HTTPS or localhost) for Voice to work.");
+                        alert("Microphone access blocked. Run this via Local Server or GitHub Pages.");
                     }
                     $('#btn-voice').removeClass('recording').html('🎤 Voice');
                     isRecording = false;
@@ -568,7 +566,7 @@
                 }
             });
 
-            // --- ADVANCED FML-TT CONVERSION DICTIONARY ---
+            // --- USER-PROVIDED FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $editor.val();
                 
@@ -577,55 +575,53 @@
                 text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); // ോ -> േ + ാ
                 text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); // ൌ -> െ + ൗ
 
-                // 2. Pre-map all Koottaksharangal (Conjuncts) & Modifiers FIRST
+                // 2. Pre-map User-Provided Koottaksharangal (Conjuncts)
                 const conjuncts = {
-                    'ക്ക': '¡', 'ങ്ക': '¢', 'ങ്ങ': '£', 'ച്ച': '¤', 'ഞ്ച': '¥', 'ഞ്ഞ': '¦', 
-                    'ട്ട': '§', 'ണ്ട': 'ï', 'ണ്ണ': '©', 'ത്ത': 'ª', 'ന്ത': '«', 'ന്ന': '¬',
-                    'പ്പ': '­', 'മ്പ': '®', 'മ്മ': '¯', 'യ്യ': '°', 'ല്ല': 'Ã', 'ള്ള': 'Å',
-                    'വ്വ': '²', 'ശ്ശ': '³', 'ക്ല': '¢', 'റ്റ': 'ä', 
-                    'ന്റ': '³v', 'ൻ്റ': '³v', // Nta variations
-                    '്യ': 'y', '്ര': '_', '്വ': 'z' // Ya, Ra, Va modifiers
+                    'ക്ക': '¡', 'ക്ല': '¢', 'ക്ഷ': '£', 'ഗ്ഗ': '¤', 'ഗ്ന': '¥',
+                    'ങ്ങ': '§', 'ച്ച': '¨', 'ജ്ജ': '©', 'ഞ്ഞ': 'ª', 'ട്ട': '«',
+                    'ണ്ണ': '¬', 'ത്ത': '¯', 'ന്ന': '°', 'ന്മ': '±', 'പ്പ': '²',
+                    'ബ്ബ': '³', 'ഭ്ഭ': '´', 'മ്മ': 'µ', 'യ്യ': 'Õ', 'ല്ല': 'ñ',
+                    'വ്വ': 'õ', 'ശ്ശ': 'ô', 'സ്സ': '÷', 'ള്ള': 'û', 'റ്റ': '‰',
+                    'ങ്ക': '¦', 'ഞ്ച': '©', 'ണ്ട': '¾', 'ന്ത': '´', 'മ്പ': '¼',
+                    'ക്യ': 'Iy', 'ക്ര': '{I', 'ക്വ': 'I്', 'ച്ഛ': 'b', 'ജ്ഞ': 'P',
+                    'ഡ്ഡ': '«', 'ദ്ധ': '²', 'സ്ഥ': 'Ø', 'സ്ക': 'kv', 'സ്ത': 'kvX',
+                    'സ്ന': 'kv\\', 'സ്പ': 'kv]', 'സ്മ': 'kvv', 'സ്വ': 'kzt'
                 };
+                
                 for (let [ml, ascii] of Object.entries(conjuncts)) {
                     text = text.split(ml).join(ascii);
                 }
 
                 // 3. Shift LEFT vowels BEFORE the preceding consonant group
-                // (ി and ീ are intentionally excluded because FML requires them on the right)
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
                 text = text.replace(new RegExp(consGroup + leftVowels, "g"), "$2$1");
 
-                // 4. Complete FML/Manglish Character Map
+                // 4. Complete FML/Manglish Character Map (Single Letters)
                 const fmlMap = {
-                    // Mapped Modifiers
                     '\u0D46': 's', '\u0D47': 't', '\u0D48': 'u', // Left: െ, േ, ൈ
                     '\u0D3F': 'n', '\u0D40': 'o', '\u0D41': 'p', '\u0D42': 'q', '\u0D43': 'r', '\u0D3E': 'm', '\u0D57': 'w', // Right: ി, ീ, ു, ൂ, ൃ, ാ, ൗ
                     '\u0D4D': 'v', '\u0D02': 'x', '\u0D03': 'y', // Virama, Anusvaram, Visargam
                     
-                    // Chillus
                     'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³', 
                     
-                    // Standard Consonants
                     'ക': 'I', 'ഖ': 'J', 'ഗ': 'K', 'ഘ': 'L', 'ങ': 'M',
                     'ച': 'N', 'ഛ': 'O', 'ജ': 'P', 'ഝ': 'Q', 'ഞ': 'R',
                     'ട': 'S', 'ഠ': 'T', 'ഡ': 'U', 'ഢ': 'V', 'ണ': 'W',
                     'ത': 'X', 'ഥ': 'Y', 'ദ': 'Z', 'ധ': 'a', 'ന': 'b',
                     'പ': 'c', 'ഫ': 'd', 'ബ': 'e', 'ഭ': 'f', 'മ': 'g',
                     
-                    // Disputed Consonants (Strict Manglish/Kuttipencil Map)
-                    // If 'ഷോ' needs to be 'tjm', then ഷ MUST be 'j'.
                     'വ': 'h', 'ശ': 'i', 'ഷ': 'j', 'സ': 'k', 'ഹ': 'l', 
                     'ള': 'z', 'ഴ': '{', 'റ': '|', 'യ': 'e', 'ര': 'f', 'ല': 'g', 
                     
-                    // Base Vowels
                     'അ': 'A', 'ആ': 'B', 'ഇ': 'C', 'ഉ': 'D', 'ഊ': 'E', 'ഋ': 'F', 'എ': 'G', 'ഏ': 'H'
                 };
 
                 let fmlOutput = "";
                 for (let i = 0; i < text.length; i++) {
-                    // Check if char is already converted by conjunct map, otherwise use standard map
-                    fmlOutput += conjuncts[text[i]] ? text[i] : (fmlMap[text[i]] || text[i]);
+                    // Only map if it's a single character not already converted by the conjunct mapping
+                    let char = text[i];
+                    fmlOutput += (char.length === 1 && fmlMap[char]) ? fmlMap[char] : char;
                 }
 
                 $('#fml-output-area').val(fmlOutput);
