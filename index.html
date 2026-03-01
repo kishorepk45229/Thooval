@@ -149,13 +149,9 @@
         .user-name { font-weight: 600; font-size: 0.85rem; }
         .user-role { font-size: 0.75rem; color: var(--text-secondary); }
 
-        /* Mobile Overlay */
         .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 999;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4); z-index: 999;
         }
 
         /* --- MAIN WORKSPACE --- */
@@ -181,164 +177,88 @@
         }
 
         .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-primary);
+            display: none; background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: var(--text-primary);
         }
 
         .tool-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 1.1rem; cursor: pointer; padding: 6px 10px; border-radius: 4px;
         }
-        .tool-btn:hover, .tool-btn.active { 
-            background-color: var(--accent-light); 
-            color: var(--text-on-accent); 
-        }
-        
+        .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-on-accent); }
         .divider { width: 1px; height: 24px; background-color: var(--border-color); }
 
         .select-format {
-            border: 1px solid transparent;
-            font-family: 'Inter', sans-serif;
-            padding: 6px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-primary);
+            border: 1px solid transparent; font-family: 'Inter', sans-serif;
+            padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; color: var(--text-primary);
         }
         .select-format:hover { background-color: var(--bg-sidebar); }
 
-        /* Keyboard Toggle */
         .keyboard-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            background: var(--bg-sidebar);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500;
+            color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px;
+            border-radius: 20px; border: 1px solid var(--border-color);
         }
         .keyboard-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
         .keyboard-toggle input { accent-color: var(--accent-color); cursor: pointer; }
 
-        /* Suggestion Dictionary Bar */
+        /* Suggestion Bar */
         .suggestion-bar {
-            padding: 12px 30px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            min-height: 56px;
-            background: var(--bg-sidebar);
-            border-bottom: 1px solid var(--border-color);
-            overflow-x: auto;
-            white-space: nowrap;
+            padding: 12px 30px; display: flex; gap: 10px; align-items: center;
+            min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color);
+            overflow-x: auto; white-space: nowrap;
         }
-        
         .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
         
         .suggestion-item {
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            padding: 6px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: 'Manjari', sans-serif;
-            font-size: 1.1rem;
-            transition: 0.2s;
-            display: inline-block;
+            background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px;
+            border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif;
+            font-size: 1.1rem; transition: 0.2s; display: inline-block;
         }
         .suggestion-item.active, .suggestion-item:hover {
-            background: var(--accent-color);
-            color: var(--text-on-accent);
-            border-color: var(--accent-color);
+            background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color);
         }
 
         /* Text Area */
         #editor {
-            flex-grow: 1;
-            width: 100%;
-            padding: 30px;
-            border: none;
-            resize: none;
-            outline: none;
-            font-family: 'Manjari', sans-serif;
-            font-size: 18px;
-            line-height: 1.8;
-            color: var(--text-primary);
-            transition: font-weight 0.2s, font-style 0.2s, text-decoration 0.2s;
+            flex-grow: 1; width: 100%; padding: 30px; border: none; resize: none; outline: none;
+            font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary);
         }
 
         /* Bottom Status Bar */
         .status-bar {
-            min-height: 60px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 30px;
-            background-color: var(--bg-main);
-            flex-wrap: wrap;
-            gap: 10px;
+            min-height: 60px; border-top: 1px solid var(--border-color); display: flex;
+            align-items: center; justify-content: space-between; padding: 10px 30px;
+            background-color: var(--bg-main); flex-wrap: wrap; gap: 10px;
         }
 
         .status-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
         .action-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-main);
-            font-weight: 500;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-            white-space: nowrap;
+            padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);
+            background: var(--bg-main); font-weight: 500; font-size: 0.9rem; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap;
         }
         .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
-        .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; }
+        .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; animation: pulse 1.5s infinite; }
         
         .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
         .btn-dtp:hover { background-color: var(--accent-color); }
 
         .lang-toggle {
-            display: flex;
-            background: var(--bg-sidebar);
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
+            display: flex; background: var(--bg-sidebar); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden;
         }
-        .lang-btn {
-            padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.9rem;
-        }
+        .lang-btn { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.9rem; }
         .lang-btn.active { background: var(--accent-color); color: var(--text-on-accent); font-weight: 600; }
 
         /* --- MODAL POPUP --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.4);
-            display: none; justify-content: center; align-items: center; z-index: 2000;
+            background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000;
         }
         .modal-content {
             background: var(--bg-main); padding: 25px; border-radius: 12px;
-            width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex; flex-direction: column; gap: 15px;
+            width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 15px;
         }
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
         .close-modal { cursor: pointer; font-size: 1.5rem; color: var(--text-secondary); border: none; background: none; }
@@ -351,42 +271,22 @@
             border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -260px;
-                top: 0;
-            }
-            .sidebar.open {
-                left: 0;
-            }
-            .sidebar-overlay.open {
-                display: block;
-            }
-            .workspace {
-                width: 100%;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .toolbar {
-                padding: 10px 15px;
-            }
-            .suggestion-bar {
-                padding: 10px 15px;
-            }
-            #editor {
-                padding: 15px;
-            }
-            .status-bar {
-                padding: 10px 15px;
-                justify-content: center;
-            }
-            .keyboard-toggle {
-                width: 100%;
-                justify-content: center;
-            }
+            .sidebar { position: fixed; left: -260px; top: 0; }
+            .sidebar.open { left: 0; }
+            .sidebar-overlay.open { display: block; }
+            .workspace { width: 100%; }
+            .menu-toggle { display: block; }
+            .toolbar, .suggestion-bar, .status-bar { padding: 10px 15px; }
+            #editor { padding: 15px; }
+            .keyboard-toggle { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -395,15 +295,11 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <div class="brand-logo">മ</div>
-            Thooval
-        </div>
+        <div class="brand"><div class="brand-logo"></div> Thooval</div>
         <button class="new-file-btn"><span>➕</span> New File</button>
         <div class="file-list">
             <div class="list-header">Today</div>
             <div class="file-item active"><span>📄</span> Draft_01.txt</div>
-            <div class="file-item"><span>📄</span> Chapter_2_Notes</div>
         </div>
         <div class="user-profile">
             <div class="avatar">KK</div>
@@ -415,36 +311,26 @@
     </aside>
 
     <main class="workspace">
-        
         <div class="toolbar">
             <button class="menu-toggle" id="menu-toggle">☰</button>
-
             <button class="tool-btn" id="btn-undo" title="Undo">&#x21BA;</button>
             <button class="tool-btn" id="btn-redo" title="Redo">&#x21BB;</button>
-            
             <div class="divider"></div>
-            
             <select class="select-format" id="font-family-select">
                 <option value="'Manjari', sans-serif">Manjari</option>
                 <option value="'Chilanka', cursive">Chilanka</option>
                 <option value="'Gayathri', sans-serif">Gayathri</option>
             </select>
-            
             <select class="select-format" id="font-size-select">
                 <option value="16">16px</option>
                 <option value="18" selected>18px</option>
                 <option value="22">22px</option>
-                <option value="26">26px</option>
             </select>
-            
             <div class="divider"></div>
-            
             <button class="tool-btn" id="btn-bold" title="Bold"><b>B</b></button>
             <button class="tool-btn" id="btn-italic" title="Italic"><i>I</i></button>
             <button class="tool-btn" id="btn-underline" title="Underline"><u>U</u></button>
-
             <div class="divider"></div>
-
             <div class="keyboard-toggle">
                 <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
                 <label><input type="radio" name="kbd" value="inscript"> Inscript</label>
@@ -465,7 +351,6 @@
                 </div>
                 <button class="action-btn" id="btn-voice">🎤 Voice</button>
             </div>
-            
             <div class="status-group">
                 <button class="action-btn" id="btn-copy-uni">📋 Unicode</button>
                 <button class="action-btn btn-dtp" id="btn-copy-fml">📄 Generate FML-TT</button>
@@ -478,12 +363,11 @@
                     <span>FML-TT Converted Text</span>
                     <button class="close-modal" id="close-modal">&times;</button>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Review and edit the raw FML ASCII characters below before copying to your DTP software.</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted using advanced Kuttipencil/Manglish mapping. Review before pasting.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
             </div>
         </div>
-
     </main>
 
     <script>
@@ -491,52 +375,33 @@
             const $editor = $('#editor');
             const $suggestionBar = $('#suggestion-bar');
             
-            // App State
-            let currentLang = 'ml'; // 'ml' or 'en'
-            let currentKeyboard = 'phonetic'; // 'phonetic' or 'inscript'
+            let currentLang = 'ml'; 
+            let currentKeyboard = 'phonetic'; 
             let currentMatchStart = -1;
             let currentMatchEnd = -1;
 
-            // --- Mobile Sidebar Toggle ---
-            $('#menu-toggle').on('click', function() {
-                $('#sidebar').addClass('open');
-                $('#sidebar-overlay').addClass('open');
-            });
-            $('#sidebar-overlay').on('click', function() {
-                $('#sidebar').removeClass('open');
-                $('#sidebar-overlay').removeClass('open');
-            });
+            // Mobile Sidebar
+            $('#menu-toggle').on('click', function() { $('#sidebar').addClass('open'); $('#sidebar-overlay').addClass('open'); });
+            $('#sidebar-overlay').on('click', function() { $('#sidebar').removeClass('open'); $('#sidebar-overlay').removeClass('open'); });
 
-            // --- Language & Keyboard Toggles ---
+            // Language & Keyboard Toggles
             $('#btn-lang-en').on('click', function() {
-                currentLang = 'en';
-                $('.lang-btn').removeClass('active');
-                $(this).addClass('active');
-                clearSuggestions();
-                $suggestionBar.html('<span class="suggestion-placeholder">English mode active. Type normally.</span>');
-                $editor.focus();
+                currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active');
+                clearSuggestions(); $suggestionBar.html('<span class="suggestion-placeholder">English mode active. Type normally.</span>'); $editor.focus();
             });
 
             $('#btn-lang-ml').on('click', function() {
-                currentLang = 'ml';
-                $('.lang-btn').removeClass('active');
-                $(this).addClass('active');
-                clearSuggestions();
-                $editor.focus();
+                currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active');
+                clearSuggestions(); $editor.focus();
             });
 
             $('input[name="kbd"]').on('change', function() {
-                currentKeyboard = $(this).val();
-                clearSuggestions();
-                if(currentKeyboard === 'inscript') {
-                    $suggestionBar.html('<span class="suggestion-placeholder">Inscript keyboard active. Type directly using layout.</span>');
-                } else {
-                    $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
-                }
+                currentKeyboard = $(this).val(); clearSuggestions();
+                $suggestionBar.html(currentKeyboard === 'inscript' ? '<span class="suggestion-placeholder">Inscript keyboard active.</span>' : '<span class="suggestion-placeholder">Type in English...</span>');
                 $editor.focus();
             });
 
-            // --- History ---
+            // Undo/Redo History
             let textHistory = [""];
             let historyIndex = 0;
             function saveHistory() {
@@ -550,80 +415,60 @@
             $('#btn-undo').on('click', function() { if (historyIndex > 0) { historyIndex--; $editor.val(textHistory[historyIndex]); } });
             $('#btn-redo').on('click', function() { if (historyIndex < textHistory.length - 1) { historyIndex++; $editor.val(textHistory[historyIndex]); } });
 
-            // --- Formatting ---
+            // Formatting
             $('#font-family-select').on('change', function() { $editor.css('font-family', $(this).val()); });
             $('#font-size-select').on('change', function() { $editor.css('font-size', $(this).val() + 'px'); });
             $('#btn-bold').on('click', function() { $(this).toggleClass('active'); $editor.css('font-weight', $(this).hasClass('active') ? 'bold' : 'normal'); });
             $('#btn-italic').on('click', function() { $(this).toggleClass('active'); $editor.css('font-style', $(this).hasClass('active') ? 'italic' : 'normal'); });
             $('#btn-underline').on('click', function() { $(this).toggleClass('active'); $editor.css('text-decoration', $(this).hasClass('active') ? 'underline' : 'none'); });
 
-
-            // --- INSCRIPT KEYMAP ---
+            // Inscript Keyboard
             const inscriptMap = {
                 'D':'അ', 'E':'ആ', 'F':'ഇ', 'R':'ഈ', 'G':'ഉ', 'T':'ഊ', '+':'ഋ', 'S':'എ', 'W':'ഏ', 'A':'ഒ', 'Q':'ഓ',
                 'k':'ക', 'K':'ഖ', 'i':'ഗ', 'I':'ഘ', 'U':'ങ', ';':'ച', ':':'ഛ', 'p':'ജ', 'P':'ഝ', '}':'ഞ',
                 "'":'ട', '"':'ഠ', '[':'ഡ', '{':'ഢ', 'C':'ണ', 'l':'ത', 'L':'ഥ', 'o':'ദ', 'O':'ധ', 'v':'ന',
                 'h':'പ', 'H':'ഫ', 'y':'ബ', 'Y':'ഭ', 'c':'മ', '/':'യ', 'j':'ര', 'n':'ല', 'b':'വ', 'M':'ശ',
                 '<':'ഷ', 'm':'സ', 'u':'ഹ', 'N':'ള', '>':'ഴ', 'J':'റ',
-                'e':'ാ', 'f':'ി', 'r':'ീ', 'g':'ു', 't':'ൂ', '=':'ൃ', 's':'െ', 'w':'േ', 'a':'ൊ', 'q':'ോ', 'd':'്',
-                'X':'ം', '_':'ഃ'
+                'e':'ാ', 'f':'ി', 'r':'ീ', 'g':'ു', 't':'ൂ', '=':'ൃ', 's':'െ', 'w':'േ', 'a':'ൊ', 'q':'ോ', 'd':'്', 'X':'ം', '_':'ഃ'
             };
-
             $editor.on('keypress', function(e) {
                 if (currentLang === 'ml' && currentKeyboard === 'inscript') {
                     let char = String.fromCharCode(e.which);
-                    if (inscriptMap[char]) {
-                        e.preventDefault();
-                        insertTextAtCursor(inscriptMap[char]);
-                    }
+                    if (inscriptMap[char]) { e.preventDefault(); insertTextAtCursor(inscriptMap[char]); }
                 }
             });
 
             function insertTextAtCursor(text) {
-                let start = $editor[0].selectionStart;
-                let end = $editor[0].selectionEnd;
-                let val = $editor.val();
+                let start = $editor[0].selectionStart; let end = $editor[0].selectionEnd; let val = $editor.val();
                 $editor.val(val.substring(0, start) + text + val.substring(end));
                 $editor[0].selectionStart = $editor[0].selectionEnd = start + text.length;
                 saveHistory();
             }
 
-            // --- PHONETIC DICTIONARY (Google API) ---
+            // Phonetic Dictionary (Google API)
             $editor.on('input', function() {
                 if (currentLang === 'en' || currentKeyboard === 'inscript') return;
-
-                let text = $editor.val();
-                let cursorPos = $editor[0].selectionStart;
-                let textBeforeCursor = text.substring(0, cursorPos);
+                let textBeforeCursor = $editor.val().substring(0, $editor[0].selectionStart);
                 let match = textBeforeCursor.match(/([a-zA-Z]+)$/);
-
                 if (match) {
-                    currentMatchStart = match.index;
-                    currentMatchEnd = cursorPos;
+                    currentMatchStart = match.index; currentMatchEnd = $editor[0].selectionStart;
                     fetchSuggestions(match[1]);
-                } else {
-                    clearSuggestions();
-                }
+                } else { clearSuggestions(); }
             });
 
             let typingTimer;
             $editor.on('keyup', function() { clearTimeout(typingTimer); typingTimer = setTimeout(saveHistory, 1000); });
-
             $editor.on('keydown', function(e) {
                 if (currentLang === 'en' || currentKeyboard === 'inscript') return;
-                
                 let $active = $('.suggestion-item.active');
                 if ($('.suggestion-item').length > 0) {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        if ($active.length) $active.click(); 
+                        e.preventDefault(); if ($active.length) $active.click(); 
                     } else if (e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        let $next = $active.next('.suggestion-item');
+                        e.preventDefault(); let $next = $active.next('.suggestion-item');
                         if ($next.length) { $active.removeClass('active'); $next.addClass('active'); }
                     } else if (e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        let $prev = $active.prev('.suggestion-item');
+                        e.preventDefault(); let $prev = $active.prev('.suggestion-item');
                         if ($prev.length) { $active.removeClass('active'); $prev.addClass('active'); }
                     }
                 }
@@ -647,14 +492,10 @@
 
             function replaceWord(malayalamWord) {
                 let text = $editor.val();
-                let before = text.substring(0, currentMatchStart);
-                let after = text.substring(currentMatchEnd);
-                $editor.val(before + malayalamWord + " " + after);
+                $editor.val(text.substring(0, currentMatchStart) + malayalamWord + " " + text.substring(currentMatchEnd));
                 let newPos = currentMatchStart + malayalamWord.length + 1;
                 $editor[0].setSelectionRange(newPos, newPos);
-                clearSuggestions();
-                saveHistory();
-                $editor.focus();
+                clearSuggestions(); saveHistory(); $editor.focus();
             }
 
             function clearSuggestions() {
@@ -662,92 +503,128 @@
                 $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
             }
 
-
-            // --- VOICE TYPING ---
+            // --- LIVE VOICE TYPING (Web Speech API) ---
             let recognition;
-            if ('webkitSpeechRecognition' in window) {
-                recognition = new webkitSpeechRecognition();
+            let isRecording = false;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRec();
                 recognition.continuous = true;
-                recognition.interimResults = true;
+                recognition.interimResults = true; // Enables live real-time feedback
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    $('#btn-voice').addClass('recording').html('⏹ Listening...');
+                };
 
                 recognition.onresult = function(event) {
                     let finalTranscript = '';
+                    let interimTranscript = '';
+                    
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
                     }
-                    if (finalTranscript) insertTextAtCursor(finalTranscript + " ");
+                    
+                    // Insert confirmed speech instantly
+                    if (finalTranscript !== '') {
+                        insertTextAtCursor(finalTranscript + " ");
+                    }
+                    
+                    // Show live listening feedback in the suggestion bar
+                    if (interimTranscript !== '') {
+                        $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
+                    } else {
+                        clearSuggestions();
+                    }
+                };
+
+                recognition.onerror = function(event) {
+                    if (event.error === 'not-allowed') {
+                        alert("Microphone access blocked. You must run this via Local Server (HTTPS or localhost) for Voice to work.");
+                    }
+                    $('#btn-voice').removeClass('recording').html('🎤 Voice');
+                    isRecording = false;
                 };
 
                 recognition.onend = function() {
                     $('#btn-voice').removeClass('recording').html('🎤 Voice');
+                    isRecording = false;
                 };
             }
 
             $('#btn-voice').on('click', function() {
-                if (!recognition) return alert("Voice typing is not supported in this browser. Try Chrome.");
+                if (!recognition) return alert("Voice typing is not supported in this browser. Please use Google Chrome.");
                 
-                if ($(this).hasClass('recording')) {
+                if (isRecording) {
                     recognition.stop();
                 } else {
                     recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-US';
                     recognition.start();
-                    $(this).addClass('recording').html('⏹ Stop');
                 }
             });
 
-
-            // --- THE CORRECTED FML CONVERSION ENGINE ---
+            // --- ADVANCED FML-TT CONVERSION DICTIONARY ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $editor.val();
                 
-                // 1. Force split compound vowels using strict Unicode Hex to prevent ligature bugs
+                // 1. Force explicit mathematical splitting of compound vowels
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); // ൊ -> െ + ാ
                 text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); // ോ -> േ + ാ
                 text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); // ൌ -> െ + ൗ
 
-                // 2. Pre-map Koottaksharangal (Conjuncts) BEFORE shifting vowels or translating single letters
+                // 2. Pre-map all Koottaksharangal (Conjuncts) & Modifiers FIRST
                 const conjuncts = {
-                    'ണ്ട': 'ï', 'ക്ക': '¡', 'ങ്ക': '¢', 'ങ്ങ': '£', 'ച്ച': '¤', 'ഞ്ച': '¥', 
-                    'ഞ്ഞ': '¦', 'ട്ട': '§', 'ണ്ണ': '©', 'ത്ത': 'ª', 'ന്ത': '«', 'ന്ന': '¬',
-                    'പ്പ': '­', 'മ്പ': '®', 'മ്മ': '¯', 'ല്ല': 'Ã', 'ള്ള': 'Å'
+                    'ക്ക': '¡', 'ങ്ക': '¢', 'ങ്ങ': '£', 'ച്ച': '¤', 'ഞ്ച': '¥', 'ഞ്ഞ': '¦', 
+                    'ട്ട': '§', 'ണ്ട': 'ï', 'ണ്ണ': '©', 'ത്ത': 'ª', 'ന്ത': '«', 'ന്ന': '¬',
+                    'പ്പ': '­', 'മ്പ': '®', 'മ്മ': '¯', 'യ്യ': '°', 'ല്ല': 'Ã', 'ള്ള': 'Å',
+                    'വ്വ': '²', 'ശ്ശ': '³', 'ക്ല': '¢', 'റ്റ': 'ä', 
+                    'ന്റ': '³v', 'ൻ്റ': '³v', // Nta variations
+                    '്യ': 'y', '്ര': '_', '്വ': 'z' // Ya, Ra, Va modifiers
                 };
                 for (let [ml, ascii] of Object.entries(conjuncts)) {
                     text = text.split(ml).join(ascii);
                 }
 
-                // 3. Safely shift LEFT modifiers (െ, േ, ൈ) to the front
-                // Note: ി (\u0D3F) and ീ (\u0D40) stay on the right for FML fonts
+                // 3. Shift LEFT vowels BEFORE the preceding consonant group
+                // (ി and ീ are intentionally excluded because FML requires them on the right)
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
                 text = text.replace(new RegExp(consGroup + leftVowels, "g"), "$2$1");
 
-                // 4. Convert using the specific Manglish/ML-TT Keymap
+                // 4. Complete FML/Manglish Character Map
                 const fmlMap = {
-                    // Modifiers
+                    // Mapped Modifiers
                     '\u0D46': 's', '\u0D47': 't', '\u0D48': 'u', // Left: െ, േ, ൈ
-                    '\u0D3F': 'n', '\u0D40': 'o', '\u0D41': 'p', '\u0D42': 'q', '\u0D43': 'r', '\u0D3E': 'm', '\u0D57': 'w', // Right/Bottom: ി, ീ, ു, ൂ, ൃ, ാ, ൗ
+                    '\u0D3F': 'n', '\u0D40': 'o', '\u0D41': 'p', '\u0D42': 'q', '\u0D43': 'r', '\u0D3E': 'm', '\u0D57': 'w', // Right: ി, ീ, ു, ൂ, ൃ, ാ, ൗ
                     '\u0D4D': 'v', '\u0D02': 'x', '\u0D03': 'y', // Virama, Anusvaram, Visargam
                     
                     // Chillus
                     'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³', 
                     
-                    // Base Consonants
+                    // Standard Consonants
                     'ക': 'I', 'ഖ': 'J', 'ഗ': 'K', 'ഘ': 'L', 'ങ': 'M',
                     'ച': 'N', 'ഛ': 'O', 'ജ': 'P', 'ഝ': 'Q', 'ഞ': 'R',
                     'ട': 'S', 'ഠ': 'T', 'ഡ': 'U', 'ഢ': 'V', 'ണ': 'W',
                     'ത': 'X', 'ഥ': 'Y', 'ദ': 'Z', 'ധ': 'a', 'ന': 'b',
                     'പ': 'c', 'ഫ': 'd', 'ബ': 'e', 'ഭ': 'f', 'മ': 'g',
                     
-                    // The Disputed Letters (Manglish ML-TT Map)
+                    // Disputed Consonants (Strict Manglish/Kuttipencil Map)
+                    // If 'ഷോ' needs to be 'tjm', then ഷ MUST be 'j'.
                     'വ': 'h', 'ശ': 'i', 'ഷ': 'j', 'സ': 'k', 'ഹ': 'l', 
                     'ള': 'z', 'ഴ': '{', 'റ': '|', 'യ': 'e', 'ര': 'f', 'ല': 'g', 
                     
-                    // Vowels
+                    // Base Vowels
                     'അ': 'A', 'ആ': 'B', 'ഇ': 'C', 'ഉ': 'D', 'ഊ': 'E', 'ഋ': 'F', 'എ': 'G', 'ഏ': 'H'
                 };
 
                 let fmlOutput = "";
                 for (let i = 0; i < text.length; i++) {
+                    // Check if char is already converted by conjunct map, otherwise use standard map
                     fmlOutput += conjuncts[text[i]] ? text[i] : (fmlMap[text[i]] || text[i]);
                 }
 
