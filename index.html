@@ -290,7 +290,7 @@
 
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-logo">യ</div>
+            <div class="brand-logo">തൂ</div>
             Thooval
         </div>
 
@@ -435,7 +435,6 @@
                 }
             });
 
-            // Save history when typing stops (basic debounce)
             let typingTimer;
             $editor.on('keyup', function() {
                 clearTimeout(typingTimer);
@@ -492,7 +491,7 @@
                 $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
             }
 
-            // --- 4. Robust FML-TT Conversion Engine ---
+            // --- 4. The Corrected FML-TT Conversion Engine ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $editor.val();
                 
@@ -501,23 +500,23 @@
                 text = text.replace(/ോ/g, "ോ"); 
                 text = text.replace(/ൌ/g, "ൌ"); 
 
-                // STAGE 2: The Core DTP Fix - Move left-vowels BEFORE the preceding consonant group
-                // This targets the vowel (ി, ീ, െ, േ, ൈ) and shifts it to the left side of the consonant.
-                // E.g., കി (ക + ി) mathematically becomes ിക. 
+                // STAGE 2: The Core Bug Fix! 
+                // Only move 'െ', 'േ', and 'ൈ' BEFORE the consonant. 
+                // DO NOT move 'ി' or 'ീ' because FML fonts require them to stay on the right.
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
-                const leftVowels = "([െേൈിീ])"; 
+                const leftVowels = "([െേൈ])"; // Notice: ി and ീ are no longer here!
                 const regexMove = new RegExp(consGroup + leftVowels, "g");
                 text = text.replace(regexMove, "$2$1");
 
-                // STAGE 3: Convert Characters to Standard FML / ML-TT Keyboard Layout
+                // STAGE 3: Map to FML / Karthika Layout Characters
                 const fmlMap = {
-                    // Left Vowels (already relocated)
-                    'ി': 'n', 'ീ': 'o', 'െ': 's', 'േ': 't', 'ൈ': 'S',
-                    // Right/Bottom Vowels
-                    'ാ': 'm', 'ു': 'p', 'ൂ': 'q', 'ൃ': 'r', 'ൗ': 'w',
+                    // Left Vowels (Moved by Regex)
+                    'െ': 's', 'േ': 't', 'ൈ': 'S',
+                    // Right Vowels & Modifiers (Stay in place)
+                    'ി': 'n', 'ീ': 'o', 'ു': 'p', 'ൂ': 'q', 'ൃ': 'r', 'ാ': 'm', 'ൗ': 'w',
                     // Chillus
                     'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': 'Æ', 'ൻ': '³',
-                    // Consonants
+                    // Base Consonants
                     'ക': 'I', 'ഖ': 'J', 'ഗ': 'K', 'ഘ': 'L', 'ങ': 'M',
                     'ച': 'N', 'ഛ': 'O', 'ജ': 'P', 'ഝ': 'Q', 'ഞ': 'R',
                     'ട': 'S', 'ഠ': 'T', 'ഡ': 'U', 'ഢ': 'V', 'ണ': 'W',
@@ -536,7 +535,6 @@
                     fmlOutput += fmlMap[text[i]] || text[i];
                 }
 
-                // Copy to clipboard
                 navigator.clipboard.writeText(fmlOutput);
                 let $btn = $(this);
                 $btn.html('✅ Copied FML');
