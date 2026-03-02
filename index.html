@@ -131,6 +131,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-grow: 1;
         }
 
         .dict-title {
@@ -163,8 +164,9 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            max-height: 120px;
+            max-height: 250px;
             overflow-y: auto;
+            padding-right: 5px;
         }
 
         .dict-item {
@@ -177,12 +179,22 @@
             font-size: 1rem;
             color: var(--text-primary);
             transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .dict-item:hover {
             background: var(--accent-color);
             color: var(--text-on-accent);
             border-color: var(--accent-color);
+        }
+        
+        .dict-pos {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            opacity: 0.6;
         }
 
         /* User Profile */
@@ -358,7 +370,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">മ</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">തൂ</div> Thooval</div>
         <button class="new-file-btn"><span>➕</span> New File</button>
         <div class="file-list">
             <div class="list-header">Today</div>
@@ -366,8 +378,8 @@
         </div>
 
         <div class="dictionary-section">
-            <div class="dict-title">📖 Dictionary Search</div>
-            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word...">
+            <div class="dict-title">📖 Advanced Dictionary</div>
+            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word here...">
             <div id="dict-results" class="dict-results"></div>
         </div>
 
@@ -450,7 +462,7 @@
             let currentMatchStart = -1;
             let currentMatchEnd = -1;
 
-            // --- DICTIONARY SEARCH API LOGIC ---
+            // --- MULTIPLE MEANINGS DICTIONARY API ---
             let dictTimer;
             $('#dict-input').on('input', function() {
                 let word = $(this).val().trim();
@@ -460,21 +472,48 @@
                 }
                 
                 clearTimeout(dictTimer);
-                // Use a free translation endpoint for English to Malayalam
+                // dt=bd fetches dictionary definitions and synonyms
                 dictTimer = setTimeout(() => {
-                    let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ml&dt=t&q=${encodeURI(word)}`;
+                    let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ml&dt=t&dt=bd&q=${encodeURI(word)}`;
+                    
                     $.get(url, function(data) {
-                        if (data && data[0] && data[0][0]) {
-                            let translated = data[0][0][0];
-                            $('#dict-results').html(`<div class="dict-item" title="Click to add to editor">${translated}</div>`);
+                        $('#dict-results').empty();
+                        let addedWords = new Set();
+                        
+                        // 1. Process multiple dictionary entries if available (data[1])
+                        if (data && data[1]) {
+                            data[1].forEach(part => {
+                                let partOfSpeech = part[0]; // e.g. "noun", "verb"
+                                if(part[1]) {
+                                    part[1].forEach(synonym => {
+                                        if (!addedWords.has(synonym)) {
+                                            addedWords.add(synonym);
+                                            // The data-word attribute safely holds just the Malayalam text for inserting
+                                            $('#dict-results').append(`<div class="dict-item" data-word="${synonym}" title="Click to add">${synonym} <span class="dict-pos">${partOfSpeech}</span></div>`);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        // 2. Fallback: Add the primary direct translation if not already added
+                        if (data && data[0] && data[0][0] && data[0][0][0]) {
+                            let primary = data[0][0][0];
+                            if (!addedWords.has(primary) && primary.toLowerCase() !== word.toLowerCase()) {
+                                $('#dict-results').prepend(`<div class="dict-item" data-word="${primary}" title="Click to add">${primary} <span class="dict-pos">primary</span></div>`);
+                            }
+                        }
+                        
+                        if ($('#dict-results').is(':empty')) {
+                            $('#dict-results').html('<div style="padding:10px;color:var(--text-secondary);font-size:0.85rem;">No results found.</div>');
                         }
                     });
                 }, 500);
             });
 
-            // Add clicked dictionary word to Editor
+            // Add clicked dictionary word to Editor safely
             $(document).on('click', '.dict-item', function() {
-                let translatedWord = $(this).text();
+                let translatedWord = $(this).attr('data-word'); // Gets only the malayalam word, ignoring the pos span
                 insertTextAtCursor(translatedWord + " ");
                 $('#dict-input').val('');
                 $('#dict-results').empty();
@@ -667,13 +706,13 @@
                 }
             });
 
-            // --- MASTER FML-TT DICTIONARY ENGINE ---
+            // --- MASTER USER-PROVIDED FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $editor.val();
                 
-                text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); 
-                text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); 
-                text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); 
+                text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); // ൊ -> െ + ാ
+                text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); // ോ -> േ + ാ
+                text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); // ൌ -> െ + ൗ
 
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
@@ -714,21 +753,10 @@
                     'യ': 'b', 'ര': 'c', 'റ': 'd', 'ല': 'e', 'ള': 'f', 
                     'ഴ': 'g', 'വ': 'h', 'ശ': 'i', 'ഷ': 'j', 'സ': 'k', 'ഹ': 'l',
                     
-                    '\u0D46': 's', // െ
-                    '\u0D47': 't', // േ
-                    '\u0D48': 'ss', // ൈ
-                    
-                    '\u0D3F': 'n', // ി
-                    '\u0D40': 'o', // ീ
-                    '\u0D41': 'p', // ു
-                    '\u0D42': 'q', // ൂ
-                    '\u0D43': 'r', // ൃ
-                    '\u0D3E': 'm', // ാ
-                    '\u0D57': 'u', // ൗ 
-                    
-                    '\u0D4D': 'v', // ് (Virama)
-                    '\u0D02': 'w', // ം (Anusvaram)
-                    '\u0D03': 'x', // ഃ (Visargam)
+                    '\u0D46': 's', '\u0D47': 't', '\u0D48': 'ss', 
+                    '\u0D3F': 'n', '\u0D40': 'o', '\u0D41': 'p', '\u0D42': 'q', 
+                    '\u0D43': 'r', '\u0D3E': 'm', '\u0D57': 'u', 
+                    '\u0D4D': 'v', '\u0D02': 'w', '\u0D03': 'x', 
                     
                     'ർ': 'À', 'ൽ': 'Â', 'ൾ': 'Ä', 'ൺ': '¬', 'ൻ': '³'
                 };
