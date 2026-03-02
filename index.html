@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thooval | Modern Manglish Editor</title>
+    <title>Thooval | Advanced Manglish Rich Editor</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -47,321 +47,95 @@
             z-index: 1000;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--text-primary);
-        }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 700; margin-bottom: 30px; }
+        .brand-logo { width: 32px; height: 32px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
 
-        .brand-logo {
-            width: 32px;
-            height: 32px;
-            background-color: var(--accent-color);
-            color: var(--text-on-accent);
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4);
-        }
-
-        .new-file-btn {
-            background-color: var(--accent-color);
-            color: var(--text-on-accent);
-            border: none;
-            padding: 12px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .new-file-btn:hover { background-color: var(--accent-hover); }
-
-        .file-list {
-            flex-grow: 1;
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .list-header {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .file-item {
-            padding: 10px 12px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-secondary);
-            border: 1px solid transparent;
-        }
-
-        .file-item.active {
-            background-color: var(--accent-light);
-            color: var(--text-on-accent);
-            border-color: var(--accent-color);
-        }
+        .file-list { flex-grow: 1; margin-top: 25px; display: flex; flex-direction: column; gap: 8px; }
+        .list-header { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; letter-spacing: 0.5px; }
+        .file-item { padding: 10px 12px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); }
+        .file-item.active { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
 
         /* --- DICTIONARY SECTION --- */
-        .dictionary-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex-grow: 1;
-        }
-
-        .dict-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .dict-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            outline: none;
-            font-size: 0.9rem;
-            background: var(--bg-main);
-            color: var(--text-primary);
-        }
-
-        .dict-input:focus {
-            border-color: var(--accent-color);
-        }
-
-        .dict-results {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .dict-item {
-            padding: 8px 10px;
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-family: 'Manjari', sans-serif;
-            font-size: 1rem;
-            color: var(--text-primary);
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dict-item:hover {
-            background: var(--accent-color);
-            color: var(--text-on-accent);
-            border-color: var(--accent-color);
-        }
-        
-        .dict-pos {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            opacity: 0.6;
-        }
+        .dictionary-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
+        .dict-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px; }
+        .dict-input { width: 100%; padding: 10px; border-radius: var(--radius); border: 1px solid var(--border-color); outline: none; font-size: 0.9rem; background: var(--bg-main); color: var(--text-primary); }
+        .dict-input:focus { border-color: var(--accent-color); }
+        .dict-results { display: flex; flex-direction: column; gap: 5px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .dict-item { padding: 8px 10px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1rem; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .dict-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
+        .dict-pos { font-family: 'Inter', sans-serif; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; }
 
         /* User Profile */
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            margin-top: auto;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            color: var(--text-on-accent);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
+        .user-profile { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: var(--text-on-accent); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 0.9rem; }
         .user-details { display: flex; flex-direction: column; }
         .user-name { font-weight: 600; font-size: 0.85rem; }
-        .user-role { font-size: 0.75rem; color: var(--text-secondary); }
 
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4); z-index: 999;
-        }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 999; }
 
         /* --- MAIN WORKSPACE --- */
-        .workspace {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-main);
-            height: 100vh;
-            position: relative;
-            width: calc(100% - 260px);
-        }
+        .workspace { flex-grow: 1; display: flex; flex-direction: column; background-color: var(--bg-main); height: 100vh; position: relative; width: calc(100% - 260px); }
 
-        /* Toolbar */
-        .toolbar {
-            min-height: 60px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            padding: 10px 30px;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .menu-toggle {
-            display: none; background: none; border: none;
-            font-size: 1.5rem; cursor: pointer; color: var(--text-primary);
-        }
-
-        .tool-btn {
-            background: none; border: none; color: var(--text-secondary);
-            font-size: 1.1rem; cursor: pointer; padding: 6px 10px; border-radius: 4px;
-        }
+        /* Advanced Toolbar */
+        .toolbar { min-height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 10px 20px; gap: 10px; flex-wrap: wrap; background: #fff; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+        .tool-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.1rem; cursor: pointer; padding: 6px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-on-accent); }
-        .divider { width: 1px; height: 24px; background-color: var(--border-color); }
+        .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 5px; }
 
-        .select-format {
-            border: 1px solid transparent; font-family: 'Inter', sans-serif;
-            padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; color: var(--text-primary);
-        }
-        .select-format:hover { background-color: var(--bg-sidebar); }
-
-        .keyboard-toggle {
-            display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500;
-            color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px;
-            border-radius: 20px; border: 1px solid var(--border-color);
-        }
+        .select-format { border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; background: var(--bg-main); }
+        
+        .color-picker-wrapper { display: flex; align-items: center; gap: 5px; font-size: 0.85rem; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+        .color-picker { border: none; width: 20px; height: 20px; padding: 0; cursor: pointer; background: none; }
+        
+        .keyboard-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); margin-left: auto; }
         .keyboard-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
-        .keyboard-toggle input { accent-color: var(--accent-color); cursor: pointer; }
 
         /* Suggestion Bar */
-        .suggestion-bar {
-            padding: 12px 30px; display: flex; gap: 10px; align-items: center;
-            min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color);
-            overflow-x: auto; white-space: nowrap;
-        }
+        .suggestion-bar { padding: 12px 30px; display: flex; gap: 10px; align-items: center; min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); overflow-x: auto; white-space: nowrap; }
         .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
-        
-        .suggestion-item {
-            background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px;
-            border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif;
-            font-size: 1.1rem; transition: 0.2s; display: inline-block;
-        }
-        .suggestion-item.active, .suggestion-item:hover {
-            background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color);
-        }
+        .suggestion-item { background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1.1rem; transition: 0.2s; display: inline-block; }
+        .suggestion-item.active, .suggestion-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
 
-        /* Text Area */
-        #editor {
-            flex-grow: 1; width: 100%; padding: 30px; border: none; resize: none; outline: none;
-            font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary);
-        }
+        /* RICH TEXT EDITOR (contenteditable) */
+        #editor { flex-grow: 1; width: 100%; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); overflow-y: auto; }
+        #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
+        #editor img { max-width: 100%; border-radius: 8px; margin: 10px 0; }
+        #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        #editor th, #editor td { border: 1px solid var(--border-color); padding: 8px; text-align: left; }
 
         /* Bottom Status Bar */
-        .status-bar {
-            min-height: 60px; border-top: 1px solid var(--border-color); display: flex;
-            align-items: center; justify-content: space-between; padding: 10px 30px;
-            background-color: var(--bg-main); flex-wrap: wrap; gap: 10px;
-        }
-
+        .status-bar { min-height: 60px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 10px 30px; background-color: var(--bg-main); flex-wrap: wrap; gap: 10px; }
         .status-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        .action-btn {
-            padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);
-            background: var(--bg-main); font-weight: 500; font-size: 0.9rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap;
-        }
+        .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
         .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
         .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; animation: pulse 1.5s infinite; }
         
         .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
         .btn-dtp:hover { background-color: var(--accent-color); }
 
-        .lang-toggle {
-            display: flex; background: var(--bg-sidebar); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden;
-        }
+        .lang-toggle { display: flex; background: var(--bg-sidebar); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .lang-btn { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.9rem; }
         .lang-btn.active { background: var(--accent-color); color: var(--text-on-accent); font-weight: 600; }
 
         /* --- MODAL POPUP --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000;
-        }
-        .modal-content {
-            background: var(--bg-main); padding: 25px; border-radius: 12px;
-            width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 15px;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--bg-main); padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 15px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
-        .close-modal { cursor: pointer; font-size: 1.5rem; color: var(--text-secondary); border: none; background: none; }
-        #fml-output-area {
-            width: 100%; height: 150px; padding: 15px; border-radius: 8px;
-            border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none;
-        }
-        .modal-btn {
-            background: var(--accent-color); color: var(--text-on-accent);
-            border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;
-        }
+        .close-modal { cursor: pointer; font-size: 1.5rem; border: none; background: none; }
+        #fml-output-area { width: 100%; height: 150px; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none; }
+        .modal-btn { background: var(--accent-color); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        /* Mobile Adjustments */
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -260px; top: 0; }
             .sidebar.open { left: 0; }
             .sidebar-overlay.open { display: block; }
             .workspace { width: 100%; }
             .menu-toggle { display: block; }
-            .toolbar, .suggestion-bar, .status-bar { padding: 10px 15px; }
-            #editor { padding: 15px; }
-            .keyboard-toggle { width: 100%; justify-content: center; }
+            .keyboard-toggle { margin-left: 0; width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -370,49 +144,65 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">തൂ</div> Thooval</div>
-        <button class="new-file-btn"><span>➕</span> New File</button>
+        <div class="brand"><div class="brand-logo">ള</div> Thooval</div>
         <div class="file-list">
-            <div class="list-header">Today</div>
-            <div class="file-item active"><span>📄</span> Draft_01.txt</div>
+            <div class="list-header">Drafts</div>
+            <div class="file-item active">📄 My_Document.txt</div>
         </div>
 
         <div class="dictionary-section">
-            <div class="dict-title">📖 Advanced Dictionary</div>
+            <div class="dict-title">📖 Dictionary Search</div>
             <input type="text" id="dict-input" class="dict-input" placeholder="Type English word here...">
             <div id="dict-results" class="dict-results"></div>
         </div>
 
         <div class="user-profile">
             <div class="avatar">U</div>
-            <div class="user-details">
-                <span class="user-name">Demo User</span>
-                <span class="user-role">Workspace User</span>
-            </div>
+            <div class="user-details"><span class="user-name">Editor</span></div>
         </div>
     </aside>
 
     <main class="workspace">
         <div class="toolbar">
             <button class="menu-toggle" id="menu-toggle">☰</button>
-            <button class="tool-btn" id="btn-undo" title="Undo">&#x21BA;</button>
-            <button class="tool-btn" id="btn-redo" title="Redo">&#x21BB;</button>
+            
+            <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo">↩</button>
+            <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo">↪</button>
             <div class="divider"></div>
-            <select class="select-format" id="font-family-select">
-                <option value="'Manjari', sans-serif">Manjari</option>
-                <option value="'Chilanka', cursive">Chilanka</option>
-                <option value="'Gayathri', sans-serif">Gayathri</option>
+            
+            <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><b>B</b></button>
+            <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i>I</i></button>
+            <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><u>U</u></button>
+            
+            <div class="divider"></div>
+            
+            <select class="select-format" onchange="document.execCommand('fontName', false, this.value)">
+                <option value="Manjari">Manjari</option>
+                <option value="Chilanka">Chilanka</option>
+                <option value="Gayathri">Gayathri</option>
             </select>
-            <select class="select-format" id="font-size-select">
-                <option value="16">16px</option>
-                <option value="18" selected>18px</option>
-                <option value="22">22px</option>
+            <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)">
+                <option value="3">Normal</option>
+                <option value="4">Large</option>
+                <option value="5">Huge</option>
             </select>
+
             <div class="divider"></div>
-            <button class="tool-btn" id="btn-bold" title="Bold"><b>B</b></button>
-            <button class="tool-btn" id="btn-italic" title="Italic"><i>I</i></button>
-            <button class="tool-btn" id="btn-underline" title="Underline"><u>U</u></button>
+
+            <div class="color-picker-wrapper" title="Text Color">
+                <span>A</span> <input type="color" class="color-picker" id="textColor" value="#000000" onchange="document.execCommand('foreColor', false, this.value)">
+            </div>
+            <div class="color-picker-wrapper" title="Highlight Color">
+                <span>Bg</span> <input type="color" class="color-picker" id="bgColor" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value)">
+            </div>
+
             <div class="divider"></div>
+
+            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            <button class="tool-btn" id="btn-image" title="Insert Picture">🖼️</button>
+            <button class="tool-btn" id="btn-table" title="Insert Table">📊</button>
+            <button class="tool-btn" id="btn-print" title="Print Document">🖨️</button>
+
             <div class="keyboard-toggle">
                 <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
                 <label><input type="radio" name="kbd" value="inscript"> Inscript</label>
@@ -423,7 +213,7 @@
             <span class="suggestion-placeholder">Type in English (e.g., 'namaskaram')...</span>
         </div>
 
-        <textarea id="editor" placeholder="ഇവിടെ മലയാളം എഴുതാം..."></textarea>
+        <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
 
         <div class="status-bar">
             <div class="status-group">
@@ -431,10 +221,10 @@
                     <button class="lang-btn active" id="btn-lang-ml">മലയാളം</button>
                     <button class="lang-btn" id="btn-lang-en">English</button>
                 </div>
-                <button class="action-btn" id="btn-voice">🎤 Voice</button>
+                <button class="action-btn" id="btn-voice">🎤 Voice Typing</button>
             </div>
             <div class="status-group">
-                <button class="action-btn" id="btn-copy-uni">📋 Unicode</button>
+                <button class="action-btn" id="btn-copy-uni">📋 Copy Unicode</button>
                 <button class="action-btn btn-dtp" id="btn-copy-fml">📄 Generate FML-TT</button>
             </div>
         </div>
@@ -445,7 +235,7 @@
                     <span>FML-TT Converted Text</span>
                     <button class="close-modal" id="close-modal">&times;</button>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">The text has been converted using your custom ML-TT Keyboard mapping.</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Your custom mappings applied successfully. Ready for DTP Software.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
             </div>
@@ -456,148 +246,127 @@
         $(document).ready(function() {
             const $editor = $('#editor');
             const $suggestionBar = $('#suggestion-bar');
-            
             let currentLang = 'ml'; 
             let currentKeyboard = 'phonetic'; 
-            let currentMatchStart = -1;
-            let currentMatchEnd = -1;
 
-            // --- MULTIPLE MEANINGS DICTIONARY API ---
+            // Make sure focus stays in contenteditable
+            $editor.focus();
+
+            // --- INSERT IMAGE ---
+            $('#btn-image').click(() => $('#image-upload').click());
+            $('#image-upload').change(function() {
+                let file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.execCommand('insertImage', false, e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- INSERT TABLE ---
+            $('#btn-table').click(function() {
+                let tableHTML = '<br><table border="1" style="border-collapse:collapse; width:100%;"><tr><td>Row 1, Cell 1</td><td>Row 1, Cell 2</td></tr><tr><td>Row 2, Cell 1</td><td>Row 2, Cell 2</td></tr></table><br>';
+                document.execCommand('insertHTML', false, tableHTML);
+            });
+
+            // --- PRINT FUNCTION ---
+            $('#btn-print').click(function() {
+                let content = $editor.html();
+                let printWin = window.open('', '', 'height=700,width=900');
+                printWin.document.write('<html><head><title>Print Document</title>');
+                printWin.document.write('<style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%;} th,td{border:1px solid #000; padding:8px;}</style>');
+                printWin.document.write('</head><body>');
+                printWin.document.write(content);
+                printWin.document.write('</body></html>');
+                printWin.document.close();
+                setTimeout(function() { printWin.print(); printWin.close(); }, 500);
+            });
+
+            // --- DICTIONARY API ---
             let dictTimer;
             $('#dict-input').on('input', function() {
                 let word = $(this).val().trim();
-                if (word.length < 2) {
-                    $('#dict-results').empty();
-                    return;
-                }
-                
+                if (word.length < 2) return $('#dict-results').empty();
                 clearTimeout(dictTimer);
-                // dt=bd fetches dictionary definitions and synonyms
                 dictTimer = setTimeout(() => {
-                    let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ml&dt=t&dt=bd&q=${encodeURI(word)}`;
-                    
-                    $.get(url, function(data) {
+                    $.get(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ml&dt=t&dt=bd&q=${encodeURI(word)}`, function(data) {
                         $('#dict-results').empty();
                         let addedWords = new Set();
-                        
-                        // 1. Process multiple dictionary entries if available (data[1])
                         if (data && data[1]) {
                             data[1].forEach(part => {
-                                let partOfSpeech = part[0]; // e.g. "noun", "verb"
-                                if(part[1]) {
-                                    part[1].forEach(synonym => {
-                                        if (!addedWords.has(synonym)) {
-                                            addedWords.add(synonym);
-                                            // The data-word attribute safely holds just the Malayalam text for inserting
-                                            $('#dict-results').append(`<div class="dict-item" data-word="${synonym}" title="Click to add">${synonym} <span class="dict-pos">${partOfSpeech}</span></div>`);
-                                        }
-                                    });
-                                }
+                                if(part[1]) part[1].forEach(synonym => {
+                                    if (!addedWords.has(synonym)) {
+                                        addedWords.add(synonym);
+                                        $('#dict-results').append(`<div class="dict-item" data-word="${synonym}">${synonym} <span class="dict-pos">${part[0]}</span></div>`);
+                                    }
+                                });
                             });
                         }
-
-                        // 2. Fallback: Add the primary direct translation if not already added
-                        if (data && data[0] && data[0][0] && data[0][0][0]) {
+                        if (data && data[0] && data[0][0]) {
                             let primary = data[0][0][0];
-                            if (!addedWords.has(primary) && primary.toLowerCase() !== word.toLowerCase()) {
-                                $('#dict-results').prepend(`<div class="dict-item" data-word="${primary}" title="Click to add">${primary} <span class="dict-pos">primary</span></div>`);
-                            }
-                        }
-                        
-                        if ($('#dict-results').is(':empty')) {
-                            $('#dict-results').html('<div style="padding:10px;color:var(--text-secondary);font-size:0.85rem;">No results found.</div>');
+                            if (!addedWords.has(primary)) $('#dict-results').prepend(`<div class="dict-item" data-word="${primary}">${primary} <span class="dict-pos">primary</span></div>`);
                         }
                     });
                 }, 500);
             });
 
-            // Add clicked dictionary word to Editor safely
             $(document).on('click', '.dict-item', function() {
-                let translatedWord = $(this).attr('data-word'); // Gets only the malayalam word, ignoring the pos span
-                insertTextAtCursor(translatedWord + " ");
-                $('#dict-input').val('');
-                $('#dict-results').empty();
-                $editor.focus();
+                insertTextAtCursor($(this).attr('data-word') + " ");
+                $('#dict-input').val(''); $('#dict-results').empty(); $editor.focus();
             });
 
             // Mobile Sidebar
-            $('#menu-toggle').on('click', function() { $('#sidebar').addClass('open'); $('#sidebar-overlay').addClass('open'); });
-            $('#sidebar-overlay').on('click', function() { $('#sidebar').removeClass('open'); $('#sidebar-overlay').removeClass('open'); });
+            $('#menu-toggle').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
+            $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
 
             // Language & Keyboard Toggles
-            $('#btn-lang-en').on('click', function() {
-                currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active');
-                clearSuggestions(); $suggestionBar.html('<span class="suggestion-placeholder">English mode active. Type normally.</span>'); $editor.focus();
-            });
+            $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $editor.focus(); });
+            $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $editor.focus(); });
+            $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $editor.focus(); });
 
-            $('#btn-lang-ml').on('click', function() {
-                currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active');
-                clearSuggestions(); $editor.focus();
-            });
-
-            $('input[name="kbd"]').on('change', function() {
-                currentKeyboard = $(this).val(); clearSuggestions();
-                $suggestionBar.html(currentKeyboard === 'inscript' ? '<span class="suggestion-placeholder">Inscript keyboard active.</span>' : '<span class="suggestion-placeholder">Type in English...</span>');
-                $editor.focus();
-            });
-
-            // Undo/Redo History
-            let textHistory = [""];
-            let historyIndex = 0;
-            function saveHistory() {
-                let currentVal = $editor.val();
-                if (currentVal !== textHistory[historyIndex]) {
-                    textHistory = textHistory.slice(0, historyIndex + 1);
-                    textHistory.push(currentVal);
-                    historyIndex++;
-                }
-            }
-            $('#btn-undo').on('click', function() { if (historyIndex > 0) { historyIndex--; $editor.val(textHistory[historyIndex]); } });
-            $('#btn-redo').on('click', function() { if (historyIndex < textHistory.length - 1) { historyIndex++; $editor.val(textHistory[historyIndex]); } });
-
-            // Formatting
-            $('#font-family-select').on('change', function() { $editor.css('font-family', $(this).val()); });
-            $('#font-size-select').on('change', function() { $editor.css('font-size', $(this).val() + 'px'); });
-            $('#btn-bold').on('click', function() { $(this).toggleClass('active'); $editor.css('font-weight', $(this).hasClass('active') ? 'bold' : 'normal'); });
-            $('#btn-italic').on('click', function() { $(this).toggleClass('active'); $editor.css('font-style', $(this).hasClass('active') ? 'italic' : 'normal'); });
-            $('#btn-underline').on('click', function() { $(this).toggleClass('active'); $editor.css('text-decoration', $(this).hasClass('active') ? 'underline' : 'none'); });
-
-            // Inscript Keyboard
-            const inscriptMap = {
-                'D':'അ', 'E':'ആ', 'F':'ഇ', 'R':'ഈ', 'G':'ഉ', 'T':'ഊ', '+':'ഋ', 'S':'എ', 'W':'ഏ', 'A':'ഒ', 'Q':'ഓ',
-                'k':'ക', 'K':'ഖ', 'i':'ഗ', 'I':'ഘ', 'U':'ങ', ';':'ച', ':':'ഛ', 'p':'ജ', 'P':'ഝ', '}':'ഞ',
-                "'":'ട', '"':'ഠ', '[':'ഡ', '{':'ഢ', 'C':'ണ', 'l':'ത', 'L':'ഥ', 'o':'ദ', 'O':'ധ', 'v':'ന',
-                'h':'പ', 'H':'ഫ', 'y':'ബ', 'Y':'ഭ', 'c':'മ', '/':'യ', 'j':'ര', 'n':'ല', 'b':'വ', 'M':'ശ',
-                '<':'ഷ', 'm':'സ', 'u':'ഹ', 'N':'ള', '>':'ഴ', 'J':'റ',
-                'e':'ാ', 'f':'ി', 'r':'ീ', 'g':'ു', 't':'ൂ', '=':'ൃ', 's':'െ', 'w':'േ', 'a':'ൊ', 'q':'ോ', 'd':'്', 'X':'ം', '_':'ഃ'
-            };
-            $editor.on('keypress', function(e) {
-                if (currentLang === 'ml' && currentKeyboard === 'inscript') {
-                    let char = String.fromCharCode(e.which);
-                    if (inscriptMap[char]) { e.preventDefault(); insertTextAtCursor(inscriptMap[char]); }
-                }
-            });
-
+            // --- HELPER TO INSERT TEXT AT CARET ---
             function insertTextAtCursor(text) {
-                let start = $editor[0].selectionStart; let end = $editor[0].selectionEnd; let val = $editor.val();
-                $editor.val(val.substring(0, start) + text + val.substring(end));
-                $editor[0].selectionStart = $editor[0].selectionEnd = start + text.length;
-                saveHistory();
+                let sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    let range = sel.getRangeAt(0);
+                    range.deleteContents();
+                    let textNode = document.createTextNode(text);
+                    range.insertNode(textNode);
+                    range.setStartAfter(textNode);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
             }
 
-            // Phonetic Dictionary (Google API)
+            // --- RICH TEXT PHONETIC TYPING ---
+            let activeWordInfo = null;
+
+            function getWordBeforeCaret() {
+                let sel = window.getSelection();
+                if (!sel.rangeCount) return null;
+                let range = sel.getRangeAt(0);
+                let node = range.startContainer;
+                if (node.nodeType === 3) { // text node
+                    let textBefore = node.textContent.substring(0, range.startOffset);
+                    let match = textBefore.match(/([a-zA-Z]+)$/);
+                    if (match) return { word: match[1], node: node, startOffset: range.startOffset - match[1].length, endOffset: range.startOffset };
+                }
+                return null;
+            }
+
             $editor.on('input', function() {
                 if (currentLang === 'en' || currentKeyboard === 'inscript') return;
-                let textBeforeCursor = $editor.val().substring(0, $editor[0].selectionStart);
-                let match = textBeforeCursor.match(/([a-zA-Z]+)$/);
-                if (match) {
-                    currentMatchStart = match.index; currentMatchEnd = $editor[0].selectionStart;
-                    fetchSuggestions(match[1]);
-                } else { clearSuggestions(); }
+                let info = getWordBeforeCaret();
+                if (info) {
+                    activeWordInfo = info;
+                    fetchSuggestions(info.word);
+                } else {
+                    clearSuggestions();
+                }
             });
 
-            let typingTimer;
-            $editor.on('keyup', function() { clearTimeout(typingTimer); typingTimer = setTimeout(saveHistory, 1000); });
             $editor.on('keydown', function(e) {
                 if (currentLang === 'en' || currentKeyboard === 'inscript') return;
                 let $active = $('.suggestion-item.active');
@@ -623,96 +392,60 @@
             function renderSuggestions(words) {
                 $suggestionBar.empty();
                 words.forEach((word, index) => {
-                    let activeClass = index === 0 ? 'active' : '';
-                    let $badge = $(`<span class="suggestion-item ${activeClass}">${word}</span>`);
+                    let $badge = $(`<span class="suggestion-item ${index === 0 ? 'active' : ''}">${word}</span>`);
                     $badge.on('click', function() { replaceWord(word); });
                     $suggestionBar.append($badge);
                 });
             }
 
             function replaceWord(malayalamWord) {
-                let text = $editor.val();
-                $editor.val(text.substring(0, currentMatchStart) + malayalamWord + " " + text.substring(currentMatchEnd));
-                let newPos = currentMatchStart + malayalamWord.length + 1;
-                $editor[0].setSelectionRange(newPos, newPos);
-                clearSuggestions(); saveHistory(); $editor.focus();
+                if (!activeWordInfo) return;
+                let sel = window.getSelection();
+                let range = document.createRange();
+                range.setStart(activeWordInfo.node, activeWordInfo.startOffset);
+                range.setEnd(activeWordInfo.node, activeWordInfo.endOffset);
+                range.deleteContents();
+                
+                let textNode = document.createTextNode(malayalamWord + "\u00A0"); // Add space
+                range.insertNode(textNode);
+                range.setStartAfter(textNode);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                
+                clearSuggestions();
+                activeWordInfo = null;
+                $editor.focus();
             }
 
             function clearSuggestions() {
-                if(currentLang === 'en' || currentKeyboard === 'inscript') return;
                 $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
+                activeWordInfo = null;
             }
 
-            // --- LIVE VOICE TYPING (Web Speech API) ---
-            let recognition;
-            let isRecording = false;
-
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRec();
-                recognition.continuous = true;
-                recognition.interimResults = true; 
-
-                recognition.onstart = function() {
-                    isRecording = true;
-                    $('#btn-voice').addClass('recording').html('⏹ Listening...');
-                };
-
-                recognition.onresult = function(event) {
-                    let finalTranscript = '';
-                    let interimTranscript = '';
-                    
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            finalTranscript += event.results[i][0].transcript;
-                        } else {
-                            interimTranscript += event.results[i][0].transcript;
-                        }
-                    }
-                    
-                    if (finalTranscript !== '') {
-                        insertTextAtCursor(finalTranscript + " ");
-                    }
-                    
-                    if (interimTranscript !== '') {
-                        $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
-                    } else {
-                        clearSuggestions();
-                    }
-                };
-
-                recognition.onerror = function(event) {
-                    if (event.error === 'not-allowed') {
-                        alert("Microphone access blocked. Run this via Local Server or GitHub Pages.");
-                    }
-                    $('#btn-voice').removeClass('recording').html('🎤 Voice');
-                    isRecording = false;
-                };
-
-                recognition.onend = function() {
-                    $('#btn-voice').removeClass('recording').html('🎤 Voice');
-                    isRecording = false;
-                };
-            }
-
-            $('#btn-voice').on('click', function() {
-                if (!recognition) return alert("Voice typing is not supported in this browser. Please use Google Chrome.");
-                
-                if (isRecording) {
-                    recognition.stop();
-                } else {
-                    recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-US';
-                    recognition.start();
+            // Inscript Keyboard
+            const inscriptMap = {
+                'D':'അ', 'E':'ആ', 'F':'ഇ', 'R':'ഈ', 'G':'ഉ', 'T':'ഊ', '+':'ഋ', 'S':'എ', 'W':'ഏ', 'A':'ഒ', 'Q':'ഓ',
+                'k':'ക', 'K':'ഖ', 'i':'ഗ', 'I':'ഘ', 'U':'ങ', ';':'ച', ':':'ഛ', 'p':'ജ', 'P':'ഝ', '}':'ഞ',
+                "'":'ട', '"':'ഠ', '[':'ഡ', '{':'ഢ', 'C':'ണ', 'l':'ത', 'L':'ഥ', 'o':'ദ', 'O':'ധ', 'v':'ന',
+                'h':'പ', 'H':'ഫ', 'y':'ബ', 'Y':'ഭ', 'c':'മ', '/':'യ', 'j':'ര', 'n':'ല', 'b':'വ', 'M':'ശ',
+                '<':'ഷ', 'm':'സ', 'u':'ഹ', 'N':'ള', '>':'ഴ', 'J':'റ',
+                'e':'ാ', 'f':'ി', 'r':'ീ', 'g':'ു', 't':'ൂ', '=':'ൃ', 's':'െ', 'w':'േ', 'a':'ൊ', 'q':'ോ', 'd':'്', 'X':'ം', '_':'ഃ'
+            };
+            $editor.on('keypress', function(e) {
+                if (currentLang === 'ml' && currentKeyboard === 'inscript') {
+                    let char = String.fromCharCode(e.which);
+                    if (inscriptMap[char]) { e.preventDefault(); insertTextAtCursor(inscriptMap[char]); }
                 }
             });
 
-            // --- MASTER USER-PROVIDED FML-TT DICTIONARY ENGINE ---
+            // --- FML ENGINE (UPDATED TO READ PLAIN TEXT FROM RICH EDITOR) ---
             $('#btn-copy-fml').on('click', function() {
-                let text = $editor.val();
+                // Extract text directly without HTML tags for FML processing
+                let text = $editor[0].innerText || $editor.text(); 
                 
-                text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); // ൊ -> െ + ാ
-                text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); // ോ -> േ + ാ
-                text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); // ൌ -> െ + ൗ
+                text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); 
+                text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); 
+                text = text.replace(/\u0D4C/g, "\u0D46\u0D57"); 
 
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
@@ -721,16 +454,19 @@
                 text = text.replace(/ണ്\u200D/g, "Æ").replace(/ന്\u200D/g, "³").replace(/ര്\u200D/g, "À").replace(/ല്\u200D/g, "Â").replace(/ള്\u200D/g, "Ä");
                 text = text.replace(/[\u200C\u200D]/g, '');
 
+                // താങ്കൾ നൽകിയ അടിസ്ഥാന കൂട്ടക്ഷരങ്ങൾ അപ്ഡേറ്റ് ചെയ്തിട്ടുണ്ട്
                 const conjuncts = {
-                    'ക്ക': '¡', 'ക്ല': '¢', 'ക്ഷ': '£', 'ഗ്ഗ': '¤', 'ഗ്ന': '¥',
-                    'ങ്ങ': '§', 'ച്ച': '¨', 'ജ്ജ': '©', 'ഞ്ഞ': 'ª', 'ട്ട': '«',
-                    'ണ്ണ': '¬', 'ത്ത': '¯', 'ന്ന': '¶', 'ന്മ': '±', 'പ്പ': '¸',
-                    'ബ്ബ': '³', 'ഭ്ഭ': '´', 'മ്മ': '½', 'യ്യ': '¿', 'ല്ല': 'Ã',
-                    'വ്വ': 'Æ', 'ശ്ശ': 'È', 'സ്സ': 'Ê', 'ള്ള': 'Å', 'റ്റ': 'ä',
-                    'ങ്ക': '¦', 'ഞ്ച': '©', 'ണ്ട': 'ï', 'ന്ത': '´', 'മ്പ': '¼',
-                    'ക്യ': 'Iy', 'ക്ര': '{I', 'ക്വ': 'Iz', 'ച്ഛ': 'b', 'ജ്ഞ': 'P',
-                    'ഡ്ഡ': '«', 'ദ്ധ': '²', 'സ്ഥ': 'Ø', 'സ്ക': 'kv', 'സ്ത': 'kvX',
-                    'സ്ന': 'kv\\', 'സ്പ': 'kv]', 'സ്മ': 'kvv', 'സ്വ': 'kzt',
+                    'ദ്ദ': '±', 'ബ്ര': '{_', 'ന്ത്ര': '{´', 'ന്മ': '·', 'ട്ര': '{S',
+                    'ത്സ': 'Õ', 'ന്ദ്ര': '{µ', 'ണ്ണ': '®', 'ന്ദ': 'µ', 'ന്ത': '´',
+                    'ഗ്ര': '{K', 'ദ്ര്യ': '{Zy', 'ക്ല': '¢', 'ബ്ല': '»', 'സ്റ്റ': 'kvä',
+                    'സ്ഥ': 'Ø', 'ജ്ജ': 'Ö', 'ക്ക': '¡', 'ക്ഷ': '£', 'ഗ്ഗ': '¤', 
+                    'ഗ്ന': '¥', 'ങ്ങ': '§', 'ച്ച': '¨', 'ഞ്ഞ': 'ª', 'ട്ട': '«', 
+                    'ത്ത': '¯', 'ന്ന': '¶', 'പ്പ': '¸', 'ബ്ബ': '³', 'ഭ്ഭ': '´', 
+                    'മ്മ': '½', 'യ്യ': '¿', 'ല്ല': 'Ã', 'വ്വ': 'Æ', 'ശ്ശ': 'È', 
+                    'സ്സ': 'Ê', 'ള്ള': 'Å', 'റ്റ': 'ä', 'ങ്ക': '¦', 'ഞ്ച': '©', 
+                    'ണ്ട': 'ï', 'മ്പ': '¼', 'ക്യ': 'Iy', 'ക്ര': '{I', 'ക്വ': 'Iz', 
+                    'ച്ഛ': 'b', 'ജ്ഞ': 'P', 'ഡ്ഡ': '«', 'ദ്ധ': '²', 'സ്ക': 'kv', 
+                    'സ്ത': 'kvX', 'സ്ന': 'kv\\', 'സ്പ': 'kv]', 'സ്മ': 'kvv', 'സ്വ': 'kzt',
                     'ശ്ര': '{i', 'സ്ര': '{k', 'ത്ര': '{X', 'പ്യ': ']y', 'പ്വ': ']z', 
                     'പ്ല': ']v', 'പ്ര': '{]', 'ർഗ': 'ÀK', 'ന്റ': 'â', 'ൻ്റ': 'â', 
                     '്യ': 'y', '്ര': '{', '്വ': 'z'
@@ -780,11 +516,52 @@
             $('#close-modal').on('click', function() { $('#fml-modal').fadeOut(200); });
 
             $('#btn-copy-uni').on('click', function() {
-                navigator.clipboard.writeText($editor.val());
+                // Unicode copy preserves line breaks from innerText
+                navigator.clipboard.writeText($editor[0].innerText || $editor.text());
                 let $btn = $(this);
                 $btn.html('✅ Copied!');
                 setTimeout(() => $btn.html('📋 Unicode'), 2000);
             });
+
+            // LIVE VOICE TYPING
+            let recognition;
+            let isRecording = false;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRec();
+                recognition.continuous = true;
+                recognition.interimResults = true; 
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    $('#btn-voice').addClass('recording').html('⏹ Listening...');
+                };
+
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                        else interimTranscript += event.results[i][0].transcript;
+                    }
+                    
+                    if (finalTranscript !== '') insertTextAtCursor(finalTranscript + " ");
+                    if (interimTranscript !== '') $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
+                    else clearSuggestions();
+                };
+
+                recognition.onerror = function() { $('#btn-voice').removeClass('recording').html('🎤 Voice'); isRecording = false; };
+                recognition.onend = function() { $('#btn-voice').removeClass('recording').html('🎤 Voice'); isRecording = false; };
+            }
+
+            $('#btn-voice').on('click', function() {
+                if (!recognition) return alert("Voice typing is not supported in this browser. Please use Google Chrome.");
+                if (isRecording) recognition.stop();
+                else { recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-US'; recognition.start(); }
+            });
+
         });
     </script>
 </body>
