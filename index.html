@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thooval | Advanced Manglish Rich Editor</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
+            /* Light Theme Variables */
             --accent-color: #a3e635; 
             --accent-hover: #84cc16;
             --accent-light: #ecfccb; 
@@ -19,6 +21,19 @@
             --text-secondary: #6b7280;
             --border-color: #e5e7eb;
             --radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark-theme {
+            /* Dark Theme Variables */
+            --bg-main: #111827;
+            --bg-sidebar: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+            --accent-light: #374151;
+            --text-on-accent: #111827;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,6 +46,7 @@
             width: 100vw;
             overflow: hidden;
             display: flex;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* --- LEFT SIDEBAR --- */
@@ -43,33 +59,37 @@
             flex-direction: column;
             padding: 24px 20px;
             flex-shrink: 0;
-            transition: left 0.3s ease;
+            transition: all 0.3s ease;
             z-index: 1000;
         }
 
         .brand { display: flex; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 700; margin-bottom: 30px; }
         .brand-logo { width: 32px; height: 32px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
 
-        .file-list { flex-grow: 1; margin-top: 25px; display: flex; flex-direction: column; gap: 8px; }
+        .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
         .list-header { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; letter-spacing: 0.5px; }
         .file-item { padding: 10px 12px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); }
         .file-item.active { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
+        .file-item i { font-size: 1.2rem; }
 
         /* --- DICTIONARY SECTION --- */
         .dictionary-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
         .dict-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px; }
-        .dict-input { width: 100%; padding: 10px; border-radius: var(--radius); border: 1px solid var(--border-color); outline: none; font-size: 0.9rem; background: var(--bg-main); color: var(--text-primary); }
+        .dict-input { width: 100%; padding: 10px; border-radius: var(--radius); border: 1px solid var(--border-color); outline: none; font-size: 0.9rem; background: var(--bg-main); color: var(--text-primary); transition: 0.2s; }
         .dict-input:focus { border-color: var(--accent-color); }
-        .dict-results { display: flex; flex-direction: column; gap: 5px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .dict-results { display: flex; flex-direction: column; gap: 5px; max-height: 200px; overflow-y: auto; padding-right: 5px; }
         .dict-item { padding: 8px 10px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1rem; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
         .dict-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
         .dict-pos { font-family: 'Inter', sans-serif; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; }
 
-        /* User Profile */
-        .user-profile { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
-        .avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: var(--text-on-accent); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 0.9rem; }
+        /* User Profile & Theme Toggle */
+        .bottom-actions { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
+        .user-profile { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--accent-color); color: var(--text-on-accent); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 0.8rem; }
         .user-details { display: flex; flex-direction: column; }
-        .user-name { font-weight: 600; font-size: 0.85rem; }
+        .user-name { font-weight: 600; font-size: 0.8rem; }
+        .theme-toggle-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; transition: 0.2s; }
+        .theme-toggle-btn:hover { color: var(--accent-color); }
 
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 999; }
 
@@ -77,55 +97,68 @@
         .workspace { flex-grow: 1; display: flex; flex-direction: column; background-color: var(--bg-main); height: 100vh; position: relative; width: calc(100% - 260px); }
 
         /* Advanced Toolbar */
-        .toolbar { min-height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 10px 20px; gap: 10px; flex-wrap: wrap; background: #fff; }
+        .toolbar { min-height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 10px 20px; gap: 8px; flex-wrap: wrap; background: var(--bg-main); }
         .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
-        .tool-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.1rem; cursor: pointer; padding: 6px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-on-accent); }
-        .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 5px; }
+        
+        .tool-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-primary); }
+        
+        .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 4px; }
 
-        .select-format { border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; background: var(--bg-main); }
+        .select-format { border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: var(--bg-main); color: var(--text-primary); outline: none; }
         
-        .color-picker-wrapper { display: flex; align-items: center; gap: 5px; font-size: 0.85rem; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; cursor: pointer; }
-        .color-picker { border: none; width: 20px; height: 20px; padding: 0; cursor: pointer; background: none; }
+        /* Hidden Color Pickers & Custom Buttons */
+        .color-picker-wrapper { position: relative; display: inline-block; }
+        .color-picker-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left: 0; top: 0; }
         
+        /* Table Dropdown */
+        .dropdown-wrapper { position: relative; }
+        .table-popup { display: none; position: absolute; top: 100%; left: 0; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 15px; box-shadow: var(--shadow); z-index: 100; min-width: 200px; margin-top: 5px; }
+        .table-popup.show { display: block; }
+        .table-popup-title { font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; color: var(--text-secondary); }
+        .table-inputs { display: flex; gap: 10px; margin-bottom: 10px; }
+        .table-input { width: 50%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-primary); outline: none; }
+        .table-btn { width: 100%; background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 8px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
         .keyboard-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); margin-left: auto; }
         .keyboard-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
 
         /* Suggestion Bar */
         .suggestion-bar { padding: 12px 30px; display: flex; gap: 10px; align-items: center; min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); overflow-x: auto; white-space: nowrap; }
         .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
-        .suggestion-item { background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1.1rem; transition: 0.2s; display: inline-block; }
+        .suggestion-item { background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1.1rem; transition: 0.2s; display: inline-block; color: var(--text-primary); }
         .suggestion-item.active, .suggestion-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
 
-        /* RICH TEXT EDITOR (contenteditable) */
+        /* RICH TEXT EDITOR */
         #editor { flex-grow: 1; width: 100%; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); overflow-y: auto; }
         #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
-        #editor img { max-width: 100%; border-radius: 8px; margin: 10px 0; }
-        #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; }
-        #editor th, #editor td { border: 1px solid var(--border-color); padding: 8px; text-align: left; }
+        #editor img { max-width: 100%; border-radius: 8px; margin: 10px 0; box-shadow: var(--shadow); }
+        #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; border: 1px solid var(--border-color); }
+        #editor th, #editor td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
 
         /* Bottom Status Bar */
         .status-bar { min-height: 60px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 10px 30px; background-color: var(--bg-main); flex-wrap: wrap; gap: 10px; }
         .status-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
+        .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
         .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
         .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; animation: pulse 1.5s infinite; }
+        .action-btn i { font-size: 1.2rem; }
         
         .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
         .btn-dtp:hover { background-color: var(--accent-color); }
 
         .lang-toggle { display: flex; background: var(--bg-sidebar); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
-        .lang-btn { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.9rem; }
+        .lang-btn { padding: 8px 16px; border: none; background: none; color: var(--text-secondary); cursor: pointer; font-size: 0.9rem; }
         .lang-btn.active { background: var(--accent-color); color: var(--text-on-accent); font-weight: 600; }
 
-        /* --- MODAL POPUP --- */
+        /* MODAL POPUP */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--bg-main); padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 15px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
-        .close-modal { cursor: pointer; font-size: 1.5rem; border: none; background: none; }
-        #fml-output-area { width: 100%; height: 150px; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none; }
-        .modal-btn { background: var(--accent-color); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .modal-content { background: var(--bg-main); padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 15px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; color: var(--text-primary); }
+        .close-modal { cursor: pointer; font-size: 1.5rem; border: none; background: none; color: var(--text-secondary); }
+        #fml-output-area { width: 100%; height: 150px; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none; background: var(--bg-main); color: var(--text-primary); }
+        .modal-btn { background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
@@ -144,44 +177,55 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">ളം</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">മ</div> Thooval</div>
+        <button class="new-file-btn"><i class="ph ph-plus"></i> New File</button>
         <div class="file-list">
             <div class="list-header">Drafts</div>
-            <div class="file-item active">📄 My_Document.txt</div>
+            <div class="file-item active"><i class="ph ph-file-text"></i> My_Document.txt</div>
         </div>
 
         <div class="dictionary-section">
-            <div class="dict-title">📖 Dictionary Search</div>
-            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word here...">
+            <div class="dict-title"><i class="ph ph-book-bookmark"></i> Dictionary Search</div>
+            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word...">
             <div id="dict-results" class="dict-results"></div>
         </div>
 
-        <div class="user-profile">
-            <div class="avatar">U</div>
-            <div class="user-details"><span class="user-name">Editor</span></div>
+        <div class="bottom-actions">
+            <div class="user-profile">
+                <div class="avatar">U</div>
+                <div class="user-details"><span class="user-name">Editor</span></div>
+            </div>
+            <button class="theme-toggle-btn" id="btn-theme" title="Toggle Theme"><i class="ph ph-moon"></i></button>
         </div>
     </aside>
 
     <main class="workspace">
         <div class="toolbar">
-            <button class="menu-toggle" id="menu-toggle">☰</button>
+            <button class="menu-toggle" id="menu-toggle"><i class="ph ph-list"></i></button>
             
-            <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo">↩</button>
-            <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo">↪</button>
+            <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo"><i class="ph ph-arrow-u-up-left"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo"><i class="ph ph-arrow-u-up-right"></i></button>
             <div class="divider"></div>
             
-            <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><b>B</b></button>
-            <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i>I</i></button>
-            <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><u>U</u></button>
+            <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
             
             <div class="divider"></div>
             
-            <select class="select-format" onchange="document.execCommand('fontName', false, this.value)">
+            <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
+
+            <div class="divider"></div>
+
+            <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
                 <option value="Manjari">Manjari</option>
                 <option value="Chilanka">Chilanka</option>
                 <option value="Gayathri">Gayathri</option>
             </select>
-            <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)">
+            <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)" title="Font Size">
                 <option value="3">Normal</option>
                 <option value="4">Large</option>
                 <option value="5">Huge</option>
@@ -189,19 +233,33 @@
 
             <div class="divider"></div>
 
-            <div class="color-picker-wrapper" title="Text Color">
-                <span>A</span> <input type="color" class="color-picker" id="textColor" value="#000000" onchange="document.execCommand('foreColor', false, this.value)">
+            <div class="color-picker-wrapper tool-btn" title="Text Color">
+                <i class="ph ph-palette"></i>
+                <input type="color" class="color-picker-input" onchange="document.execCommand('foreColor', false, this.value)">
             </div>
-            <div class="color-picker-wrapper" title="Highlight Color">
-                <span>Bg</span> <input type="color" class="color-picker" id="bgColor" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value)">
+            <div class="color-picker-wrapper tool-btn" title="Highlight Color">
+                <i class="ph ph-highlighter"></i>
+                <input type="color" class="color-picker-input" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value)">
             </div>
 
             <div class="divider"></div>
 
             <input type="file" id="image-upload" accept="image/*" style="display: none;">
-            <button class="tool-btn" id="btn-image" title="Insert Picture">🖼️</button>
-            <button class="tool-btn" id="btn-table" title="Insert Table">📊</button>
-            <button class="tool-btn" id="btn-print" title="Print Document">🖨️</button>
+            <button class="tool-btn" id="btn-image" title="Insert Picture"><i class="ph ph-image"></i></button>
+            
+            <div class="dropdown-wrapper">
+                <button class="tool-btn" id="btn-table-toggle" title="Insert Table"><i class="ph ph-table"></i></button>
+                <div class="table-popup" id="table-popup">
+                    <div class="table-popup-title">Table Size</div>
+                    <div class="table-inputs">
+                        <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows">
+                        <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns">
+                    </div>
+                    <button class="table-btn" id="btn-insert-table">Insert Table</button>
+                </div>
+            </div>
+
+            <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
 
             <div class="keyboard-toggle">
                 <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
@@ -221,11 +279,11 @@
                     <button class="lang-btn active" id="btn-lang-ml">മലയാളം</button>
                     <button class="lang-btn" id="btn-lang-en">English</button>
                 </div>
-                <button class="action-btn" id="btn-voice">🎤 Voice Typing</button>
+                <button class="action-btn" id="btn-voice"><i class="ph ph-microphone"></i> Voice Typing</button>
             </div>
             <div class="status-group">
-                <button class="action-btn" id="btn-copy-uni">📋 Copy Unicode</button>
-                <button class="action-btn btn-dtp" id="btn-copy-fml">📄 Generate FML-TT</button>
+                <button class="action-btn" id="btn-copy-uni"><i class="ph ph-copy"></i> Unicode</button>
+                <button class="action-btn btn-dtp" id="btn-copy-fml"><i class="ph ph-file-code"></i> Generate FML-TT</button>
             </div>
         </div>
 
@@ -249,8 +307,14 @@
             let currentLang = 'ml'; 
             let currentKeyboard = 'phonetic'; 
 
-            // Make sure focus stays in contenteditable
             $editor.focus();
+
+            // --- THEME TOGGLE ---
+            $('#btn-theme').click(function() {
+                $('body').toggleClass('dark-theme');
+                let isDark = $('body').hasClass('dark-theme');
+                $(this).html(isDark ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
+            });
 
             // --- INSERT IMAGE ---
             $('#btn-image').click(() => $('#image-upload').click());
@@ -258,17 +322,33 @@
                 let file = this.files[0];
                 if (file) {
                     let reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.execCommand('insertImage', false, e.target.result);
-                    }
+                    reader.onload = function(e) { document.execCommand('insertImage', false, e.target.result); }
                     reader.readAsDataURL(file);
                 }
             });
 
-            // --- INSERT TABLE ---
-            $('#btn-table').click(function() {
-                let tableHTML = '<br><table border="1" style="border-collapse:collapse; width:100%;"><tr><td>Row 1, Cell 1</td><td>Row 1, Cell 2</td></tr><tr><td>Row 2, Cell 1</td><td>Row 2, Cell 2</td></tr></table><br>';
-                document.execCommand('insertHTML', false, tableHTML);
+            // --- INSERT TABLE (Dynamic Rows/Cols) ---
+            $('#btn-table-toggle').click(function(e) {
+                e.stopPropagation();
+                $('#table-popup').toggleClass('show');
+            });
+            $(document).click(function() { $('#table-popup').removeClass('show'); });
+            $('#table-popup').click(function(e) { e.stopPropagation(); });
+            
+            $('#btn-insert-table').click(function() {
+                let rows = $('#tbl-rows').val();
+                let cols = $('#tbl-cols').val();
+                let html = '<br><table border="1"><tbody>';
+                for(let r=0; r<rows; r++) {
+                    html += '<tr>';
+                    for(let c=0; c<cols; c++) html += `<td>Row ${r+1}, Col ${c+1}</td>`;
+                    html += '</tr>';
+                }
+                html += '</tbody></table><br>';
+                
+                $editor.focus();
+                document.execCommand('insertHTML', false, html);
+                $('#table-popup').removeClass('show');
             });
 
             // --- PRINT FUNCTION ---
@@ -276,15 +356,13 @@
                 let content = $editor.html();
                 let printWin = window.open('', '', 'height=700,width=900');
                 printWin.document.write('<html><head><title>Print Document</title>');
-                printWin.document.write('<style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%;} th,td{border:1px solid #000; padding:8px;}</style>');
-                printWin.document.write('</head><body>');
-                printWin.document.write(content);
-                printWin.document.write('</body></html>');
+                printWin.document.write('<style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;}</style>');
+                printWin.document.write('</head><body>' + content + '</body></html>');
                 printWin.document.close();
-                setTimeout(function() { printWin.print(); printWin.close(); }, 500);
+                setTimeout(() => { printWin.print(); printWin.close(); }, 500);
             });
 
-            // --- DICTIONARY API ---
+            // --- DICTIONARY API (Fixing the focus loss issue) ---
             let dictTimer;
             $('#dict-input').on('input', function() {
                 let word = $(this).val().trim();
@@ -312,9 +390,15 @@
                 }, 500);
             });
 
+            // PREVENT BLUR WHEN CLICKING DICTIONARY ITEM
+            $(document).on('mousedown', '.dict-item', function(e) {
+                e.preventDefault(); // This is the magic fix! Stops editor from losing focus.
+            });
             $(document).on('click', '.dict-item', function() {
-                insertTextAtCursor($(this).attr('data-word') + " ");
-                $('#dict-input').val(''); $('#dict-results').empty(); $editor.focus();
+                let translatedWord = $(this).attr('data-word');
+                document.execCommand("insertText", false, translatedWord + " ");
+                $('#dict-input').val(''); 
+                $('#dict-results').empty();
             });
 
             // Mobile Sidebar
@@ -326,18 +410,8 @@
             $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $editor.focus(); });
             $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $editor.focus(); });
 
-            // --- HELPER TO INSERT TEXT AT CARET ---
             function insertTextAtCursor(text) {
-                let sel = window.getSelection();
-                if (sel.getRangeAt && sel.rangeCount) {
-                    let range = sel.getRangeAt(0);
-                    range.deleteContents();
-                    let textNode = document.createTextNode(text);
-                    range.insertNode(textNode);
-                    range.setStartAfter(textNode);
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                }
+                document.execCommand("insertText", false, text);
             }
 
             // --- RICH TEXT PHONETIC TYPING ---
@@ -348,7 +422,7 @@
                 if (!sel.rangeCount) return null;
                 let range = sel.getRangeAt(0);
                 let node = range.startContainer;
-                if (node.nodeType === 3) { // text node
+                if (node.nodeType === 3) { 
                     let textBefore = node.textContent.substring(0, range.startOffset);
                     let match = textBefore.match(/([a-zA-Z]+)$/);
                     if (match) return { word: match[1], node: node, startOffset: range.startOffset - match[1].length, endOffset: range.startOffset };
@@ -393,7 +467,11 @@
                 $suggestionBar.empty();
                 words.forEach((word, index) => {
                     let $badge = $(`<span class="suggestion-item ${index === 0 ? 'active' : ''}">${word}</span>`);
+                    
+                    // Mouse down to prevent focus loss
+                    $badge.on('mousedown', function(e) { e.preventDefault(); });
                     $badge.on('click', function() { replaceWord(word); });
+                    
                     $suggestionBar.append($badge);
                 });
             }
@@ -404,17 +482,11 @@
                 let range = document.createRange();
                 range.setStart(activeWordInfo.node, activeWordInfo.startOffset);
                 range.setEnd(activeWordInfo.node, activeWordInfo.endOffset);
-                range.deleteContents();
-                
-                let textNode = document.createTextNode(malayalamWord + "\u00A0"); // Add space
-                range.insertNode(textNode);
-                range.setStartAfter(textNode);
                 sel.removeAllRanges();
                 sel.addRange(range);
                 
+                document.execCommand("insertText", false, malayalamWord + "\u00A0");
                 clearSuggestions();
-                activeWordInfo = null;
-                $editor.focus();
             }
 
             function clearSuggestions() {
@@ -438,10 +510,62 @@
                 }
             });
 
-            // --- FML ENGINE (UPDATED TO READ PLAIN TEXT FROM RICH EDITOR) ---
+            // --- LIVE VOICE TYPING (Web Speech API) ---
+            let recognition;
+            let isRecording = false;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRec();
+                recognition.continuous = true;
+                recognition.interimResults = true; 
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    $('#btn-voice').addClass('recording').html('<i class="ph ph-stop"></i> Listening...');
+                };
+
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                        else interimTranscript += event.results[i][0].transcript;
+                    }
+                    if (finalTranscript !== '') {
+                        // Focus editor before inserting speech
+                        $editor.focus();
+                        document.execCommand("insertText", false, finalTranscript + " ");
+                    }
+                    if (interimTranscript !== '') $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
+                    else clearSuggestions();
+                };
+
+                recognition.onerror = function(event) {
+                    alert("Speech Recognition Error. Make sure you are on HTTPS or Localhost.");
+                    $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing');
+                    isRecording = false;
+                };
+
+                recognition.onend = function() {
+                    $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing');
+                    isRecording = false;
+                };
+            }
+
+            $('#btn-voice').on('click', function() {
+                if (!recognition) return alert("Voice typing is not supported in this browser. Please use Chrome/Edge.");
+                if (isRecording) recognition.stop();
+                else { 
+                    // Set language dynamically based on active tab
+                    recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; 
+                    recognition.start(); 
+                }
+            });
+
+            // --- MASTER FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
-                // Extract text directly without HTML tags for FML processing
-                let text = $editor[0].innerText || $editor.text(); 
+                let text = $editor[0].innerText || $editor.text(); // Strip HTML before FML
                 
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); 
                 text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); 
@@ -454,7 +578,6 @@
                 text = text.replace(/ണ്\u200D/g, "Æ").replace(/ന്\u200D/g, "³").replace(/ര്\u200D/g, "À").replace(/ല്\u200D/g, "Â").replace(/ള്\u200D/g, "Ä");
                 text = text.replace(/[\u200C\u200D]/g, '');
 
-                // താങ്കൾ നൽകിയ അടിസ്ഥാന കൂട്ടക്ഷരങ്ങൾ അപ്ഡേറ്റ് ചെയ്തിട്ടുണ്ട്
                 const conjuncts = {
                     'ദ്ദ': '±', 'ബ്ര': '{_', 'ന്ത്ര': '{´', 'ന്മ': '·', 'ട്ര': '{S',
                     'ത്സ': 'Õ', 'ന്ദ്ര': '{µ', 'ണ്ണ': '®', 'ന്ദ': 'µ', 'ന്ത': '´',
@@ -509,59 +632,19 @@
 
             $('#modal-copy-btn').on('click', function() {
                 navigator.clipboard.writeText($('#fml-output-area').val());
-                $(this).text('✅ Copied to Clipboard!');
-                setTimeout(() => $(this).text('📋 Copy to Clipboard'), 2000);
+                $(this).html('✅ Copied to Clipboard!');
+                setTimeout(() => $(this).html('📋 Copy to Clipboard'), 2000);
             });
 
             $('#close-modal').on('click', function() { $('#fml-modal').fadeOut(200); });
 
             $('#btn-copy-uni').on('click', function() {
-                // Unicode copy preserves line breaks from innerText
                 navigator.clipboard.writeText($editor[0].innerText || $editor.text());
                 let $btn = $(this);
+                let og = $btn.html();
                 $btn.html('✅ Copied!');
-                setTimeout(() => $btn.html('📋 Unicode'), 2000);
+                setTimeout(() => $btn.html(og), 2000);
             });
-
-            // LIVE VOICE TYPING
-            let recognition;
-            let isRecording = false;
-
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRec();
-                recognition.continuous = true;
-                recognition.interimResults = true; 
-
-                recognition.onstart = function() {
-                    isRecording = true;
-                    $('#btn-voice').addClass('recording').html('⏹ Listening...');
-                };
-
-                recognition.onresult = function(event) {
-                    let finalTranscript = '';
-                    let interimTranscript = '';
-                    
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
-                        else interimTranscript += event.results[i][0].transcript;
-                    }
-                    
-                    if (finalTranscript !== '') insertTextAtCursor(finalTranscript + " ");
-                    if (interimTranscript !== '') $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
-                    else clearSuggestions();
-                };
-
-                recognition.onerror = function() { $('#btn-voice').removeClass('recording').html('🎤 Voice'); isRecording = false; };
-                recognition.onend = function() { $('#btn-voice').removeClass('recording').html('🎤 Voice'); isRecording = false; };
-            }
-
-            $('#btn-voice').on('click', function() {
-                if (!recognition) return alert("Voice typing is not supported in this browser. Please use Google Chrome.");
-                if (isRecording) recognition.stop();
-                else { recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-US'; recognition.start(); }
-            });
-
         });
     </script>
 </body>
