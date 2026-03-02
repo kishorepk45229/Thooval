@@ -634,51 +634,178 @@
                 navigator.clipboard.writeText($editor[0].innerText || $editor.text());
                 let $btn = $(this); let og = $btn.html(); $btn.html('✅ Copied!'); setTimeout(() => $btn.html(og), 2000);
             });
+        });
+    </script>
+    <script type="module">
+        // Firebase മോഡ്യൂളുകൾ ഇംപോർട്ട് ചെയ്യുന്നു
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            // --- FIREBASE MOCK LOGIN & AUTOSAVE LOGIC ---
-            let currentUserId = null;
-            let currentFileId = 'local-draft-1';
-            let saveTimeout;
+        // ======================================================================
+        // താഴെ കാണുന്ന ഭാഗത്ത് നിങ്ങളുടെ യഥാർത്ഥ FIREBASE കീകൾ നൽകുക!
+        // ======================================================================
+        const firebaseConfig = {
+        apiKey: "AIzaSyBQFJ1lqnSdqFKEGnE4TzjfBdnxrrlG740",
+        authDomain: "thooval-6b344.firebaseapp.com",
+        projectId: "thooval-6b344",
+        storageBucket: "thooval-6b344.firebasestorage.app",
+        messagingSenderId: "850368774501",
+        appId: "1:850368774501:web:3abfb1b8c6f71ef2aba18c"
+        };
+        
+        // ഫയർബേസ് ആരംഭിക്കുന്നു
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-            $('#btn-google-login').click(function() {
-                currentUserId = "user-123";
-                $('#user-name-display').text("Kishore Krishnan"); 
-                $('#user-avatar').text("K"); 
+        let currentUserId = null;
+        let currentFileId = null;
+        let saveTimeout;
+
+        // --- 1. ലോഗിൻ സ്റ്റാറ്റസ് പരിശോധിക്കുന്നു ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // യൂസർ ലോഗിൻ ചെയ്തിട്ടുണ്ട്
+                currentUserId = user.uid;
+                $('#user-name-display').text(user.displayName); 
+                $('#user-avatar').html(`<img src="${user.photoURL}" style="width:100%; border-radius:50%;">`); 
                 $('#login-overlay').css('opacity', '0');
                 setTimeout(() => $('#login-overlay').hide(), 500);
                 $('#save-status').html('<i class="ph ph-cloud-check"></i> Cloud Sync Active');
-            });
+                
+                // യൂസറുടെ സേവ് ചെയ്ത ഫയലുകൾ ക്ലൗഡിൽ നിന്നും എടുക്കുന്നു
+                loadUserFiles();
+            } else {
+                // യൂസർ ലോഗിൻ ചെയ്തിട്ടില്ല, ലോഗിൻ പേജ് കാണിക്കുന്നു
+                currentUserId = null;
+                $('#login-overlay').show().css('opacity', '1');
+            }
+        });
 
-            $('#btn-guest-login').click(function() {
-                $('#login-overlay').css('opacity', '0');
-                setTimeout(() => $('#login-overlay').hide(), 500);
+        // --- 2. ഗൂഗിൾ വഴി ലോഗിൻ ചെയ്യാനുള്ള ബട്ടൺ ---
+        $('#btn-google-login').click(function() {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).catch((error) => {
+                console.error("Login Error:", error);
+                alert("Login failed! Ensure your GitHub Pages domain is added to Firebase Authorized Domains.");
             });
+        });
 
-            $('#user-profile-box').click(function() {
-                if(currentUserId && confirm("Do you want to sign out?")) location.reload();
-            });
+        // ഗെസ്റ്റ് ലോഗിൻ (സേവ് ആകില്ല)
+        $('#btn-guest-login').click(function() {
+            $('#login-overlay').css('opacity', '0');
+            setTimeout(() => $('#login-overlay').hide(), 500);
+            $('#save-status').html('<i class="ph ph-warning-circle"></i> Guest Mode (No Cloud Save)');
+            currentFileId = 'local-draft';
+        });
 
-            $editor.on('input', function() {
-                clearTimeout(saveTimeout);
-                $('#save-status').html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Saving...');
-                saveTimeout = setTimeout(() => {
-                    if (currentUserId) {
-                        // DB save logic will go here
+        // സൈൻ ഔട്ട് ചെയ്യാനുള്ള ഓപ്ഷൻ
+        $('#user-profile-box').click(function() {
+            if(currentUserId && confirm("Do you want to sign out of your account?")) {
+                signOut(auth);
+            }
+        });
+
+        // --- 3. ഓട്ടോ സേവ് (AUTO-SAVE TO CLOUD) ---
+        $('#editor').on('input', function() {
+            clearTimeout(saveTimeout);
+            $('#save-status').html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Saving to cloud...');
+            
+            saveTimeout = setTimeout(async () => {
+                let content = $(this).html();
+                
+                if (currentUserId && currentFileId && currentFileId !== 'local-draft') {
+                    try {
+                        const fileRef = doc(db, `users/${currentUserId}/files`, currentFileId);
+                        await updateDoc(fileRef, { 
+                            content: content, 
+                            lastModified: serverTimestamp() 
+                        });
                         $('#save-status').html('<i class="ph ph-cloud-check" style="color: var(--accent-color);"></i> Saved to Cloud');
-                    } else {
-                        localStorage.setItem(currentFileId, $editor.html());
-                        $('#save-status').html('<i class="ph ph-check-circle"></i> Saved locally');
+                    } catch (error) {
+                        console.error("Error saving document:", error);
+                        $('#save-status').html('<i class="ph ph-warning-circle" style="color: red;"></i> Save Error');
                     }
-                }, 2000);
-            });
+                }
+            }, 2000); // ടൈപ്പിംഗ് നിർത്തി 2 സെക്കൻഡിനു ശേഷം സേവ് ആകുന്നു
+        });
 
-            $('#btn-new-file').click(function() {
-                if(!currentUserId) return alert("Please log in to create multiple cloud files.");
-                let newTitle = prompt("Enter file name:", "New Document");
-                if(!newTitle) return;
-                $('.file-item').removeClass('active');
-                $('#cloud-file-list').append(`<div class="file-item active"><i class="ph ph-file-text"></i> ${newTitle}.txt</div>`);
-                $editor.html(''); 
+        // --- 4. പുതിയ ഫയൽ നിർമ്മിക്കാൻ ---
+        $('#btn-new-file').click(async function() {
+            if(!currentUserId) return alert("Please log in with Google to create saved files.");
+            
+            let newTitle = prompt("Enter new file name:", "Untitled Document");
+            if(!newTitle) return;
+
+            try {
+                // പുതിയ ഫയൽ ക്ലൗഡിൽ ഉണ്ടാക്കുന്നു
+                const docRef = await addDoc(collection(db, `users/${currentUserId}/files`), {
+                    title: newTitle, 
+                    content: "", 
+                    lastModified: serverTimestamp()
+                });
+                
+                currentFileId = docRef.id;
+                $('#editor').html(''); 
+            } catch (error) {
+                console.error("Error creating file:", error);
+            }
+        });
+
+        // --- 5. ഫയലുകൾ തത്സമയം ലോഡ് ചെയ്യാൻ (REAL-TIME SYNC) ---
+        function loadUserFiles() {
+            const q = query(collection(db, `users/${currentUserId}/files`), orderBy("lastModified", "desc"));
+            onSnapshot(q, (snapshot) => {
+                let fileList = $('#cloud-file-list');
+                fileList.html('<div class="list-header">My Documents</div>');
+                
+                // യൂസർക്ക് ഫയലുകൾ ഒന്നും ഇല്ലെങ്കിൽ പുതിയത് ഉണ്ടാക്കുന്നു
+                if (snapshot.empty) {
+                    addDoc(collection(db, `users/${currentUserId}/files`), {
+                        title: "Welcome Document",
+                        content: "<h1>നമസ്കാരം!</h1><p>ഇവിടെ മലയാളം ടൈപ്പ് ചെയ്തു തുടങ്ങാം...</p>",
+                        lastModified: serverTimestamp()
+                    });
+                    return;
+                }
+
+                let isFirst = true;
+                snapshot.forEach(docSnap => {
+                    let data = docSnap.data();
+                    
+                    // ആദ്യത്തെ ഫയൽ ഡിഫോൾട്ട് ആയി എഡിറ്ററിൽ കാണിക്കുന്നു
+                    if (isFirst && !currentFileId) {
+                        currentFileId = docSnap.id;
+                        $('#editor').html(data.content);
+                    }
+                    
+                    let isActive = (currentFileId === docSnap.id) ? 'active' : '';
+                    fileList.append(`<div class="file-item ${isActive}" data-id="${docSnap.id}"><i class="ph ph-file-text"></i> ${data.title}</div>`);
+                    isFirst = false;
+                });
+            });
+        }
+
+        // --- 6. ഫയലുകൾ മാറുമ്പോൾ (SWITCH FILES) ---
+        $(document).on('click', '.file-item', async function() {
+            if(!currentUserId) return; 
+            
+            let fileId = $(this).attr('data-id');
+            if(fileId === currentFileId) return; 
+            
+            $('.file-item').removeClass('active');
+            $(this).addClass('active');
+            currentFileId = fileId;
+            
+            $('#editor').html('<p style="color:var(--text-secondary);"><i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Loading document...</p>');
+            
+            const q = query(collection(db, `users/${currentUserId}/files`));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((docSnap) => {
+                if(docSnap.id === fileId) {
+                    $('#editor').html(docSnap.data().content);
+                }
             });
         });
     </script>
