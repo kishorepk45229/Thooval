@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thooval | Advanced Manglish Rich Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&family=Chilanka&family=Gayathri:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Meera+Inimai&family=Anek+Malayalam:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -70,7 +70,6 @@
         .list-header { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; letter-spacing: 0.5px; }
         .file-item { padding: 10px 12px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); }
         .file-item.active { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
-        .file-item i { font-size: 1.2rem; }
 
         /* --- DICTIONARY SECTION --- */
         .dictionary-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
@@ -105,11 +104,12 @@
         
         .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 4px; }
 
-        .select-format { border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: var(--bg-main); color: var(--text-primary); outline: none; }
+        .select-format { border: 1px solid var(--border-color); padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: var(--bg-main); color: var(--text-primary); outline: none; }
         
-        /* Hidden Color Pickers & Custom Buttons */
-        .color-picker-wrapper { position: relative; display: inline-block; }
-        .color-picker-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left: 0; top: 0; }
+        /* Circular Color Pickers */
+        .color-picker-container { display: flex; align-items: center; gap: 6px; background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 20px; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;}
+        .color-circle { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-color); position: relative; overflow: hidden; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);}
+        .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 50px; height: 50px; opacity: 0; cursor: pointer; }
         
         /* Table Dropdown */
         .dropdown-wrapper { position: relative; }
@@ -177,8 +177,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">മ</div> Thooval</div>
-        <button class="new-file-btn"><i class="ph ph-plus"></i> New File</button>
+        <div class="brand"><div class="brand-logo">തൂ</div> Thooval</div>
         <div class="file-list">
             <div class="list-header">Drafts</div>
             <div class="file-item active"><i class="ph ph-file-text"></i> My_Document.txt</div>
@@ -186,7 +185,7 @@
 
         <div class="dictionary-section">
             <div class="dict-title"><i class="ph ph-book-bookmark"></i> Dictionary Search</div>
-            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word...">
+            <input type="text" id="dict-input" class="dict-input" placeholder="Type English word here...">
             <div id="dict-results" class="dict-results"></div>
         </div>
 
@@ -221,9 +220,12 @@
             <div class="divider"></div>
 
             <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
-                <option value="Manjari">Manjari</option>
-                <option value="Chilanka">Chilanka</option>
-                <option value="Gayathri">Gayathri</option>
+                <option value="'Manjari', sans-serif" style="font-family: 'Manjari', sans-serif;">Manjari (മഞ്ചരി)</option>
+                <option value="'Chilanka', cursive" style="font-family: 'Chilanka', cursive;">Chilanka (ചിലങ്ക)</option>
+                <option value="'Gayathri', sans-serif" style="font-family: 'Gayathri', sans-serif;">Gayathri (ഗായത്രി)</option>
+                <option value="'Noto Sans Malayalam', sans-serif" style="font-family: 'Noto Sans Malayalam', sans-serif;">Noto Sans (നോട്ടോ)</option>
+                <option value="'Meera Inimai', sans-serif" style="font-family: 'Meera Inimai', sans-serif;">Meera (മീര)</option>
+                <option value="'Anek Malayalam', sans-serif" style="font-family: 'Anek Malayalam', sans-serif;">Anek (അനേക്)</option>
             </select>
             <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)" title="Font Size">
                 <option value="3">Normal</option>
@@ -233,13 +235,18 @@
 
             <div class="divider"></div>
 
-            <div class="color-picker-wrapper tool-btn" title="Text Color">
-                <i class="ph ph-palette"></i>
-                <input type="color" class="color-picker-input" onchange="document.execCommand('foreColor', false, this.value)">
+            <div class="color-picker-container" title="Text Color">
+                <i class="ph ph-palette"></i> Text
+                <div class="color-circle" style="background-color: #000000;" id="textColorDisplay">
+                    <input type="color" onchange="document.execCommand('foreColor', false, this.value); document.getElementById('textColorDisplay').style.backgroundColor = this.value;">
+                </div>
             </div>
-            <div class="color-picker-wrapper tool-btn" title="Highlight Color">
-                <i class="ph ph-highlighter"></i>
-                <input type="color" class="color-picker-input" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value)">
+            
+            <div class="color-picker-container" title="Highlight Color">
+                <i class="ph ph-highlighter"></i> Fill
+                <div class="color-circle" style="background-color: #ffff00;" id="bgColorDisplay">
+                    <input type="color" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value); document.getElementById('bgColorDisplay').style.backgroundColor = this.value;">
+                </div>
             </div>
 
             <div class="divider"></div>
@@ -252,8 +259,8 @@
                 <div class="table-popup" id="table-popup">
                     <div class="table-popup-title">Table Size</div>
                     <div class="table-inputs">
-                        <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows">
-                        <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns">
+                        <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows" placeholder="Rows">
+                        <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns" placeholder="Cols">
                     </div>
                     <button class="table-btn" id="btn-insert-table">Insert Table</button>
                 </div>
@@ -362,7 +369,27 @@
                 setTimeout(() => { printWin.print(); printWin.close(); }, 500);
             });
 
-            // --- DICTIONARY API (Fixing the focus loss issue) ---
+            // --- SAVE/RESTORE CURSOR STATE FOR DICTIONARY FIX ---
+            let savedRange = null;
+            
+            function saveSelection() {
+                let sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    savedRange = sel.getRangeAt(0);
+                }
+            }
+            
+            function restoreSelection() {
+                if (savedRange) {
+                    let sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(savedRange);
+                }
+            }
+
+            $editor.on('keyup mouseup blur', saveSelection);
+
+            // --- DICTIONARY API ---
             let dictTimer;
             $('#dict-input').on('input', function() {
                 let word = $(this).val().trim();
@@ -390,13 +417,18 @@
                 }, 500);
             });
 
-            // PREVENT BLUR WHEN CLICKING DICTIONARY ITEM
+            // Mousedown prevent default stops the editor from losing focus initially
             $(document).on('mousedown', '.dict-item', function(e) {
-                e.preventDefault(); // This is the magic fix! Stops editor from losing focus.
+                e.preventDefault();
             });
+
+            // Click actually inserts the word
             $(document).on('click', '.dict-item', function() {
                 let translatedWord = $(this).attr('data-word');
+                $editor.focus();
+                restoreSelection();
                 document.execCommand("insertText", false, translatedWord + " ");
+                saveSelection(); // Save new position
                 $('#dict-input').val(''); 
                 $('#dict-results').empty();
             });
@@ -412,6 +444,7 @@
 
             function insertTextAtCursor(text) {
                 document.execCommand("insertText", false, text);
+                saveSelection();
             }
 
             // --- RICH TEXT PHONETIC TYPING ---
@@ -467,11 +500,8 @@
                 $suggestionBar.empty();
                 words.forEach((word, index) => {
                     let $badge = $(`<span class="suggestion-item ${index === 0 ? 'active' : ''}">${word}</span>`);
-                    
-                    // Mouse down to prevent focus loss
                     $badge.on('mousedown', function(e) { e.preventDefault(); });
                     $badge.on('click', function() { replaceWord(word); });
-                    
                     $suggestionBar.append($badge);
                 });
             }
@@ -487,6 +517,7 @@
                 
                 document.execCommand("insertText", false, malayalamWord + "\u00A0");
                 clearSuggestions();
+                saveSelection();
             }
 
             function clearSuggestions() {
@@ -528,36 +559,30 @@
                 recognition.onresult = function(event) {
                     let finalTranscript = '';
                     let interimTranscript = '';
+                    
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
                         if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
                         else interimTranscript += event.results[i][0].transcript;
                     }
+                    
                     if (finalTranscript !== '') {
-                        // Focus editor before inserting speech
                         $editor.focus();
+                        restoreSelection();
                         document.execCommand("insertText", false, finalTranscript + " ");
+                        saveSelection();
                     }
                     if (interimTranscript !== '') $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
                     else clearSuggestions();
                 };
 
-                recognition.onerror = function(event) {
-                    alert("Speech Recognition Error. Make sure you are on HTTPS or Localhost.");
-                    $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing');
-                    isRecording = false;
-                };
-
-                recognition.onend = function() {
-                    $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing');
-                    isRecording = false;
-                };
+                recognition.onerror = function() { $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing'); isRecording = false; };
+                recognition.onend = function() { $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing'); isRecording = false; };
             }
 
             $('#btn-voice').on('click', function() {
                 if (!recognition) return alert("Voice typing is not supported in this browser. Please use Chrome/Edge.");
                 if (isRecording) recognition.stop();
                 else { 
-                    // Set language dynamically based on active tab
                     recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; 
                     recognition.start(); 
                 }
@@ -565,7 +590,7 @@
 
             // --- MASTER FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
-                let text = $editor[0].innerText || $editor.text(); // Strip HTML before FML
+                let text = $editor[0].innerText || $editor.text(); 
                 
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E"); 
                 text = text.replace(/\u0D4B/g, "\u0D47\u0D3E"); 
