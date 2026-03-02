@@ -34,9 +34,20 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; transition: background-color 0.3s, color 0.3s; }
 
-        /* --- LOGIN OVERLAY PORTAL --- */
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; }
-        .login-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; max-width: 400px; width: 90%; }
+        /* --- LOGIN OVERLAY & BACKGROUND ANIMATION --- */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; overflow: hidden; }
+        
+        /* Background Floating Letters Animation */
+        .bg-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
+        .bg-letter { position: absolute; font-size: 5rem; color: var(--accent-color); opacity: 0; font-family: 'Chilanka', cursive; font-weight: bold; animation: floatAndFade 8s infinite ease-in-out; filter: blur(0.5px); }
+        @keyframes floatAndFade {
+            0% { opacity: 0; transform: scale(0.6) translateY(30px) rotate(-10deg); }
+            30% { opacity: 0.15; transform: scale(1.1) translateY(0) rotate(5deg); }
+            70% { opacity: 0.15; transform: scale(1) translateY(-15px) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.8) translateY(-40px) rotate(10deg); }
+        }
+
+        .login-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; max-width: 400px; width: 90%; position: relative; z-index: 10; backdrop-filter: blur(10px); }
         .login-logo { width: 60px; height: 60px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; margin: 0 auto 20px auto; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
         .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); }
         .login-subtitle { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5; }
@@ -46,11 +57,14 @@
         .btn-guest { background: transparent; color: var(--text-secondary); border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; transition: 0.2s; }
         .btn-guest:hover { color: var(--text-primary); }
 
+        /* --- MOBILE TOP HEADER --- */
+        .mobile-header { display: none; }
+        
         /* --- LEFT SIDEBAR --- */
         .sidebar { width: 260px; height: 100vh; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px 20px; flex-shrink: 0; transition: all 0.3s ease; z-index: 1000; }
         .brand { display: flex; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 700; margin-bottom: 30px; }
         .brand-logo { width: 32px; height: 32px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
-        .new-file-btn { background-color: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: var(--radius); cursor: pointer; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .new-file-btn { background-color: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: var(--radius); cursor: pointer; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; transition: 0.2s; width: 100%; }
         .new-file-btn:hover { background-color: var(--accent-hover); }
 
         .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 30vh; }
@@ -59,7 +73,6 @@
         .file-item.active { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
         .file-title-wrapper { display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; }
         .file-title-wrapper span { overflow: hidden; text-overflow: ellipsis; }
-        
         .btn-delete-file { background: transparent; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer; display: none; padding: 2px; border-radius: 4px; transition: 0.2s;}
         .btn-delete-file:hover { background: #fee2e2; }
         .file-item:hover .btn-delete-file { display: block; }
@@ -92,7 +105,10 @@
         .workspace { flex-grow: 1; display: flex; flex-direction: column; background-color: var(--bg-main); height: 100vh; position: relative; width: calc(100% - 260px); }
         
         .toolbar { min-height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 10px 20px; gap: 8px; flex-wrap: wrap; background: var(--bg-main); }
-        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+        .toolbar-primary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .toolbar-secondary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .toolbar-expand-btn { display: none; }
+        
         .tool-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-primary); }
         .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 4px; }
@@ -126,10 +142,14 @@
         #editor th, #editor td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
         #editor ul, #editor ol { margin-left: 20px; margin-bottom: 10px; }
 
+        /* --- BTM STATUS BAR --- */
         .status-bar { min-height: 60px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 10px 30px; background-color: var(--bg-main); flex-wrap: wrap; gap: 10px; }
+        .status-bar-content { display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .status-expand-btn { display: none; }
         .status-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
         .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
-        .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
+        .action-btn:hover { background: var(--bg-sidebar); border-color: var(--accent-color); }
         .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; animation: pulse 1.5s infinite; }
         .action-btn i { font-size: 1.2rem; }
         .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
@@ -137,7 +157,6 @@
         .lang-toggle { display: flex; background: var(--bg-sidebar); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .lang-btn { padding: 8px 16px; border: none; background: transparent; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
         .lang-btn.active { background: var(--accent-color); color: var(--text-on-accent); font-weight: 600; }
-        
         .keyboard-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); }
         .keyboard-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
 
@@ -151,21 +170,52 @@
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
+        /* --- MOBILE RESPONSIVE TWEAKS --- */
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -260px; top: 0; }
             .sidebar.open { left: 0; }
             .sidebar-overlay.open { display: block; }
             .workspace { width: 100%; }
-            .menu-toggle { display: block; }
-            .save-status { width: 100%; justify-content: center; margin-top: 10px;}
+            
+            /* Mobile Top Header */
+            .mobile-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
+            .mobile-menu-toggle { background: none; border: none; font-size: 1.5rem; color: var(--text-primary); cursor: pointer; }
+            .mobile-brand { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+            .mobile-user-profile { display: flex; align-items: center; gap: 10px; }
+            
+            /* Mobile Toolbar Hide/Show */
+            .toolbar { flex-direction: column; align-items: stretch; padding: 10px 15px; }
+            .toolbar-primary { display: flex; width: 100%; justify-content: flex-start; }
+            .toolbar-secondary { display: none; width: 100%; border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 5px; justify-content: flex-start; }
+            .toolbar-secondary.expanded { display: flex; }
+            .toolbar-expand-btn { display: flex; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 4px; margin-left: auto; }
+            .save-status { margin: 10px auto 0 auto; width: 100%; justify-content: center; padding: 0; border: none; }
+            
+            /* Mobile Bottom Bar Hide/Show */
+            .status-bar { padding: 10px 15px; flex-direction: column; }
+            .status-bar-content { display: none; flex-direction: column; width: 100%; gap: 15px; }
+            .status-bar-content.expanded { display: flex; }
+            .status-expand-btn { display: flex; width: 100%; justify-content: center; background: none; border: none; font-size: 1rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 5px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 5px;}
+            .status-group { justify-content: center; width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <div class="login-overlay" id="login-overlay">
+        <div class="bg-animation">
+            <div class="bg-letter" style="left: 10%; top: 20%; animation-delay: 0s; font-size: 6rem;">അ</div>
+            <div class="bg-letter" style="left: 80%; top: 15%; animation-delay: 1.5s; font-size: 4rem;">ക</div>
+            <div class="bg-letter" style="left: 25%; top: 70%; animation-delay: 3s; font-size: 7rem;">മ</div>
+            <div class="bg-letter" style="left: 70%; top: 80%; animation-delay: 0.5s; font-size: 5rem;">ല</div>
+            <div class="bg-letter" style="left: 50%; top: 35%; animation-delay: 4s; font-size: 8rem; opacity: 0.05;">തൂ</div>
+            <div class="bg-letter" style="left: 85%; top: 50%; animation-delay: 2.5s; font-size: 4.5rem;">ർ</div>
+            <div class="bg-letter" style="left: 15%; top: 50%; animation-delay: 1s; font-size: 6.5rem;">ജ്ഞ</div>
+            <div class="bg-letter" style="left: 40%; top: 85%; animation-delay: 5s; font-size: 5.5rem;">ശ്ര</div>
+        </div>
+
         <div class="login-box">
-            <div class="login-logo">ക</div>
+            <div class="login-logo">ത</div>
             <h1 class="login-title">Welcome to Thooval</h1>
             <p class="login-subtitle">Sign in to save your documents to the cloud and access them from anywhere.</p>
             <button class="btn-google" id="btn-google-login">
@@ -179,7 +229,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">ക</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">ത</div> Thooval</div>
         <button class="new-file-btn" id="btn-new-file"><i class="ph ph-plus"></i> New File</button>
         
         <div class="file-list" id="cloud-file-list">
@@ -208,72 +258,88 @@
     </aside>
 
     <main class="workspace">
+        
+        <header class="mobile-header">
+            <button class="mobile-menu-toggle" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
+            <div class="mobile-brand">
+                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">തൂ</div> Thooval
+            </div>
+            <div class="mobile-user-profile">
+                <div class="avatar mobile-avatar" id="mobile-user-avatar" style="width:28px; height:28px;">G</div>
+                <button class="logout-btn mobile-logout-btn" id="mobile-logout" style="display:none; color:#ef4444;"><i class="ph ph-sign-out"></i></button>
+            </div>
+        </header>
+
         <div class="toolbar">
-            <button class="menu-toggle" id="menu-toggle"><i class="ph ph-list"></i></button>
-            
-            <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo"><i class="ph ph-arrow-u-up-left"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo"><i class="ph ph-arrow-u-up-right"></i></button>
-            <div class="divider"></div>
-            
-            <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
-            <div class="divider"></div>
-            
-            <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="ph ph-list-bullets"></i></button>
-            <button class="tool-btn" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="ph ph-list-numbers"></i></button>
-            <div class="divider"></div>
-
-            <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
-                <option value="'Manjari', sans-serif" style="font-family: 'Manjari', sans-serif;">Manjari (മഞ്ചരി)</option>
-                <option value="'Chilanka', cursive" style="font-family: 'Chilanka', cursive;">Chilanka (ചിലങ്ക)</option>
-                <option value="'Gayathri', sans-serif" style="font-family: 'Gayathri', sans-serif;">Gayathri (ഗായത്രി)</option>
-                <option value="'Noto Sans Malayalam', sans-serif" style="font-family: 'Noto Sans Malayalam', sans-serif;">Noto Sans (നോട്ടോ)</option>
-                <option value="'Meera Inimai', sans-serif" style="font-family: 'Meera Inimai', sans-serif;">Meera (മീര)</option>
-                <option value="'Anek Malayalam', sans-serif" style="font-family: 'Anek Malayalam', sans-serif;">Anek (അനേക്)</option>
-            </select>
-            <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)" title="Font Size">
-                <option value="3">Normal</option>
-                <option value="4">Large</option>
-                <option value="5">Huge</option>
-            </select>
-            <div class="divider"></div>
-
-            <div class="color-picker-container" title="Text Color">
-                <i class="ph ph-palette"></i>
-                <div class="color-circle" style="background-color: #000000;" id="textColorDisplay">
-                    <input type="color" onchange="document.execCommand('foreColor', false, this.value); document.getElementById('textColorDisplay').style.backgroundColor = this.value;">
-                </div>
-            </div>
-            <div class="color-picker-container" title="Highlight Color">
-                <i class="ph ph-highlighter"></i>
-                <div class="color-circle" style="background-color: #ffff00;" id="bgColorDisplay">
-                    <input type="color" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value); document.getElementById('bgColorDisplay').style.backgroundColor = this.value;">
-                </div>
-            </div>
-            <div class="divider"></div>
-
-            <input type="file" id="image-upload" accept="image/*" style="display: none;">
-            <button class="tool-btn" id="btn-image" title="Insert Picture"><i class="ph ph-image"></i></button>
-            
-            <div class="dropdown-wrapper">
-                <button class="tool-btn" id="btn-table-toggle" title="Insert Table"><i class="ph ph-table"></i></button>
-                <div class="table-popup" id="table-popup">
-                    <div class="table-popup-title">Table Size</div>
-                    <div class="table-inputs">
-                        <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows" placeholder="Rows">
-                        <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns" placeholder="Cols">
+            <div class="toolbar-primary">
+                <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo"><i class="ph ph-arrow-u-up-left"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo"><i class="ph ph-arrow-u-up-right"></i></button>
+                <div class="divider"></div>
+                <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
+                <div class="divider"></div>
+                
+                <div class="color-picker-container" title="Text Color">
+                    <div class="color-circle" style="background-color: #000000;" id="textColorDisplay">
+                        <input type="color" onchange="document.execCommand('foreColor', false, this.value); document.getElementById('textColorDisplay').style.backgroundColor = this.value;">
                     </div>
-                    <button class="table-btn" id="btn-insert-table">Insert Table</button>
                 </div>
+                
+                <button class="toolbar-expand-btn" id="btn-toolbar-expand"><i class="ph ph-caret-down"></i></button>
             </div>
 
-            <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
+            <div class="toolbar-secondary" id="toolbar-secondary">
+                <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
+                <div class="divider"></div>
+                <button class="tool-btn" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="ph ph-list-bullets"></i></button>
+                <button class="tool-btn" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="ph ph-list-numbers"></i></button>
+                <div class="divider"></div>
 
+                <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
+                    <option value="'Manjari', sans-serif" style="font-family: 'Manjari', sans-serif;">Manjari (മഞ്ചരി)</option>
+                    <option value="'Chilanka', cursive" style="font-family: 'Chilanka', cursive;">Chilanka (ചിലങ്ക)</option>
+                    <option value="'Gayathri', sans-serif" style="font-family: 'Gayathri', sans-serif;">Gayathri (ഗായത്രി)</option>
+                    <option value="'Noto Sans Malayalam', sans-serif" style="font-family: 'Noto Sans Malayalam', sans-serif;">Noto Sans (നോട്ടോ)</option>
+                    <option value="'Meera Inimai', sans-serif" style="font-family: 'Meera Inimai', sans-serif;">Meera (മീര)</option>
+                    <option value="'Anek Malayalam', sans-serif" style="font-family: 'Anek Malayalam', sans-serif;">Anek (അനേക്)</option>
+                </select>
+                <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)" title="Font Size">
+                    <option value="3">Normal</option>
+                    <option value="4">Large</option>
+                    <option value="5">Huge</option>
+                </select>
+                <div class="divider"></div>
+
+                <div class="color-picker-container" title="Highlight Color">
+                    <i class="ph ph-highlighter"></i>
+                    <div class="color-circle" style="background-color: #ffff00;" id="bgColorDisplay">
+                        <input type="color" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value); document.getElementById('bgColorDisplay').style.backgroundColor = this.value;">
+                    </div>
+                </div>
+                <div class="divider"></div>
+
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                <button class="tool-btn" id="btn-image" title="Insert Picture"><i class="ph ph-image"></i></button>
+                
+                <div class="dropdown-wrapper">
+                    <button class="tool-btn" id="btn-table-toggle" title="Insert Table"><i class="ph ph-table"></i></button>
+                    <div class="table-popup" id="table-popup">
+                        <div class="table-popup-title">Table Size</div>
+                        <div class="table-inputs">
+                            <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows" placeholder="Rows">
+                            <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns" placeholder="Cols">
+                        </div>
+                        <button class="table-btn" id="btn-insert-table">Insert Table</button>
+                    </div>
+                </div>
+
+                <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
+            </div>
+            
             <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
         </div>
 
@@ -284,22 +350,25 @@
         <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
 
         <div class="status-bar">
-            <div class="status-group">
-                <div class="lang-toggle">
-                    <button class="lang-btn active" id="btn-lang-ml">മലയാളം</button>
-                    <button class="lang-btn" id="btn-lang-en">English</button>
-                </div>
-                
-                <div class="keyboard-toggle">
-                    <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
-                    <label><input type="radio" name="kbd" value="inscript"> Inscript</label>
-                </div>
+            <button class="status-expand-btn" id="btn-status-expand"><i class="ph ph-caret-up"></i> More Options</button>
+            <div class="status-bar-content" id="status-bar-content">
+                <div class="status-group">
+                    <div class="lang-toggle">
+                        <button class="lang-btn active" id="btn-lang-ml">മലയാളം</button>
+                        <button class="lang-btn" id="btn-lang-en">English</button>
+                    </div>
+                    
+                    <div class="keyboard-toggle">
+                        <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
+                        <label><input type="radio" name="kbd" value="inscript"> Inscript</label>
+                    </div>
 
-                <button class="action-btn" id="btn-voice"><i class="ph ph-microphone"></i> Voice Typing</button>
-            </div>
-            <div class="status-group">
-                <button class="action-btn" id="btn-copy-uni"><i class="ph ph-copy"></i> Unicode</button>
-                <button class="action-btn btn-dtp" id="btn-copy-fml"><i class="ph ph-file-code"></i> Generate FML-TT</button>
+                    <button class="action-btn" id="btn-voice"><i class="ph ph-microphone"></i> Voice Typing</button>
+                </div>
+                <div class="status-group">
+                    <button class="action-btn" id="btn-copy-uni"><i class="ph ph-copy"></i> Unicode</button>
+                    <button class="action-btn btn-dtp" id="btn-copy-fml"><i class="ph ph-file-code"></i> Generate FML-TT</button>
+                </div>
             </div>
         </div>
 
@@ -321,6 +390,7 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Your Firebase Keys
         const firebaseConfig = {
             apiKey: "AIzaSyBQFJ1lqnSdqFKEGnE4TzjfBdnxrrlG740",
             authDomain: "thooval-6b344.firebaseapp.com",
@@ -344,10 +414,15 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
+                // Desktop
                 $('#user-name-display').text(user.displayName); 
                 $('#user-email-display').text(user.email); 
                 $('#user-avatar').html(`<img src="${user.photoURL}" style="width:100%; border-radius:50%;">`); 
                 $('#btn-logout').show(); 
+                
+                // Mobile
+                $('#mobile-user-avatar').html(`<img src="${user.photoURL}" style="width:100%; border-radius:50%;">`);
+                $('#mobile-logout').show();
 
                 $('#login-overlay').css('opacity', '0');
                 setTimeout(() => $('#login-overlay').hide(), 500);
@@ -357,6 +432,7 @@
             } else {
                 currentUserId = null;
                 $('#btn-logout').hide();
+                $('#mobile-logout').hide();
                 $('#login-overlay').show().css('opacity', '1');
             }
         });
@@ -378,11 +454,13 @@
             if(localStorage.getItem('local-draft')) $('#editor').html(localStorage.getItem('local-draft'));
         });
 
-        $('#btn-logout').click(function() {
+        const handleLogout = function() {
             if(confirm("Do you want to sign out of your account?")) {
                 signOut(auth);
             }
-        });
+        };
+        $('#btn-logout').click(handleLogout);
+        $('#mobile-logout').click(handleLogout);
 
         // --- AUTO SAVE ---
         $('#editor').on('input', function() {
@@ -418,6 +496,8 @@
                 });
                 currentFileId = docRef.id;
                 $('#editor').html(''); 
+                // Auto hide sidebar on mobile after new file
+                if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
             } catch (error) { console.error("Error creating file:", error); }
         });
 
@@ -493,6 +573,9 @@
             querySnapshot.forEach((docSnap) => {
                 if(docSnap.id === fileId) $('#editor').html(docSnap.data().content);
             });
+            
+            // Auto hide sidebar on mobile after click
+            if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
         });
 
         // ==========================================
@@ -505,6 +588,18 @@
                 $('body').toggleClass('dark-theme');
                 $(this).html($('body').hasClass('dark-theme') ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
             });
+
+            // Mobile Toggles UI
+            $('#btn-toolbar-expand').click(function() {
+                $('#toolbar-secondary').toggleClass('expanded');
+                $(this).find('i').toggleClass('ph-caret-down ph-caret-up');
+            });
+            $('#btn-status-expand').click(function() {
+                $('#status-bar-content').toggleClass('expanded');
+                $(this).find('i').toggleClass('ph-caret-up ph-caret-down');
+            });
+            $('#mobile-menu-btn').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
+            $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
 
             // Tools
             $('#btn-image').click(() => $('#image-upload').click());
@@ -535,15 +630,12 @@
                 printWin.document.close(); setTimeout(() => { printWin.print(); printWin.close(); }, 500);
             });
 
-            // Selection Memory
             let savedRange = null;
             function saveSelection() { let sel = window.getSelection(); if (sel.getRangeAt && sel.rangeCount) savedRange = sel.getRangeAt(0); }
             function restoreSelection() { if (savedRange) { let sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(savedRange); } }
             $('#editor').on('keyup mouseup blur', saveSelection);
 
-            // Toggles
-            $('#menu-toggle').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
-            $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
+            // Lang Toggles
             $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
             $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
             $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $('#editor').focus(); });
@@ -669,7 +761,7 @@
                 if (isRecording) recognition.stop(); else { recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; recognition.start(); }
             });
 
-            // --- FML CONVERSION (BUG FIXED) ---
+            // --- FML CONVERSION ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $('#editor')[0].innerText || $('#editor').text(); 
                 
@@ -684,7 +776,6 @@
 
                 const fmlMap = { 'അ':'A', 'ആ':'B', 'ഇ':'C', 'ഈ':'Cu', 'ഉ':'D', 'ഊ':'Du', 'ഋ':'E', 'എ':'F', 'ഏ':'G', 'ഐ':'sF', 'ഒ':'H', 'ഓ':'Hm', 'ഔ':'Hu', 'ക':'I', 'ഖ':'J', 'ഗ':'K', 'ഘ':'L', 'ങ':'M', 'ച':'N', 'ഛ':'O', 'ജ':'P', 'ഝ':'Q', 'ഞ':'R', 'ട':'S', 'ഠ':'T', 'ഡ':'U', 'ഢ':'V', 'ണ':'W', 'ത':'X', 'ഥ':'Y', 'ദ':'Z', 'ധ':'[', 'ന':'\\', 'പ':']', 'ഫ':'^', 'ബ':'_', 'ഭ':'`', 'മ':'a', 'യ':'b', 'ര':'c', 'റ':'d', 'ല':'e', 'ള':'f', 'ഴ':'g', 'വ':'h', 'ശ':'i', 'ഷ':'j', 'സ':'k', 'ഹ':'l', '\u0D46':'s', '\u0D47':'t', '\u0D48':'ss', '\u0D3F':'n', '\u0D40':'o', '\u0D41':'p', '\u0D42':'q', '\u0D43':'r', '\u0D3E':'m', '\u0D57':'u', '\u0D4D':'v', '\u0D02':'w', '\u0D03':'x', 'ർ':'À', 'ൽ':'Â', 'ൾ':'Ä', 'ൺ':'¬', 'ൻ':'³' };
                 
-                // Fixed syntax error here
                 let fmlOutput = "";
                 for (let i = 0; i < text.length; i++) {
                     let char = text[i];
