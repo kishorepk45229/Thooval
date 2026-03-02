@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
+            /* Light Theme Variables */
             --accent-color: #a3e635; 
             --accent-hover: #84cc16;
             --accent-light: #ecfccb; 
@@ -24,6 +25,7 @@
         }
 
         body.dark-theme {
+            /* Dark Theme Variables */
             --bg-main: #111827;
             --bg-sidebar: #1f2937;
             --text-primary: #f9fafb;
@@ -36,51 +38,18 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            transition: background-color 0.3s, color 0.3s;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; transition: background-color 0.3s, color 0.3s; }
 
         /* --- LOGIN OVERLAY PORTAL --- */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-main); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column; transition: opacity 0.5s ease;
-        }
-        .login-box {
-            background: var(--bg-sidebar); border: 1px solid var(--border-color);
-            padding: 40px; border-radius: 16px; box-shadow: var(--shadow);
-            text-align: center; max-width: 400px; width: 90%;
-        }
-        .login-logo {
-            width: 60px; height: 60px; background-color: var(--accent-color);
-            color: var(--text-on-accent); border-radius: 12px; display: flex;
-            justify-content: center; align-items: center; font-size: 2rem;
-            font-weight: bold; margin: 0 auto 20px auto; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4);
-        }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; }
+        .login-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; max-width: 400px; width: 90%; }
+        .login-logo { width: 60px; height: 60px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; margin: 0 auto 20px auto; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
         .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); }
         .login-subtitle { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5; }
-        
-        .btn-google {
-            background: #ffffff; color: #333; border: 1px solid #ddd;
-            padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 1rem;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            gap: 10px; width: 100%; transition: 0.2s; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
+        .btn-google { background: #ffffff; color: #333; border: 1px solid #ddd; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; transition: 0.2s; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .btn-google:hover { background: #f8f9fa; }
         .btn-google img { width: 20px; }
-        
-        .btn-guest {
-            background: transparent; color: var(--text-secondary); border: none;
-            font-size: 0.9rem; cursor: pointer; text-decoration: underline; transition: 0.2s;
-        }
+        .btn-guest { background: transparent; color: var(--text-secondary); border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; transition: 0.2s; }
         .btn-guest:hover { color: var(--text-primary); }
 
         /* --- LEFT SIDEBAR --- */
@@ -96,37 +65,78 @@
         .file-item { padding: 10px 12px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .file-item.active { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
         
+        /* --- DICTIONARY SECTION --- */
         .dictionary-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
         .dict-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px; }
         .dict-input { width: 100%; padding: 10px; border-radius: var(--radius); border: 1px solid var(--border-color); outline: none; font-size: 0.9rem; background: var(--bg-main); color: var(--text-primary); transition: 0.2s; }
         .dict-results { display: flex; flex-direction: column; gap: 5px; max-height: 200px; overflow-y: auto; padding-right: 5px; }
-        .dict-item { padding: 8px 10px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1rem; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; }
+        .dict-item { padding: 8px 10px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1rem; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
         .dict-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
+        .dict-pos { font-family: 'Inter', sans-serif; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; }
 
+        /* User Profile & Theme Toggle */
         .bottom-actions { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
         .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--accent-color); color: var(--text-on-accent); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 0.8rem; overflow: hidden; }
         .user-details { display: flex; flex-direction: column; }
         .user-name { font-weight: 600; font-size: 0.8rem; }
-        .theme-toggle-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; }
-        
+        .theme-toggle-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; transition: 0.2s; }
+        .theme-toggle-btn:hover { color: var(--accent-color); }
+
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 999; }
+
         /* --- MAIN WORKSPACE --- */
         .workspace { flex-grow: 1; display: flex; flex-direction: column; background-color: var(--bg-main); height: 100vh; position: relative; width: calc(100% - 260px); }
+        
+        /* Advanced Toolbar (Fully Restored) */
         .toolbar { min-height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 10px 20px; gap: 8px; flex-wrap: wrap; background: var(--bg-main); }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
         .tool-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .tool-btn:hover { background-color: var(--accent-light); color: var(--text-primary); }
+        .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-primary); }
         .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 4px; }
+        .select-format { border: 1px solid var(--border-color); padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: var(--bg-main); color: var(--text-primary); outline: none; }
+        
+        /* Circular Color Pickers */
+        .color-picker-container { display: flex; align-items: center; gap: 6px; background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 20px; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;}
+        .color-circle { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-color); position: relative; overflow: hidden; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);}
+        .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 50px; height: 50px; opacity: 0; cursor: pointer; }
+        
+        /* Table Dropdown */
+        .dropdown-wrapper { position: relative; }
+        .table-popup { display: none; position: absolute; top: 100%; left: 0; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 15px; box-shadow: var(--shadow); z-index: 100; min-width: 200px; margin-top: 5px; }
+        .table-popup.show { display: block; }
+        .table-popup-title { font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; color: var(--text-secondary); }
+        .table-inputs { display: flex; gap: 10px; margin-bottom: 10px; }
+        .table-input { width: 50%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-primary); outline: none; }
+        .table-btn { width: 100%; background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 8px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+        .keyboard-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); margin-left: auto; }
         
         /* Save Status Indicator */
-        .save-status { margin-left: auto; font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .save-status { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 5px; margin-left: 10px; border-left: 1px solid var(--border-color); padding-left: 10px;}
 
+        /* Suggestion Bar */
+        .suggestion-bar { padding: 12px 30px; display: flex; gap: 10px; align-items: center; min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); overflow-x: auto; white-space: nowrap; }
+        .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
+        .suggestion-item { background: var(--bg-main); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-family: 'Manjari', sans-serif; font-size: 1.1rem; transition: 0.2s; display: inline-block; color: var(--text-primary); }
+        .suggestion-item.active, .suggestion-item:hover { background: var(--accent-color); color: var(--text-on-accent); border-color: var(--accent-color); }
+        .suggestion-item.predictive { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; font-size: 0.95rem; }
+        body.dark-theme .suggestion-item.predictive { background: #0c4a6e; border-color: #0284c7; color: #bae6fd; }
+
+        /* RICH TEXT EDITOR */
         #editor { flex-grow: 1; width: 100%; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); overflow-y: auto; }
         #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
-        
+        #editor img { max-width: 100%; border-radius: 8px; margin: 10px 0; box-shadow: var(--shadow); }
+        #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; border: 1px solid var(--border-color); }
+        #editor th, #editor td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
+        #editor ul, #editor ol { margin-left: 20px; margin-bottom: 10px; }
+
+        /* Bottom Status Bar */
         .status-bar { min-height: 60px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 10px 30px; background-color: var(--bg-main); flex-wrap: wrap; gap: 10px; }
         .status-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .action-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
         .action-btn:hover { background-color: var(--bg-sidebar); border-color: var(--accent-color); }
+        .action-btn.recording { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; animation: pulse 1.5s infinite; }
         .btn-dtp { background-color: var(--accent-light); color: var(--text-on-accent); border-color: var(--accent-color); }
 
         /* MODAL POPUP */
@@ -136,22 +146,33 @@
         .close-modal { cursor: pointer; font-size: 1.5rem; border: none; background: none; color: var(--text-secondary); }
         #fml-output-area { width: 100%; height: 150px; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none; background: var(--bg-main); color: var(--text-primary); }
         .modal-btn { background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: -260px; top: 0; }
+            .sidebar.open { left: 0; }
+            .sidebar-overlay.open { display: block; }
+            .workspace { width: 100%; }
+            .menu-toggle { display: block; }
+            .keyboard-toggle { margin-left: 0; width: 100%; justify-content: center; }
+            .save-status { width: 100%; justify-content: center; border-left: none; padding-left: 0; margin-left: 0; margin-top: 10px;}
+        }
     </style>
 </head>
 <body>
 
     <div class="login-overlay" id="login-overlay">
         <div class="login-box">
-            <div class="login-logo">തൂ</div>
+            <div class="login-logo">മ</div>
             <h1 class="login-title">Welcome to Thooval</h1>
             <p class="login-subtitle">Sign in to save your documents to the cloud and access them from anywhere.</p>
-            
             <button class="btn-google" id="btn-google-login">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
                 Sign in with Google
             </button>
-            
-            <button class="btn-guest" id="btn-guest-login">Continue as Guest (No saving)</button>
+            <button class="btn-guest" id="btn-guest-login">Continue as Guest (Local Save Only)</button>
         </div>
     </div>
 
@@ -163,7 +184,8 @@
         
         <div class="file-list" id="cloud-file-list">
             <div class="list-header">My Documents</div>
-            </div>
+            <div class="file-item active"><i class="ph ph-file-text"></i> Draft_01.txt</div>
+        </div>
 
         <div class="dictionary-section">
             <div class="dict-title"><i class="ph ph-book-bookmark"></i> Dictionary Search</div>
@@ -182,34 +204,105 @@
 
     <main class="workspace">
         <div class="toolbar">
+            <button class="menu-toggle" id="menu-toggle"><i class="ph ph-list"></i></button>
+            
+            <button class="tool-btn" onclick="document.execCommand('undo')" title="Undo"><i class="ph ph-arrow-u-up-left"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('redo')" title="Redo"><i class="ph ph-arrow-u-up-right"></i></button>
+            <div class="divider"></div>
+            
             <button class="tool-btn" onclick="document.execCommand('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
             <button class="tool-btn" onclick="document.execCommand('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
             <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
             <div class="divider"></div>
+            
             <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
             <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
             <button class="tool-btn" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="ph ph-list-bullets"></i></button>
+            <button class="tool-btn" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="ph ph-list-numbers"></i></button>
             <div class="divider"></div>
-            
-            <div class="save-status" id="save-status">
-                <i class="ph ph-cloud-check"></i> Saved locally
+
+            <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
+                <option value="'Manjari', sans-serif" style="font-family: 'Manjari', sans-serif;">Manjari (മഞ്ചരി)</option>
+                <option value="'Chilanka', cursive" style="font-family: 'Chilanka', cursive;">Chilanka (ചിലങ്ക)</option>
+                <option value="'Gayathri', sans-serif" style="font-family: 'Gayathri', sans-serif;">Gayathri (ഗായത്രി)</option>
+                <option value="'Noto Sans Malayalam', sans-serif" style="font-family: 'Noto Sans Malayalam', sans-serif;">Noto Sans (നോട്ടോ)</option>
+                <option value="'Meera Inimai', sans-serif" style="font-family: 'Meera Inimai', sans-serif;">Meera (മീര)</option>
+                <option value="'Anek Malayalam', sans-serif" style="font-family: 'Anek Malayalam', sans-serif;">Anek (അനേക്)</option>
+            </select>
+            <select class="select-format" onchange="document.execCommand('fontSize', false, this.value)" title="Font Size">
+                <option value="3">Normal</option>
+                <option value="4">Large</option>
+                <option value="5">Huge</option>
+            </select>
+            <div class="divider"></div>
+
+            <div class="color-picker-container" title="Text Color">
+                <i class="ph ph-palette"></i>
+                <div class="color-circle" style="background-color: #000000;" id="textColorDisplay">
+                    <input type="color" onchange="document.execCommand('foreColor', false, this.value); document.getElementById('textColorDisplay').style.backgroundColor = this.value;">
+                </div>
             </div>
+            <div class="color-picker-container" title="Highlight Color">
+                <i class="ph ph-highlighter"></i>
+                <div class="color-circle" style="background-color: #ffff00;" id="bgColorDisplay">
+                    <input type="color" value="#ffff00" onchange="document.execCommand('hiliteColor', false, this.value); document.getElementById('bgColorDisplay').style.backgroundColor = this.value;">
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            <button class="tool-btn" id="btn-image" title="Insert Picture"><i class="ph ph-image"></i></button>
+            
+            <div class="dropdown-wrapper">
+                <button class="tool-btn" id="btn-table-toggle" title="Insert Table"><i class="ph ph-table"></i></button>
+                <div class="table-popup" id="table-popup">
+                    <div class="table-popup-title">Table Size</div>
+                    <div class="table-inputs">
+                        <input type="number" id="tbl-rows" class="table-input" min="1" max="10" value="3" title="Rows" placeholder="Rows">
+                        <input type="number" id="tbl-cols" class="table-input" min="1" max="10" value="3" title="Columns" placeholder="Cols">
+                    </div>
+                    <button class="table-btn" id="btn-insert-table">Insert Table</button>
+                </div>
+            </div>
+
+            <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
+
+            <div class="keyboard-toggle">
+                <label><input type="radio" name="kbd" value="phonetic" checked> Phonetic</label>
+                <label><input type="radio" name="kbd" value="inscript"> Inscript</label>
+            </div>
+            <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
+        </div>
+
+        <div class="suggestion-bar" id="suggestion-bar">
+            <span class="suggestion-placeholder">Type in English (e.g., 'namaskaram')...</span>
         </div>
 
         <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
 
         <div class="status-bar">
             <div class="status-group">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="btn-lang-ml">മലയാളം</button>
+                    <button class="lang-btn" id="btn-lang-en">English</button>
+                </div>
                 <button class="action-btn" id="btn-voice"><i class="ph ph-microphone"></i> Voice Typing</button>
             </div>
             <div class="status-group">
+                <button class="action-btn" id="btn-copy-uni"><i class="ph ph-copy"></i> Unicode</button>
                 <button class="action-btn btn-dtp" id="btn-copy-fml"><i class="ph ph-file-code"></i> Generate FML-TT</button>
             </div>
         </div>
 
         <div class="modal-overlay" id="fml-modal">
             <div class="modal-content">
-                <div class="modal-header"><span>FML-TT Output</span><button class="close-modal" id="close-modal">&times;</button></div>
+                <div class="modal-header">
+                    <span>FML-TT Converted Text</span>
+                    <button class="close-modal" id="close-modal">&times;</button>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Your custom mappings applied successfully. Ready for DTP Software.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
             </div>
@@ -218,13 +311,78 @@
 
     <script>
         $(document).ready(function() {
-            // Theme Toggle
+            const $editor = $('#editor');
+            const $suggestionBar = $('#suggestion-bar');
+            let currentLang = 'ml'; 
+            let currentKeyboard = 'phonetic'; 
+
+            $editor.focus();
+
+            // --- THEME TOGGLE ---
             $('#btn-theme').click(function() {
                 $('body').toggleClass('dark-theme');
                 $(this).html($('body').hasClass('dark-theme') ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
             });
 
-            // Dictionary API
+            // --- INSERT IMAGE ---
+            $('#btn-image').click(() => $('#image-upload').click());
+            $('#image-upload').change(function() {
+                let file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) { document.execCommand('insertImage', false, e.target.result); }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- INSERT TABLE ---
+            $('#btn-table-toggle').click(function(e) { e.stopPropagation(); $('#table-popup').toggleClass('show'); });
+            $(document).click(function() { $('#table-popup').removeClass('show'); });
+            $('#table-popup').click(function(e) { e.stopPropagation(); });
+            
+            $('#btn-insert-table').click(function() {
+                let rows = $('#tbl-rows').val();
+                let cols = $('#tbl-cols').val();
+                let html = '<br><table border="1"><tbody>';
+                for(let r=0; r<rows; r++) {
+                    html += '<tr>';
+                    for(let c=0; c<cols; c++) html += `<td>Row ${r+1}, Col ${c+1}</td>`;
+                    html += '</tr>';
+                }
+                html += '</tbody></table><br>';
+                
+                $editor.focus();
+                document.execCommand('insertHTML', false, html);
+                $('#table-popup').removeClass('show');
+            });
+
+            // --- PRINT FUNCTION ---
+            $('#btn-print').click(function() {
+                let content = $editor.html();
+                let printWin = window.open('', '', 'height=700,width=900');
+                printWin.document.write('<html><head><title>Print Document</title>');
+                printWin.document.write('<style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;}</style>');
+                printWin.document.write('</head><body>' + content + '</body></html>');
+                printWin.document.close();
+                setTimeout(() => { printWin.print(); printWin.close(); }, 500);
+            });
+
+            // --- SAVE/RESTORE CURSOR STATE FOR DICTIONARY ---
+            let savedRange = null;
+            function saveSelection() {
+                let sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) savedRange = sel.getRangeAt(0);
+            }
+            function restoreSelection() {
+                if (savedRange) {
+                    let sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(savedRange);
+                }
+            }
+            $editor.on('keyup mouseup blur', saveSelection);
+
+            // --- DICTIONARY API ---
             let dictTimer;
             $('#dict-input').on('input', function() {
                 let word = $(this).val().trim();
@@ -255,19 +413,203 @@
             $(document).on('mousedown', '.dict-item', function(e) { e.preventDefault(); });
             $(document).on('click', '.dict-item', function() {
                 let translatedWord = $(this).attr('data-word');
-                $('#editor').focus();
+                $editor.focus();
+                restoreSelection();
                 document.execCommand("insertText", false, translatedWord + " ");
+                saveSelection(); 
                 $('#dict-input').val(''); 
                 $('#dict-results').empty();
             });
 
-            // FML CONVERSION (Preserved from previous step)
+            // Mobile Sidebar
+            $('#menu-toggle').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
+            $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
+
+            // Language & Keyboard Toggles
+            $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $editor.focus(); });
+            $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $editor.focus(); });
+            $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $editor.focus(); });
+
+            function insertTextAtCursor(text) {
+                document.execCommand("insertText", false, text);
+                saveSelection();
+            }
+
+            // --- PREDICTIVE TEXT & PHONETIC TYPING ---
+            const nextWordDB = {
+                'ഞാൻ': ['വരുന്നു', 'പോവുകയാണ്', 'ഇന്ന്'],
+                'നിങ്ങൾ': ['എവിടെയാണ്', 'എന്താണ്', 'വരുന്നുണ്ടോ'],
+                'നമസ്കാരം': ['എന്തൊക്കെയുണ്ട്', 'സ്വാഗതം', 'കൂട്ടുകാരേ'],
+                'എന്താണ്': ['വിശേഷം', 'പരിപാടി', 'പേര്'],
+                'എനിക്ക്': ['വേണം', 'ഇഷ്ടമാണ്', 'അറിയാം'],
+                'വളരെ': ['നല്ലത്', 'സന്തോഷം', 'നന്ദി']
+            };
+
+            let activeWordInfo = null;
+            let isPredicting = false;
+
+            function getWordBeforeCaret() {
+                let sel = window.getSelection();
+                if (!sel.rangeCount) return null;
+                let range = sel.getRangeAt(0);
+                let node = range.startContainer;
+                if (node.nodeType === 3) { 
+                    let textBefore = node.textContent.substring(0, range.startOffset);
+                    let match = textBefore.match(/([a-zA-Z]+)$/);
+                    if (match) return { type: 'phonetic', word: match[1], node: node, startOffset: range.startOffset - match[1].length, endOffset: range.startOffset };
+                    
+                    if (textBefore.endsWith(' ')) {
+                        let words = textBefore.trim().split(' ');
+                        let lastWord = words[words.length - 1];
+                        if (nextWordDB[lastWord]) return { type: 'predict', words: nextWordDB[lastWord] };
+                    }
+                }
+                return null;
+            }
+
+            $editor.on('input', function() {
+                if (currentLang === 'en' || currentKeyboard === 'inscript') return;
+                let info = getWordBeforeCaret();
+                if (info && info.type === 'phonetic') {
+                    activeWordInfo = info;
+                    isPredicting = false;
+                    fetchSuggestions(info.word);
+                } else if (info && info.type === 'predict') {
+                    activeWordInfo = null;
+                    isPredicting = true;
+                    renderSuggestions(info.words, true);
+                } else {
+                    clearSuggestions();
+                }
+            });
+
+            $editor.on('keydown', function(e) {
+                if (currentLang === 'en' || currentKeyboard === 'inscript') return;
+                let $active = $('.suggestion-item.active');
+                if ($('.suggestion-item').length > 0) {
+                    if (e.key === 'Enter' || (e.key === ' ' && !isPredicting)) {
+                        e.preventDefault(); if ($active.length) $active.click(); 
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault(); let $next = $active.next('.suggestion-item');
+                        if ($next.length) { $active.removeClass('active'); $next.addClass('active'); }
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault(); let $prev = $active.prev('.suggestion-item');
+                        if ($prev.length) { $active.removeClass('active'); $prev.addClass('active'); }
+                    }
+                }
+            });
+
+            function fetchSuggestions(word) {
+                $.get(`https://inputtools.google.com/request?text=${word}&itc=ml-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8`, function(res) {
+                    if (res[0] === 'SUCCESS') renderSuggestions(res[1][0][1], false);
+                });
+            }
+
+            function renderSuggestions(words, isPredictionMode) {
+                $suggestionBar.empty();
+                if (isPredictionMode) $suggestionBar.append(`<span style="color:var(--accent-color); font-size:0.8rem; margin-right:5px;">✨ Smart Suggest:</span>`);
+                words.forEach((word, index) => {
+                    let classes = `suggestion-item ${index === 0 ? 'active' : ''} ${isPredictionMode ? 'predictive' : ''}`;
+                    let $badge = $(`<span class="${classes}">${word}</span>`);
+                    $badge.on('mousedown', function(e) { e.preventDefault(); });
+                    $badge.on('click', function() { 
+                        if(isPredictionMode) insertTextAtCursor(word + " ");
+                        else replaceWord(word); 
+                    });
+                    $suggestionBar.append($badge);
+                });
+            }
+
+            function replaceWord(malayalamWord) {
+                if (!activeWordInfo) return;
+                let sel = window.getSelection();
+                let range = document.createRange();
+                range.setStart(activeWordInfo.node, activeWordInfo.startOffset);
+                range.setEnd(activeWordInfo.node, activeWordInfo.endOffset);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand("insertText", false, malayalamWord + " ");
+                clearSuggestions();
+                saveSelection();
+            }
+
+            function clearSuggestions() {
+                $suggestionBar.html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>');
+                activeWordInfo = null;
+                isPredicting = false;
+            }
+
+            // Inscript Keyboard
+            const inscriptMap = { 'D':'അ', 'E':'ആ', 'F':'ഇ', 'R':'ഈ', 'G':'ഉ', 'T':'ഊ', '+':'ഋ', 'S':'എ', 'W':'ഏ', 'A':'ഒ', 'Q':'ഓ', 'k':'ക', 'K':'ഖ', 'i':'ഗ', 'I':'ഘ', 'U':'ങ', ';':'ച', ':':'ഛ', 'p':'ജ', 'P':'ഝ', '}':'ഞ', "'":'ട', '"':'ഠ', '[':'ഡ', '{':'ഢ', 'C':'ണ', 'l':'ത', 'L':'ഥ', 'o':'ദ', 'O':'ധ', 'v':'ന', 'h':'പ', 'H':'ഫ', 'y':'ബ', 'Y':'ഭ', 'c':'മ', '/':'യ', 'j':'ര', 'n':'ല', 'b':'വ', 'M':'ശ', '<':'ഷ', 'm':'സ', 'u':'ഹ', 'N':'ള', '>':'ഴ', 'J':'റ', 'e':'ാ', 'f':'ി', 'r':'ീ', 'g':'ു', 't':'ൂ', '=':'ൃ', 's':'െ', 'w':'േ', 'a':'ൊ', 'q':'ോ', 'd':'്', 'X':'ം', '_':'ഃ' };
+            $editor.on('keypress', function(e) {
+                if (currentLang === 'ml' && currentKeyboard === 'inscript') {
+                    let char = String.fromCharCode(e.which);
+                    if (inscriptMap[char]) { e.preventDefault(); insertTextAtCursor(inscriptMap[char]); }
+                }
+            });
+
+            // --- LIVE VOICE TYPING (Safari Adjusted) ---
+            let recognition;
+            let isRecording = false;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRec();
+                recognition.continuous = true;
+                // Safari tends to crash with interim results sometimes, but Chrome needs it for fluid UI
+                recognition.interimResults = true; 
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    $('#btn-voice').addClass('recording').html('<i class="ph ph-stop"></i> Listening...');
+                };
+
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                        else interimTranscript += event.results[i][0].transcript;
+                    }
+                    if (finalTranscript !== '') {
+                        $editor.focus();
+                        restoreSelection();
+                        document.execCommand("insertText", false, finalTranscript + " ");
+                        saveSelection();
+                    }
+                    if (interimTranscript !== '') $suggestionBar.html(`<span style="color:var(--accent-color); font-weight:bold;">Hearing: ${interimTranscript}...</span>`);
+                    else clearSuggestions();
+                };
+
+                recognition.onerror = function(event) { 
+                    if(event.error !== 'no-speech') {
+                        console.error("Speech error:", event.error);
+                        alert("Voice typing encountered an error. Note: Safari has limited Malayalam support. Chrome is recommended."); 
+                    }
+                    $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing'); 
+                    isRecording = false; 
+                };
+                recognition.onend = function() { $('#btn-voice').removeClass('recording').html('<i class="ph ph-microphone"></i> Voice Typing'); isRecording = false; };
+            }
+
+            $('#btn-voice').on('click', function() {
+                if (!recognition) return alert("Voice typing is not fully supported in this browser. Please use Chrome.");
+                if (isRecording) recognition.stop();
+                else { 
+                    recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; 
+                    recognition.start(); 
+                }
+            });
+
+            // --- MASTER FML-TT DICTIONARY ENGINE ---
             $('#btn-copy-fml').on('click', function() {
-                let text = $('#editor')[0].innerText || $('#editor').text(); 
+                let text = $editor[0].innerText || $editor.text(); 
+                
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E").replace(/\u0D4B/g, "\u0D47\u0D3E").replace(/\u0D4C/g, "\u0D46\u0D57"); 
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
                 text = text.replace(new RegExp(consGroup + leftVowels, "g"), "$2$1");
+
                 text = text.replace(/ണ്\u200D/g, "Æ").replace(/ന്\u200D/g, "³").replace(/ര്\u200D/g, "À").replace(/ല്\u200D/g, "Â").replace(/ള്\u200D/g, "Ä");
                 text = text.replace(/[\u200C\u200D]/g, '');
 
@@ -285,131 +627,60 @@
                 $('#fml-modal').fadeIn(200).css("display", "flex");
             });
 
-            $('#modal-copy-btn').click(function() { navigator.clipboard.writeText($('#fml-output-area').val()); $(this).html('✅ Copied!'); setTimeout(() => $(this).html('📋 Copy to Clipboard'), 2000); });
-            $('#close-modal').click(() => $('#fml-modal').fadeOut(200));
+            $('#modal-copy-btn').on('click', function() { navigator.clipboard.writeText($('#fml-output-area').val()); $(this).html('✅ Copied!'); setTimeout(() => $(this).html('📋 Copy to Clipboard'), 2000); });
+            $('#close-modal').on('click', () => $('#fml-modal').fadeOut(200));
 
-            // Guest Login Handler
+            $('#btn-copy-uni').on('click', function() {
+                navigator.clipboard.writeText($editor[0].innerText || $editor.text());
+                let $btn = $(this); let og = $btn.html(); $btn.html('✅ Copied!'); setTimeout(() => $btn.html(og), 2000);
+            });
+
+            // --- FIREBASE MOCK LOGIN & AUTOSAVE LOGIC ---
+            let currentUserId = null;
+            let currentFileId = 'local-draft-1';
+            let saveTimeout;
+
+            $('#btn-google-login').click(function() {
+                currentUserId = "user-123";
+                $('#user-name-display').text("Kishore Krishnan"); 
+                $('#user-avatar').text("K"); 
+                $('#login-overlay').css('opacity', '0');
+                setTimeout(() => $('#login-overlay').hide(), 500);
+                $('#save-status').html('<i class="ph ph-cloud-check"></i> Cloud Sync Active');
+            });
+
             $('#btn-guest-login').click(function() {
                 $('#login-overlay').css('opacity', '0');
                 setTimeout(() => $('#login-overlay').hide(), 500);
             });
-        });
-    </script>
 
-    <script type="module">
-        // 1. Import Firebase v9 Modular SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+            $('#user-profile-box').click(function() {
+                if(currentUserId && confirm("Do you want to sign out?")) location.reload();
+            });
 
-        // ==========================================
-        // 2. ADD YOUR FIREBASE KEYS HERE LATER
-        // ==========================================
-        /*
-        const firebaseConfig = {
-            apiKey: "AIzaSy_YOUR_API_KEY_HERE",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:12345:web:abcd"
-        };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        */
+            $editor.on('input', function() {
+                clearTimeout(saveTimeout);
+                $('#save-status').html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Saving...');
+                saveTimeout = setTimeout(() => {
+                    if (currentUserId) {
+                        // DB save logic will go here
+                        $('#save-status').html('<i class="ph ph-cloud-check" style="color: var(--accent-color);"></i> Saved to Cloud');
+                    } else {
+                        localStorage.setItem(currentFileId, $editor.html());
+                        $('#save-status').html('<i class="ph ph-check-circle"></i> Saved locally');
+                    }
+                }, 2000);
+            });
 
-        // --- MOCK DATABASE BEHAVIOR UNTIL KEYS ARE ADDED ---
-        let currentUserId = null;
-        let currentFileId = 'local-draft-1';
-        let saveTimeout;
-
-        // Login Button Click (Will trigger real Google Login once keys are added)
-        document.getElementById('btn-google-login').addEventListener('click', () => {
-            // NOTE: Replace this mock block with real `signInWithPopup(auth, new GoogleAuthProvider())` later.
-            currentUserId = "user-123";
-            document.getElementById('user-name-display').innerText = "Kishore Krishnan"; // Replace with your name
-            document.getElementById('user-avatar').innerHTML = "K"; // Replace with profile pic
-            
-            document.getElementById('login-overlay').style.opacity = '0';
-            setTimeout(() => document.getElementById('login-overlay').style.display = 'none', 500);
-            
-            document.getElementById('save-status').innerHTML = '<i class="ph ph-cloud-check"></i> Cloud Sync Active';
-        });
-
-        // Sign Out
-        document.getElementById('user-profile-box').addEventListener('click', () => {
-            if(currentUserId) {
-                if(confirm("Do you want to sign out?")) {
-                    // signOut(auth); // Uncomment later
-                    location.reload();
-                }
-            }
-        });
-
-        // Auto-Save Logic (Debouncing)
-        document.getElementById('editor').addEventListener('input', function() {
-            clearTimeout(saveTimeout);
-            
-            let statusEl = document.getElementById('save-status');
-            statusEl.innerHTML = '<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Saving to cloud...';
-
-            saveTimeout = setTimeout(async () => {
-                let content = this.innerHTML;
-                
-                if (currentUserId) {
-                    // --- REAL DATABASE SAVE LOGIC (Uncomment later) ---
-                    // const fileRef = doc(db, `users/${currentUserId}/files`, currentFileId);
-                    // await updateDoc(fileRef, { content: content, lastModified: serverTimestamp() });
-                    
-                    statusEl.innerHTML = '<i class="ph ph-cloud-check" style="color: var(--accent-color);"></i> Saved to Cloud';
-                } else {
-                    // Guest Mode Local Save
-                    localStorage.setItem(currentFileId, content);
-                    statusEl.innerHTML = '<i class="ph ph-check-circle"></i> Saved locally';
-                }
-            }, 2000); // Waits 2 seconds after you stop typing
-        });
-
-        // Add New File Logic
-        document.getElementById('btn-new-file').addEventListener('click', async () => {
-            if(!currentUserId) return alert("Please log in to create multiple cloud files.");
-            
-            let newTitle = prompt("Enter file name:", "New Document");
-            if(!newTitle) return;
-
-            // --- REAL DB CREATE LOGIC (Uncomment later) ---
-            // const docRef = await addDoc(collection(db, `users/${currentUserId}/files`), {
-            //     title: newTitle, content: "", lastModified: serverTimestamp()
-            // });
-            // currentFileId = docRef.id;
-
-            // Mock UI Update
-            let fileList = document.getElementById('cloud-file-list');
-            document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
-            
-            let newItem = document.createElement('div');
-            newItem.className = 'file-item active';
-            newItem.innerHTML = `<i class="ph ph-file-text"></i> ${newTitle}.txt`;
-            fileList.appendChild(newItem);
-
-            document.getElementById('editor').innerHTML = ''; // Clear editor for new file
-        });
-
-        // Load files from Cloud dynamically (Conceptual)
-        /*
-        onSnapshot(query(collection(db, `users/${currentUserId}/files`), orderBy("lastModified", "desc")), (snapshot) => {
-            let fileList = document.getElementById('cloud-file-list');
-            fileList.innerHTML = '<div class="list-header">My Documents</div>';
-            
-            snapshot.forEach(doc => {
-                let data = doc.data();
-                fileList.innerHTML += `<div class="file-item" data-id="${doc.id}"><i class="ph ph-file-text"></i> ${data.title}</div>`;
+            $('#btn-new-file').click(function() {
+                if(!currentUserId) return alert("Please log in to create multiple cloud files.");
+                let newTitle = prompt("Enter file name:", "New Document");
+                if(!newTitle) return;
+                $('.file-item').removeClass('active');
+                $('#cloud-file-list').append(`<div class="file-item active"><i class="ph ph-file-text"></i> ${newTitle}.txt</div>`);
+                $editor.html(''); 
             });
         });
-        */
-
     </script>
-    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
