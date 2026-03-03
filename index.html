@@ -137,7 +137,9 @@
         .table-input { width: 50%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-primary); outline: none; }
         .table-btn { width: 100%; background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 8px; border-radius: 4px; font-weight: 600; cursor: pointer; }
 
-        .save-status { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 5px; margin-left: auto; padding-left: 10px;}
+        .status-indicators { margin-left: auto; display: flex; align-items: center; gap: 15px; }
+        .word-count { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 5px; border-right: 1px solid var(--border-color); padding-right: 15px;}
+        .save-status { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 5px; }
 
         .suggestion-bar { flex-shrink: 0; padding: 12px 30px; display: flex; gap: 10px; align-items: center; min-height: 56px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); overflow-x: auto; white-space: nowrap; }
         .suggestion-placeholder { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; }
@@ -146,7 +148,7 @@
         .suggestion-item.predictive { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; font-size: 0.95rem; }
         body.dark-theme .suggestion-item.predictive { background: #0c4a6e; border-color: #0284c7; color: #bae6fd; }
 
-        /* EDITOR CONTAINER - SCROLL FIX */
+        /* EDITOR CONTAINER */
         #editor-container { flex-grow: 1; overflow-y: auto; width: 100%; background: var(--bg-main); min-height: 0; position: relative;}
         #editor-wrapper-inner { width: 100%; min-height: 100%; display: flex; flex-direction: column; }
         #editor { flex-grow: 1; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); }
@@ -206,20 +208,19 @@
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- READ ONLY MODE STYLES & COVER PAGE --- */
-        body.read-only-mode { display: block; overflow-y: auto; background: var(--bg-sidebar); }
+        /* --- READ ONLY MODE STYLES (WITH SCROLL FIX) --- */
+        body.read-only-mode { display: block; height: auto; min-height: 100vh; overflow-y: auto !important; background: var(--bg-sidebar); }
         .read-only-mode .sidebar, .read-only-mode .toolbar, .read-only-mode .status-bar, .read-only-mode .suggestion-bar, .read-only-mode .mobile-header { display: none !important; }
-        .read-only-mode .workspace { width: 100%; display: block; }
+        .read-only-mode .workspace { width: 100%; display: block; height: auto; min-height: 100vh; overflow: visible !important; }
         
-        .read-only-cover { display: none; height: 60vh; width: 100%; position: relative; overflow: hidden; align-items: center; justify-content: center; text-align: center; color: white; background: linear-gradient(135deg, #1e293b, #4b5563); border-radius: 12px 12px 0 0; }
+        .read-only-cover { display: none; height: 50vh; width: 100%; position: relative; overflow: hidden; align-items: center; justify-content: center; text-align: center; color: white; background: linear-gradient(135deg, #1e293b, #4b5563); border-radius: 12px 12px 0 0; }
         .read-only-cover::before { content: ""; position: absolute; top:0; left:0; right:0; bottom:0; background: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=1200&auto=format&fit=crop') center/cover; opacity: 0.4; mix-blend-mode: overlay;}
         .read-only-cover-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px;}
         .cover-title { font-size: 3.5rem; font-weight: 700; font-family: 'Manjari', sans-serif; text-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 5px; line-height: 1.2;}
-        .cover-author { font-size: 1.1rem; font-weight: 500; font-family: 'Inter', sans-serif; opacity: 0.9; margin-bottom: 20px; display: flex; align-items: center; gap: 5px;}
         .cover-brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 600; font-family: 'Inter', sans-serif; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);}
         .cover-brand .logo { background: var(--accent-color); color: var(--text-on-accent); width: 28px; height: 28px; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
 
-        .read-only-mode #editor-container { background: var(--bg-sidebar); padding: 40px 20px; }
+        .read-only-mode #editor-container { background: var(--bg-sidebar); padding: 40px 20px; height: auto; overflow: visible !important; }
         .read-only-mode #editor-wrapper-inner { max-width: 800px; margin: 0 auto; background: var(--bg-main); box-shadow: var(--shadow); border-radius: 12px; overflow: hidden; }
         .read-only-mode #editor { padding: 60px; min-height: auto; }
         
@@ -227,7 +228,7 @@
         .read-only-mode .read-only-badge { display: flex; align-items: center; gap: 8px;}
         .read-only-badge:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(163, 230, 53, 0.5); }
 
-        /* --- MOBILE RESPONSIVE TWEAKS (FIXED ARROW & SCROLL) --- */
+        /* --- MOBILE RESPONSIVE TWEAKS --- */
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -260px; top: 0; }
             .sidebar.open { left: 0; }
@@ -246,7 +247,8 @@
             .toolbar-secondary.expanded { display: flex !important; }
             
             .toolbar-expand-btn { display: flex; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 4px; margin-left: auto; }
-            .save-status { margin: 10px auto 0 auto; width: 100%; justify-content: center; padding: 0; border: none; }
+            .status-indicators { margin: 10px auto 0 auto; width: 100%; justify-content: center; }
+            .word-count { border-right: none; padding-right: 0; margin-right: 15px; }
             
             .status-bar { padding: 10px 15px; flex-direction: column; }
             .status-bar-content { display: none !important; flex-direction: column; width: 100%; gap: 15px; }
@@ -258,7 +260,6 @@
             .read-only-mode #editor-container { padding: 0; }
             .read-only-mode #editor-wrapper-inner { border-radius: 0; }
             .read-only-mode #editor { padding: 30px 20px; }
-            .read-only-cover { border-radius: 0; height: 50vh; }
             .cover-title { font-size: 2.2rem; }
         }
     </style>
@@ -267,11 +268,11 @@
 
     <div class="login-overlay" id="login-overlay">
         <div class="bg-animation">
-            <div class="bg-letter" style="left: 10%; top: 20%; animation-delay: 0s; font-size: 6rem;">അ</div>
+            <div class="bg-letter" style="left: 10%; top: 20%; animation-delay: 0s; font-size: 6rem;">ത</div>
             <div class="bg-letter" style="left: 80%; top: 15%; animation-delay: 1.5s; font-size: 4rem;">ക</div>
             <div class="bg-letter" style="left: 25%; top: 70%; animation-delay: 3s; font-size: 7rem;">മ</div>
             <div class="bg-letter" style="left: 70%; top: 80%; animation-delay: 0.5s; font-size: 5rem;">ല</div>
-            <div class="bg-letter" style="left: 50%; top: 35%; animation-delay: 4s; font-size: 8rem; opacity: 0.05;">തൂ</div>
+            <div class="bg-letter" style="left: 50%; top: 35%; animation-delay: 4s; font-size: 8rem; opacity: 0.05;">ത</div>
             <div class="bg-letter" style="left: 85%; top: 50%; animation-delay: 2.5s; font-size: 4.5rem;">ർ</div>
             <div class="bg-letter" style="left: 15%; top: 50%; animation-delay: 1s; font-size: 6.5rem;">ജ്ഞ</div>
             <div class="bg-letter" style="left: 40%; top: 85%; animation-delay: 5s; font-size: 5.5rem;">ശ്ര</div>
@@ -432,7 +433,10 @@
                 <button class="tool-btn" id="btn-share" title="Share Public Link"><i class="ph ph-share-network" style="color:var(--accent-color);"></i></button>
             </div>
             
-            <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
+            <div class="status-indicators">
+                <div class="word-count" id="word-count"><i class="ph ph-text-aa"></i> 0 words</div>
+                <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
+            </div>
         </div>
 
         <div class="suggestion-bar" id="suggestion-bar">
@@ -444,9 +448,8 @@
                 
                 <div id="read-only-cover" class="read-only-cover">
                     <div class="read-only-cover-content">
-                        <div class="cover-brand"><div class="logo">തൂ</div> Thooval Story</div>
+                        <div class="cover-brand"><div class="logo">ത</div> Thooval Story</div>
                         <h1 class="cover-title" id="cover-title">Story Title</h1>
-                        <div class="cover-author" id="cover-author"></div>
                         <div style="font-size: 0.9rem; opacity: 0.8; font-family: 'Inter', sans-serif; margin-top:10px;"><i class="ph ph-caret-double-down" style="animation: pulse 1.5s infinite;"></i> Scroll to Read</div>
                     </div>
                 </div>
@@ -455,7 +458,7 @@
             </div>
         </div>
         
-        <a href="?" class="read-only-badge"><div class="brand-logo" style="width:20px;height:20px;font-size:0.8rem; background:white; color:var(--text-on-accent);">തൂ</div> Build with Thooval</a>
+        <a href="?" class="read-only-badge"><div class="brand-logo" style="width:20px;height:20px;font-size:0.8rem; background:white; color:var(--text-on-accent);">ത</div> Build with Thooval</a>
 
         <div id="img-toolbar">
             <button id="img-left" title="Wrap Text Left"><i class="ph ph-align-left"></i></button>
@@ -554,6 +557,13 @@
         let currentLang = 'ml'; 
         let currentKeyboard = 'phonetic';
 
+        // Word Count Updater
+        function updateWordCount() {
+            let text = $('#editor').text().trim();
+            let count = text === "" ? 0 : text.split(/\s+/).length;
+            $('#word-count').html('<i class="ph ph-text-aa"></i> ' + count + ' words');
+        }
+
         // --- CHECK FOR SHARED READ-ONLY LINK ---
         const urlParams = new URLSearchParams(window.location.search);
         const viewUser = urlParams.get('u');
@@ -572,7 +582,6 @@
                     $('#editor').html(data.content);
                     document.title = data.title + " | Thooval";
                     $('#cover-title').text(data.title);
-                    $('#cover-author').html('<i class="ph ph-pencil-simple" style="margin-right:5px;"></i> By ' + (data.authorName || 'Author'));
                     $('#read-only-cover').css('display', 'flex'); 
                 } else {
                     $('#editor').html('<p style="text-align:center; margin-top:50px;">Document not found or deleted by owner.</p>');
@@ -639,16 +648,20 @@
             $('#save-status').html('<i class="ph ph-warning-circle"></i> Guest Mode');
             currentFileId = 'local-draft';
             $('#cloud-file-list').html('<div class="list-header">Drafts</div><div class="file-item active" data-id="local-draft"><div class="file-title-wrapper"><i class="ph ph-file-text"></i> <span>Local_Draft.txt</span></div></div>');
-            if(localStorage.getItem('local-draft')) $('#editor').html(localStorage.getItem('local-draft'));
+            if(localStorage.getItem('local-draft')) {
+                $('#editor').html(localStorage.getItem('local-draft'));
+                updateWordCount();
+            }
         });
 
         const handleLogout = function() { if(confirm("Do you want to sign out of your account?")) { signOut(auth); } };
         $('#btn-logout').click(handleLogout);
         $('#mobile-logout').click(handleLogout);
 
-        // --- AUTO SAVE ---
+        // --- AUTO SAVE & WORD COUNT ---
         $('#editor').on('input', function() {
             if (isReadOnly) return;
+            updateWordCount();
             clearTimeout(saveTimeout);
             $('#save-status').html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Saving...');
             
@@ -675,11 +688,11 @@
                 const docRef = await addDoc(collection(db, `users/${currentUserId}/files`), { 
                     title: newTitle, 
                     content: "", 
-                    authorName: auth.currentUser.displayName || 'Author',
                     lastModified: serverTimestamp() 
                 });
                 currentFileId = docRef.id;
                 $('#editor').html(''); 
+                updateWordCount();
                 if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
             } catch (error) { console.error("Error creating file:", error); }
         });
@@ -712,6 +725,7 @@
                         currentFileId = null;
                         $('#editor').html('<p style="color:var(--text-secondary);">File deleted. Please select or create a new file.</p>');
                         $('#save-status').html('<i class="ph ph-trash"></i> File Deleted');
+                        updateWordCount();
                     }
                 } catch(error) { console.error("Error deleting file:", error); }
             }
@@ -745,7 +759,6 @@
                     addDoc(collection(db, `users/${currentUserId}/files`), { 
                         title: "Welcome Document", 
                         content: "<h1>നമസ്കാരം!</h1><p>ഇവിടെ മലയാളം ടൈപ്പ് ചെയ്തു തുടങ്ങാം...</p>", 
-                        authorName: auth.currentUser.displayName || 'Author',
                         lastModified: serverTimestamp() 
                     }); 
                     return;
@@ -753,7 +766,11 @@
                 let isFirst = true;
                 snapshot.forEach(docSnap => {
                     let data = docSnap.data();
-                    if (isFirst && !currentFileId) { currentFileId = docSnap.id; $('#editor').html(data.content); }
+                    if (isFirst && !currentFileId) { 
+                        currentFileId = docSnap.id; 
+                        $('#editor').html(data.content); 
+                        updateWordCount();
+                    }
                     let isActive = (currentFileId === docSnap.id) ? 'active' : '';
                     fileList.append(`
                         <div class="file-item ${isActive}" data-id="${docSnap.id}">
@@ -776,7 +793,12 @@
             $('.file-item').removeClass('active'); $(this).addClass('active'); currentFileId = fileId;
             $('#editor').html('<p style="color:var(--text-secondary);"><i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Loading document...</p>');
             const querySnapshot = await getDocs(query(collection(db, `users/${currentUserId}/files`)));
-            querySnapshot.forEach((docSnap) => { if(docSnap.id === fileId) $('#editor').html(docSnap.data().content); });
+            querySnapshot.forEach((docSnap) => { 
+                if(docSnap.id === fileId) {
+                    $('#editor').html(docSnap.data().content); 
+                    updateWordCount();
+                }
+            });
             if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
         });
 
