@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&family=Chilanka&family=Gayathri:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Meera+Inimai&family=Anek+Malayalam:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --accent-color: #a3e635; 
@@ -21,6 +22,7 @@
             --radius: 8px;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
+
         body.dark-theme {
             --bg-main: #111827;
             --bg-sidebar: #1f2937;
@@ -31,13 +33,12 @@
             --text-on-accent: #111827;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; transition: background-color 0.3s, color 0.3s; }
 
         /* --- LOGIN OVERLAY & BACKGROUND ANIMATION --- */
         .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; overflow: hidden; }
-        
-        /* Background Floating Letters Animation */
         .bg-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .bg-letter { position: absolute; font-size: 5rem; color: var(--accent-color); opacity: 0; font-family: 'Chilanka', cursive; font-weight: bold; animation: floatAndFade 8s infinite ease-in-out; filter: blur(0.5px); }
         @keyframes floatAndFade {
@@ -46,7 +47,6 @@
             70% { opacity: 0.15; transform: scale(1) translateY(-15px) rotate(0deg); }
             100% { opacity: 0; transform: scale(0.8) translateY(-40px) rotate(10deg); }
         }
-
         .login-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; max-width: 400px; width: 90%; position: relative; z-index: 10; backdrop-filter: blur(10px); }
         .login-logo { width: 60px; height: 60px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; margin: 0 auto 20px auto; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
         .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); }
@@ -135,9 +135,25 @@
         .suggestion-item.predictive { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; font-size: 0.95rem; }
         body.dark-theme .suggestion-item.predictive { background: #0c4a6e; border-color: #0284c7; color: #bae6fd; }
 
+        /* RICH TEXT EDITOR */
         #editor { flex-grow: 1; width: 100%; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); overflow-y: auto; }
         #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
-        #editor img { max-width: 100%; border-radius: 8px; margin: 10px 0; box-shadow: var(--shadow); }
+        
+        /* Drop Cap Styling */
+        .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; color: var(--accent-color); font-weight: bold; }
+        
+        /* Image Editing Styling inside Editor */
+        #editor img { transition: all 0.2s ease; cursor: pointer; max-width: 100%; }
+        #editor img.img-float-left { float: left; margin: 10px 20px 10px 0; max-width: 50%; }
+        #editor img.img-float-right { float: right; margin: 10px 0 10px 20px; max-width: 50%; }
+        #editor img.img-center { display: block; margin: 10px auto; float: none; }
+        #editor img.selected { outline: 3px dashed var(--accent-color); }
+        
+        /* Image Control Floating Toolbar */
+        #img-toolbar { position: absolute; display: none; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow); padding: 5px; z-index: 100; gap: 5px; }
+        #img-toolbar button { background: transparent; border: none; padding: 6px; cursor: pointer; color: var(--text-primary); font-size: 1.2rem; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        #img-toolbar button:hover { background: var(--accent-light); color: var(--accent-color); }
+
         #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; border: 1px solid var(--border-color); }
         #editor th, #editor td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
         #editor ul, #editor ol { margin-left: 20px; margin-bottom: 10px; }
@@ -177,13 +193,11 @@
             .sidebar-overlay.open { display: block; }
             .workspace { width: 100%; }
             
-            /* Mobile Top Header */
             .mobile-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
             .mobile-menu-toggle { background: none; border: none; font-size: 1.5rem; color: var(--text-primary); cursor: pointer; }
             .mobile-brand { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
             .mobile-user-profile { display: flex; align-items: center; gap: 10px; }
             
-            /* Mobile Toolbar Hide/Show */
             .toolbar { flex-direction: column; align-items: stretch; padding: 10px 15px; }
             .toolbar-primary { display: flex; width: 100%; justify-content: flex-start; }
             .toolbar-secondary { display: none; width: 100%; border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 5px; justify-content: flex-start; }
@@ -191,7 +205,6 @@
             .toolbar-expand-btn { display: flex; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 4px; margin-left: auto; }
             .save-status { margin: 10px auto 0 auto; width: 100%; justify-content: center; padding: 0; border: none; }
             
-            /* Mobile Bottom Bar Hide/Show */
             .status-bar { padding: 10px 15px; flex-direction: column; }
             .status-bar-content { display: none; flex-direction: column; width: 100%; gap: 15px; }
             .status-bar-content.expanded { display: flex; }
@@ -262,7 +275,7 @@
         <header class="mobile-header">
             <button class="mobile-menu-toggle" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
             <div class="mobile-brand">
-                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">തൂ</div> Thooval
+                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">ത</div> Thooval
             </div>
             <div class="mobile-user-profile">
                 <div class="avatar mobile-avatar" id="mobile-user-avatar" style="width:28px; height:28px;">G</div>
@@ -280,6 +293,9 @@
                 <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
                 <div class="divider"></div>
                 
+                <button class="tool-btn" id="btn-dropcap" title="Drop Cap (First Letter Big)"><span style="font-weight:900; font-family:serif; font-size:1.2rem; line-height:1;">A<span style="font-size:0.6rem; vertical-align:middle;">≡</span></span></button>
+                <div class="divider"></div>
+
                 <div class="color-picker-container" title="Text Color">
                     <div class="color-circle" style="background-color: #000000;" id="textColorDisplay">
                         <input type="color" onchange="document.execCommand('foreColor', false, this.value); document.getElementById('textColorDisplay').style.backgroundColor = this.value;">
@@ -290,6 +306,7 @@
             </div>
 
             <div class="toolbar-secondary" id="toolbar-secondary">
+                <div class="divider" style="display: block;"></div>
                 <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
                 <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
                 <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
@@ -338,6 +355,7 @@
                 </div>
 
                 <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
+                <button class="tool-btn" id="btn-export-pdf" title="Download as PDF"><i class="ph ph-file-pdf"></i></button>
             </div>
             
             <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
@@ -348,6 +366,15 @@
         </div>
 
         <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
+
+        <div id="img-toolbar">
+            <button id="img-left" title="Wrap Text Left"><i class="ph ph-align-left"></i></button>
+            <button id="img-center" title="Break Text Center"><i class="ph ph-align-center"></i></button>
+            <button id="img-right" title="Wrap Text Right"><i class="ph ph-align-right"></i></button>
+            <div class="divider" style="display:block;"></div>
+            <button id="img-minus" title="Reduce Size"><i class="ph ph-minus-circle"></i></button>
+            <button id="img-plus" title="Increase Size"><i class="ph ph-plus-circle"></i></button>
+        </div>
 
         <div class="status-bar">
             <button class="status-expand-btn" id="btn-status-expand"><i class="ph ph-caret-up"></i> More Options</button>
@@ -390,7 +417,6 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase Keys
         const firebaseConfig = {
             apiKey: "AIzaSyBQFJ1lqnSdqFKEGnE4TzjfBdnxrrlG740",
             authDomain: "thooval-6b344.firebaseapp.com",
@@ -414,13 +440,11 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
-                // Desktop
                 $('#user-name-display').text(user.displayName); 
                 $('#user-email-display').text(user.email); 
                 $('#user-avatar').html(`<img src="${user.photoURL}" style="width:100%; border-radius:50%;">`); 
                 $('#btn-logout').show(); 
                 
-                // Mobile
                 $('#mobile-user-avatar').html(`<img src="${user.photoURL}" style="width:100%; border-radius:50%;">`);
                 $('#mobile-logout').show();
 
@@ -437,7 +461,6 @@
             }
         });
 
-        // --- LOGIN & LOGOUT ---
         $('#btn-google-login').click(function() {
             signInWithPopup(auth, new GoogleAuthProvider()).catch((error) => {
                 console.error("Login Error:", error);
@@ -454,11 +477,7 @@
             if(localStorage.getItem('local-draft')) $('#editor').html(localStorage.getItem('local-draft'));
         });
 
-        const handleLogout = function() {
-            if(confirm("Do you want to sign out of your account?")) {
-                signOut(auth);
-            }
-        };
+        const handleLogout = function() { if(confirm("Do you want to sign out of your account?")) { signOut(auth); } };
         $('#btn-logout').click(handleLogout);
         $('#mobile-logout').click(handleLogout);
 
@@ -474,9 +493,7 @@
                         const fileRef = doc(db, `users/${currentUserId}/files`, currentFileId);
                         await updateDoc(fileRef, { content: content, lastModified: serverTimestamp() });
                         $('#save-status').html('<i class="ph ph-cloud-check" style="color: var(--accent-color);"></i> Saved to Cloud');
-                    } catch (error) {
-                        $('#save-status').html('<i class="ph ph-warning-circle" style="color: red;"></i> Save Error');
-                    }
+                    } catch (error) { $('#save-status').html('<i class="ph ph-warning-circle" style="color: red;"></i> Save Error'); }
                 } else if (!currentUserId) {
                     localStorage.setItem('local-draft', content);
                     $('#save-status').html('<i class="ph ph-check-circle"></i> Saved locally');
@@ -484,28 +501,21 @@
             }, 2000);
         });
 
-        // --- NEW FILE ---
         $('#btn-new-file').click(async function() {
             if(!currentUserId) return alert("Please log in to create multiple cloud files.");
             let newTitle = prompt("Enter new file name:", "Untitled Document");
             if(!newTitle) return;
-
             try {
-                const docRef = await addDoc(collection(db, `users/${currentUserId}/files`), {
-                    title: newTitle, content: "", lastModified: serverTimestamp()
-                });
+                const docRef = await addDoc(collection(db, `users/${currentUserId}/files`), { title: newTitle, content: "", lastModified: serverTimestamp() });
                 currentFileId = docRef.id;
                 $('#editor').html(''); 
-                // Auto hide sidebar on mobile after new file
                 if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
             } catch (error) { console.error("Error creating file:", error); }
         });
 
-        // --- DELETE FILE BUTTON ---
         $(document).on('click', '.btn-delete-file', async function(e) {
             e.stopPropagation(); 
             if(!currentUserId) return alert("Cannot delete guest file.");
-            
             let fileId = $(this).closest('.file-item').attr('data-id');
             if(confirm("Are you sure you want to completely delete this file? This cannot be undone.")) {
                 try {
@@ -515,71 +525,42 @@
                         $('#editor').html('<p style="color:var(--text-secondary);">File deleted. Please select or create a new file.</p>');
                         $('#save-status').html('<i class="ph ph-trash"></i> File Deleted');
                     }
-                } catch(error) {
-                    console.error("Error deleting file:", error);
-                }
+                } catch(error) { console.error("Error deleting file:", error); }
             }
         });
 
-        // --- LOAD FILES ---
         function loadUserFiles() {
             const q = query(collection(db, `users/${currentUserId}/files`), orderBy("lastModified", "desc"));
             onSnapshot(q, (snapshot) => {
                 let fileList = $('#cloud-file-list');
                 fileList.html('<div class="list-header">My Documents</div>');
-                
                 if (snapshot.empty) {
-                    addDoc(collection(db, `users/${currentUserId}/files`), {
-                        title: "Welcome Document", content: "<h1>നമസ്കാരം!</h1><p>ഇവിടെ മലയാളം ടൈപ്പ് ചെയ്തു തുടങ്ങാം...</p>", lastModified: serverTimestamp()
-                    });
-                    return;
+                    addDoc(collection(db, `users/${currentUserId}/files`), { title: "Welcome Document", content: "<h1>നമസ്കാരം!</h1><p>ഇവിടെ മലയാളം ടൈപ്പ് ചെയ്തു തുടങ്ങാം...</p>", lastModified: serverTimestamp() }); return;
                 }
-
                 let isFirst = true;
                 snapshot.forEach(docSnap => {
                     let data = docSnap.data();
-                    if (isFirst && !currentFileId) {
-                        currentFileId = docSnap.id;
-                        $('#editor').html(data.content);
-                    }
+                    if (isFirst && !currentFileId) { currentFileId = docSnap.id; $('#editor').html(data.content); }
                     let isActive = (currentFileId === docSnap.id) ? 'active' : '';
-                    
-                    fileList.append(`
-                        <div class="file-item ${isActive}" data-id="${docSnap.id}">
-                            <div class="file-title-wrapper">
-                                <i class="ph ph-file-text"></i> <span>${data.title}</span>
-                            </div>
-                            <button class="btn-delete-file" title="Delete File"><i class="ph ph-trash"></i></button>
-                        </div>
-                    `);
+                    fileList.append(`<div class="file-item ${isActive}" data-id="${docSnap.id}"><div class="file-title-wrapper"><i class="ph ph-file-text"></i> <span>${data.title}</span></div><button class="btn-delete-file" title="Delete File"><i class="ph ph-trash"></i></button></div>`);
                     isFirst = false;
                 });
             });
         }
 
-        // --- SWITCH FILES ---
         $(document).on('click', '.file-item', async function() {
             if(!currentUserId || $(this).attr('data-id') === 'local-draft') return; 
             let fileId = $(this).attr('data-id');
             if(fileId === currentFileId) return; 
-            
-            $('.file-item').removeClass('active');
-            $(this).addClass('active');
-            currentFileId = fileId;
-            
+            $('.file-item').removeClass('active'); $(this).addClass('active'); currentFileId = fileId;
             $('#editor').html('<p style="color:var(--text-secondary);"><i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i> Loading document...</p>');
-            
             const querySnapshot = await getDocs(query(collection(db, `users/${currentUserId}/files`)));
-            querySnapshot.forEach((docSnap) => {
-                if(docSnap.id === fileId) $('#editor').html(docSnap.data().content);
-            });
-            
-            // Auto hide sidebar on mobile after click
+            querySnapshot.forEach((docSnap) => { if(docSnap.id === fileId) $('#editor').html(docSnap.data().content); });
             if(window.innerWidth <= 768) { $('#sidebar, #sidebar-overlay').removeClass('open'); }
         });
 
         // ==========================================
-        // TEXT EDITOR & MALAYALAM TYPING LOGIC
+        // TEXT EDITOR LOGIC & MALAYALAM TYPING
         // ==========================================
         $(document).ready(function() {
             $('#editor').focus();
@@ -589,19 +570,36 @@
                 $(this).html($('body').hasClass('dark-theme') ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
             });
 
-            // Mobile Toggles UI
-            $('#btn-toolbar-expand').click(function() {
-                $('#toolbar-secondary').toggleClass('expanded');
-                $(this).find('i').toggleClass('ph-caret-down ph-caret-up');
-            });
-            $('#btn-status-expand').click(function() {
-                $('#status-bar-content').toggleClass('expanded');
-                $(this).find('i').toggleClass('ph-caret-up ph-caret-down');
-            });
+            // Mobile Toggles
+            $('#btn-toolbar-expand').click(function() { $('#toolbar-secondary').toggleClass('expanded'); $(this).find('i').toggleClass('ph-caret-down ph-caret-up'); });
+            $('#btn-status-expand').click(function() { $('#status-bar-content').toggleClass('expanded'); $(this).find('i').toggleClass('ph-caret-up ph-caret-down'); });
             $('#mobile-menu-btn').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
             $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
 
-            // Tools
+            // --- DROP CAP LOGIC ---
+            $('#btn-dropcap').click(function() {
+                let sel = window.getSelection();
+                if (sel.rangeCount > 0) {
+                    let node = sel.getRangeAt(0).commonAncestorContainer;
+                    let blockNode = (node.nodeType === 1) ? node : node.parentNode;
+                    // Find parent block
+                    while (blockNode && blockNode.id !== 'editor' && !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)) {
+                        blockNode = blockNode.parentNode;
+                    }
+                    if (blockNode && blockNode.id !== 'editor') {
+                        $(blockNode).toggleClass('drop-cap');
+                    } else if (blockNode && blockNode.id === 'editor') {
+                        // If it's pure text without a block wrapper, wrap it first
+                        document.execCommand('formatBlock', false, 'p');
+                        let newNode = window.getSelection().getRangeAt(0).commonAncestorContainer;
+                        if(newNode.nodeType !== 1) newNode = newNode.parentNode;
+                        $(newNode).addClass('drop-cap');
+                    }
+                }
+            });
+
+            // --- IMAGE CONTROL LOGIC ---
+            let currentSelectedImage = null;
             $('#btn-image').click(() => $('#image-upload').click());
             $('#image-upload').change(function() {
                 let file = this.files[0];
@@ -612,6 +610,34 @@
                 }
             });
 
+            // Click image to show Floating Toolbar
+            $('#editor').on('click', 'img', function(e) {
+                e.stopPropagation();
+                $('#editor img').removeClass('selected');
+                $(this).addClass('selected');
+                currentSelectedImage = $(this);
+                
+                let offset = $(this).offset();
+                $('#img-toolbar').css({ top: offset.top - 50, left: offset.left, display: 'flex' });
+            });
+
+            // Hide Image Toolbar when clicking away
+            $(document).click(function(e) {
+                if(!$(e.target).closest('#img-toolbar').length && !$(e.target).is('img')) {
+                    $('#editor img').removeClass('selected');
+                    $('#img-toolbar').hide();
+                    currentSelectedImage = null;
+                }
+            });
+
+            // Image Toolbar Buttons
+            $('#img-left').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-right img-center').addClass('img-float-left'); });
+            $('#img-center').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-left img-float-right').addClass('img-center'); });
+            $('#img-right').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-left img-center').addClass('img-float-right'); });
+            $('#img-minus').click(() => { if(currentSelectedImage) { let w = currentSelectedImage.width(); currentSelectedImage.css({'width': (w - 40) + 'px', 'max-width': 'none'}); } });
+            $('#img-plus').click(() => { if(currentSelectedImage) { let w = currentSelectedImage.width(); currentSelectedImage.css({'width': (w + 40) + 'px', 'max-width': 'none'}); } });
+
+            // Table Tools
             $('#btn-table-toggle').click(function(e) { e.stopPropagation(); $('#table-popup').toggleClass('show'); });
             $(document).click(function() { $('#table-popup').removeClass('show'); });
             $('#table-popup').click(function(e) { e.stopPropagation(); });
@@ -623,11 +649,22 @@
                 $('#editor').focus(); document.execCommand('insertHTML', false, html); $('#table-popup').removeClass('show');
             });
 
+            // Export options
             $('#btn-print').click(function() {
                 let content = $('#editor').html();
                 let printWin = window.open('', '', 'height=700,width=900');
-                printWin.document.write('<html><head><title>Print Document</title><style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;}</style></head><body>' + content + '</body></html>');
+                printWin.document.write('<html><head><title>Print Document</title><style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;} .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; font-weight: bold; }</style></head><body>' + content + '</body></html>');
                 printWin.document.close(); setTimeout(() => { printWin.print(); printWin.close(); }, 500);
+            });
+
+            $('#btn-export-pdf').click(function() {
+                $('#editor img').removeClass('selected'); // remove border before generating
+                $('#img-toolbar').hide();
+                let element = document.getElementById('editor');
+                let opt = { margin: 0.5, filename: 'Thooval_Document.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+                let $btn = $(this); let ogHtml = $btn.html();
+                $btn.html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i>');
+                html2pdf().set(opt).from(element).save().then(() => { $btn.html(ogHtml); });
             });
 
             let savedRange = null;
@@ -635,7 +672,6 @@
             function restoreSelection() { if (savedRange) { let sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(savedRange); } }
             $('#editor').on('keyup mouseup blur', saveSelection);
 
-            // Lang Toggles
             $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
             $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
             $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $('#editor').focus(); });
@@ -660,7 +696,7 @@
                 $('#editor').focus(); restoreSelection(); document.execCommand("insertText", false, translatedWord + " "); saveSelection(); $('#dict-input').val(''); $('#dict-results').empty();
             });
 
-            // --- PHONETIC TRANSLITERATION ---
+            // Phonetic Transliteration
             const nextWordDB = { 'ഞാൻ': ['വരുന്നു', 'പോവുകയാണ്', 'ഇന്ന്'], 'നിങ്ങൾ': ['എവിടെയാണ്', 'എന്താണ്', 'വരുന്നുണ്ടോ'], 'നമസ്കാരം': ['എന്തൊക്കെയുണ്ട്', 'സ്വാഗതം', 'കൂട്ടുകാരേ'], 'എന്താണ്': ['വിശേഷം', 'പരിപാടി', 'പേര്'], 'എനിക്ക്': ['വേണം', 'ഇഷ്ടമാണ്', 'അറിയാം'], 'വളരെ': ['നല്ലത്', 'സന്തോഷം', 'നന്ദി'] };
             let activeWordInfo = null; let isPredicting = false;
 
@@ -693,7 +729,6 @@
             });
 
             function fetchSuggestions(word) { $.get(`https://inputtools.google.com/request?text=${word}&itc=ml-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8`, function(res) { if (res[0] === 'SUCCESS') renderSuggestions(res[1][0][1], false); }); }
-            
             function renderSuggestions(words, isPredictionMode) {
                 $('#suggestion-bar').empty();
                 if (isPredictionMode) $('#suggestion-bar').append(`<span style="color:var(--accent-color); font-size:0.8rem; margin-right:5px;">✨ Smart Suggest:</span>`);
@@ -701,32 +736,19 @@
                     let $badge = $(`<span class="suggestion-item ${index === 0 ? 'active' : ''} ${isPredictionMode ? 'predictive' : ''}">${word}</span>`);
                     $badge.on('mousedown', function(e) { e.preventDefault(); });
                     $badge.on('click', function() { 
-                        if(isPredictionMode) { 
-                            $('#editor').focus(); restoreSelection(); document.execCommand("insertText", false, word + " "); saveSelection(); clearSuggestions();
-                        } else replaceWord(word); 
+                        if(isPredictionMode) { $('#editor').focus(); restoreSelection(); document.execCommand("insertText", false, word + " "); saveSelection(); clearSuggestions(); } else replaceWord(word); 
                     });
                     $('#suggestion-bar').append($badge);
                 });
             }
 
             function replaceWord(malayalamWord) {
-                if (!activeWordInfo) return; 
-                let sel = window.getSelection(); 
-                let range = document.createRange();
-                range.setStart(activeWordInfo.node, activeWordInfo.startOffset); 
-                range.setEnd(activeWordInfo.node, activeWordInfo.endOffset);
-                range.deleteContents(); 
-                
-                let textNode = document.createTextNode(malayalamWord + "\u00A0"); 
-                range.insertNode(textNode);
-                range.setStartAfter(textNode);
-                sel.removeAllRanges(); 
-                sel.addRange(range);
-                
-                clearSuggestions(); 
-                saveSelection();
+                if (!activeWordInfo) return; let sel = window.getSelection(); let range = document.createRange();
+                range.setStart(activeWordInfo.node, activeWordInfo.startOffset); range.setEnd(activeWordInfo.node, activeWordInfo.endOffset);
+                range.deleteContents(); let textNode = document.createTextNode(malayalamWord + "\u00A0"); 
+                range.insertNode(textNode); range.setStartAfter(textNode); sel.removeAllRanges(); sel.addRange(range);
+                clearSuggestions(); saveSelection();
             }
-
             function clearSuggestions() { $('#suggestion-bar').html('<span class="suggestion-placeholder">Type in English (e.g., \'namaskaram\')...</span>'); activeWordInfo = null; isPredicting = false; }
 
             // Inscript Keyboard
@@ -734,10 +756,7 @@
             $('#editor').on('keypress', function(e) {
                 if (currentLang === 'ml' && currentKeyboard === 'inscript') {
                     let char = String.fromCharCode(e.which);
-                    if (inscriptMap[char]) { 
-                        e.preventDefault(); 
-                        $('#editor').focus(); restoreSelection(); document.execCommand("insertText", false, inscriptMap[char]); saveSelection();
-                    }
+                    if (inscriptMap[char]) { e.preventDefault(); $('#editor').focus(); restoreSelection(); document.execCommand("insertText", false, inscriptMap[char]); saveSelection(); }
                 }
             });
 
@@ -761,10 +780,9 @@
                 if (isRecording) recognition.stop(); else { recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; recognition.start(); }
             });
 
-            // --- FML CONVERSION ---
+            // FML CONVERSION
             $('#btn-copy-fml').on('click', function() {
                 let text = $('#editor')[0].innerText || $('#editor').text(); 
-                
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E").replace(/\u0D4B/g, "\u0D47\u0D3E").replace(/\u0D4C/g, "\u0D46\u0D57"); 
                 const consGroup = "([ക-ഹളഴറൺ-ൿ](?:്[ക-ഹളഴറൺ-ൿ])*)"; 
                 const leftVowels = "([\u0D46\u0D47\u0D48])"; 
@@ -775,12 +793,8 @@
                 for (let [ml, ascii] of Object.entries(conjuncts)) text = text.split(ml).join(ascii);
 
                 const fmlMap = { 'അ':'A', 'ആ':'B', 'ഇ':'C', 'ഈ':'Cu', 'ഉ':'D', 'ഊ':'Du', 'ഋ':'E', 'എ':'F', 'ഏ':'G', 'ഐ':'sF', 'ഒ':'H', 'ഓ':'Hm', 'ഔ':'Hu', 'ക':'I', 'ഖ':'J', 'ഗ':'K', 'ഘ':'L', 'ങ':'M', 'ച':'N', 'ഛ':'O', 'ജ':'P', 'ഝ':'Q', 'ഞ':'R', 'ട':'S', 'ഠ':'T', 'ഡ':'U', 'ഢ':'V', 'ണ':'W', 'ത':'X', 'ഥ':'Y', 'ദ':'Z', 'ധ':'[', 'ന':'\\', 'പ':']', 'ഫ':'^', 'ബ':'_', 'ഭ':'`', 'മ':'a', 'യ':'b', 'ര':'c', 'റ':'d', 'ല':'e', 'ള':'f', 'ഴ':'g', 'വ':'h', 'ശ':'i', 'ഷ':'j', 'സ':'k', 'ഹ':'l', '\u0D46':'s', '\u0D47':'t', '\u0D48':'ss', '\u0D3F':'n', '\u0D40':'o', '\u0D41':'p', '\u0D42':'q', '\u0D43':'r', '\u0D3E':'m', '\u0D57':'u', '\u0D4D':'v', '\u0D02':'w', '\u0D03':'x', 'ർ':'À', 'ൽ':'Â', 'ൾ':'Ä', 'ൺ':'¬', 'ൻ':'³' };
-                
                 let fmlOutput = "";
-                for (let i = 0; i < text.length; i++) {
-                    let char = text[i];
-                    fmlOutput += (char.length === 1 && fmlMap[char]) ? fmlMap[char] : char;
-                }
+                for (let i = 0; i < text.length; i++) fmlOutput += (char.length === 1 && fmlMap[text[i]]) ? fmlMap[text[i]] : text[i];
 
                 $('#fml-output-area').val(fmlOutput); $('#fml-modal').fadeIn(200).css("display", "flex");
             });
