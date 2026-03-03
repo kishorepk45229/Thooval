@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manjari:wght@400;700&family=Chilanka&family=Gayathri:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Meera+Inimai&family=Anek+Malayalam:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --accent-color: #a3e635; 
@@ -176,12 +175,23 @@
         .keyboard-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: var(--bg-sidebar); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); }
         .keyboard-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        /* MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 3000; }
         .modal-content { background: var(--bg-main); padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 15px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; color: var(--text-primary); }
         .close-modal { cursor: pointer; font-size: 1.5rem; border: none; background: none; color: var(--text-secondary); }
+        
         #fml-output-area { width: 100%; height: 150px; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.2rem; resize: none; outline: none; background: var(--bg-main); color: var(--text-primary); }
-        .modal-btn { background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .modal-btn { background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+        .modal-btn:hover { background: var(--accent-hover); }
+
+        /* PDF PREVIEW MODAL (A4 Style) */
+        .pdf-modal-content { max-width: 800px; width: 95%; max-height: 90vh; overflow: hidden; background: #e5e7eb; padding: 0; }
+        .pdf-modal-header { background: var(--bg-main); padding: 15px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;}
+        .pdf-preview-container { padding: 20px; overflow-y: auto; max-height: calc(90vh - 140px); display: flex; justify-content: center; }
+        .pdf-paper { background: white; width: 210mm; min-height: 297mm; padding: 20mm; box-shadow: 0 0 10px rgba(0,0,0,0.1); color: #000; font-family: 'Manjari', sans-serif; font-size: 14pt; line-height: 1.6; }
+        .pdf-modal-footer { background: var(--bg-main); padding: 15px 25px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 10px;}
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px 15px; border-radius: 8px; cursor: pointer;}
 
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -210,6 +220,8 @@
             .status-bar-content.expanded { display: flex; }
             .status-expand-btn { display: flex; width: 100%; justify-content: center; background: none; border: none; font-size: 1rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; padding: 5px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 5px;}
             .status-group { justify-content: center; width: 100%; }
+
+            .pdf-paper { width: 100%; padding: 10px; }
         }
     </style>
 </head>
@@ -228,7 +240,7 @@
         </div>
 
         <div class="login-box">
-            <div class="login-logo">ത</div>
+            <div class="login-logo">തൂ</div>
             <h1 class="login-title">Welcome to Thooval</h1>
             <p class="login-subtitle">Sign in to save your documents to the cloud and access them from anywhere.</p>
             <button class="btn-google" id="btn-google-login">
@@ -242,7 +254,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">ത</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">തൂ</div> Thooval</div>
         <button class="new-file-btn" id="btn-new-file"><i class="ph ph-plus"></i> New File</button>
         
         <div class="file-list" id="cloud-file-list">
@@ -275,7 +287,7 @@
         <header class="mobile-header">
             <button class="mobile-menu-toggle" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
             <div class="mobile-brand">
-                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">ത</div> Thooval
+                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">തൂ</div> Thooval
             </div>
             <div class="mobile-user-profile">
                 <div class="avatar mobile-avatar" id="mobile-user-avatar" style="width:28px; height:28px;">G</div>
@@ -355,7 +367,7 @@
                 </div>
 
                 <button class="tool-btn" id="btn-print" title="Print Document"><i class="ph ph-printer"></i></button>
-                <button class="tool-btn" id="btn-export-pdf" title="Download as PDF"><i class="ph ph-file-pdf"></i></button>
+                <button class="tool-btn" id="btn-export-pdf" title="Save as PDF"><i class="ph ph-file-pdf"></i></button>
             </div>
             
             <div class="save-status" id="save-status"><i class="ph ph-cloud-check"></i> Local Ready</div>
@@ -408,6 +420,22 @@
                 <p style="font-size: 0.85rem; color: var(--text-secondary);">Your custom mappings applied successfully. Ready for DTP Software.</p>
                 <textarea id="fml-output-area"></textarea>
                 <button class="modal-btn" id="modal-copy-btn">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="pdf-preview-modal">
+            <div class="modal-content pdf-modal-content">
+                <div class="pdf-modal-header">
+                    <span style="font-weight:600; font-size:1.1rem; color:var(--text-primary);"><i class="ph ph-file-pdf"></i> PDF Preview</span>
+                    <button class="close-modal" id="close-pdf-modal">&times;</button>
+                </div>
+                <div class="pdf-preview-container">
+                    <div class="pdf-paper" id="pdf-paper"></div>
+                </div>
+                <div class="pdf-modal-footer">
+                    <button class="btn-outline" id="cancel-pdf">Cancel</button>
+                    <button class="modal-btn" id="download-pdf-btn"><i class="ph ph-download-simple"></i> Save as PDF</button>
+                </div>
             </div>
         </div>
     </main>
@@ -582,14 +610,12 @@
                 if (sel.rangeCount > 0) {
                     let node = sel.getRangeAt(0).commonAncestorContainer;
                     let blockNode = (node.nodeType === 1) ? node : node.parentNode;
-                    // Find parent block
                     while (blockNode && blockNode.id !== 'editor' && !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)) {
                         blockNode = blockNode.parentNode;
                     }
                     if (blockNode && blockNode.id !== 'editor') {
                         $(blockNode).toggleClass('drop-cap');
                     } else if (blockNode && blockNode.id === 'editor') {
-                        // If it's pure text without a block wrapper, wrap it first
                         document.execCommand('formatBlock', false, 'p');
                         let newNode = window.getSelection().getRangeAt(0).commonAncestorContainer;
                         if(newNode.nodeType !== 1) newNode = newNode.parentNode;
@@ -610,7 +636,6 @@
                 }
             });
 
-            // Click image to show Floating Toolbar
             $('#editor').on('click', 'img', function(e) {
                 e.stopPropagation();
                 $('#editor img').removeClass('selected');
@@ -621,7 +646,6 @@
                 $('#img-toolbar').css({ top: offset.top - 50, left: offset.left, display: 'flex' });
             });
 
-            // Hide Image Toolbar when clicking away
             $(document).click(function(e) {
                 if(!$(e.target).closest('#img-toolbar').length && !$(e.target).is('img')) {
                     $('#editor img').removeClass('selected');
@@ -630,7 +654,6 @@
                 }
             });
 
-            // Image Toolbar Buttons
             $('#img-left').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-right img-center').addClass('img-float-left'); });
             $('#img-center').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-left img-float-right').addClass('img-center'); });
             $('#img-right').click(() => { if(currentSelectedImage) currentSelectedImage.removeClass('img-float-left img-center').addClass('img-float-right'); });
@@ -653,18 +676,39 @@
             $('#btn-print').click(function() {
                 let content = $('#editor').html();
                 let printWin = window.open('', '', 'height=700,width=900');
-                printWin.document.write('<html><head><title>Print Document</title><style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;} .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; font-weight: bold; }</style></head><body>' + content + '</body></html>');
+                printWin.document.write('<html><head><title>Print Document</title><style>body{font-family: Manjari, sans-serif; font-size: 18px; line-height: 1.6; padding: 40px;} table{border-collapse:collapse; width:100%; margin:15px 0;} th,td{border:1px solid #000; padding:10px; text-align:left;} img{max-width:100%;} .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; font-weight: bold; color: #a3e635; }</style></head><body>' + content + '</body></html>');
                 printWin.document.close(); setTimeout(() => { printWin.print(); printWin.close(); }, 500);
             });
 
+            // --- NATIVE PDF EXPORT WITH PREVIEW ---
             $('#btn-export-pdf').click(function() {
-                $('#editor img').removeClass('selected'); // remove border before generating
+                $('#editor img').removeClass('selected');
                 $('#img-toolbar').hide();
-                let element = document.getElementById('editor');
-                let opt = { margin: 0.5, filename: 'Thooval_Document.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-                let $btn = $(this); let ogHtml = $btn.html();
-                $btn.html('<i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite;"></i>');
-                html2pdf().set(opt).from(element).save().then(() => { $btn.html(ogHtml); });
+                let content = $('#editor').html();
+                $('#pdf-paper').html(content);
+                $('#pdf-preview-modal').css('display', 'flex').hide().fadeIn(200);
+            });
+
+            $('#close-pdf-modal, #cancel-pdf').click(function() {
+                $('#pdf-preview-modal').fadeOut(200);
+            });
+
+            $('#download-pdf-btn').click(function() {
+                // By using Native Print to Save PDF, we guarantee 100% perfect Malayalam Unicode rendering
+                let content = $('#pdf-paper').html();
+                let printWin = window.open('', '', 'height=800,width=1000');
+                printWin.document.write('<html><head><title>Thooval_Document</title>');
+                printWin.document.write('<link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap" rel="stylesheet">');
+                printWin.document.write('<style>@page { size: A4; margin: 20mm; } body { font-family: "Manjari", sans-serif; font-size: 14pt; line-height: 1.6; color: #000; } table { border-collapse: collapse; width: 100%; margin: 15px 0; } th, td { border: 1px solid #000; padding: 8px; text-align: left; } img { max-width: 100%; height: auto; } .img-float-left { float: left; margin: 10px 20px 10px 0; max-width: 50%; } .img-float-right { float: right; margin: 10px 0 10px 20px; max-width: 50%; } .img-center { display: block; margin: 10px auto; float: none; } .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; font-weight: bold; color: #a3e635; }</style></head><body>');
+                printWin.document.write(content);
+                printWin.document.write('</body></html>');
+                printWin.document.close();
+                
+                setTimeout(() => {
+                    printWin.print();
+                    printWin.close();
+                    $('#pdf-preview-modal').fadeOut(200);
+                }, 1000);
             });
 
             let savedRange = null;
@@ -780,7 +824,7 @@
                 if (isRecording) recognition.stop(); else { recognition.lang = currentLang === 'ml' ? 'ml-IN' : 'en-IN'; recognition.start(); }
             });
 
-            // FML CONVERSION
+            // --- FML CONVERSION ---
             $('#btn-copy-fml').on('click', function() {
                 let text = $('#editor')[0].innerText || $('#editor').text(); 
                 text = text.replace(/\u0D4A/g, "\u0D46\u0D3E").replace(/\u0D4B/g, "\u0D47\u0D3E").replace(/\u0D4C/g, "\u0D46\u0D57"); 
