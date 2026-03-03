@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <title>Thooval Logo Generator</title>
+    <style>
+        body { text-align: center; padding: 50px; font-family: 'Inter', sans-serif; background: #111827; color: white; }
+        canvas { border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        button { padding: 15px 30px; font-size: 18px; background: #a3e635; color: #1a2e05; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        button:hover { background: #84cc16; }
+    </style>
+</head>
+<body>
+
+    <h2>Thooval App Logo (512x512)</h2>
+    <p>ഇതാണ് താങ്കളുടെ പുതിയ ആപ്പിന്റെ ലോഗോ. താഴെയുള്ള ബട്ടണിൽ ക്ലിക്ക് ചെയ്ത് ഡൗൺലോഡ് ചെയ്യുക.</p>
+    
+    <canvas id="logoCanvas" width="512" height="512"></canvas>
+    <br>
+    <button id="downloadBtn">⬇️ Download logo.png</button>
+
+    <script>
+        const canvas = document.getElementById('logoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Draw Background (Accent Color)
+        ctx.fillStyle = '#a3e635';
+        ctx.fillRect(0, 0, 512, 512);
+
+        // Draw Text ("ത")
+        ctx.fillStyle = '#1a2e05';
+        ctx.font = 'bold 300px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Adjusted for exact vertical center for 'ത'
+        ctx.fillText('ത', 256, 280);
+
+        // Download Action
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const link = document.createElement('a');
+            link.download = 'logo.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+
+</body>
+</html>
