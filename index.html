@@ -41,12 +41,8 @@
         .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; overflow: hidden; }
         .bg-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .bg-letter { position: absolute; font-size: 5rem; color: var(--accent-color); opacity: 0; font-family: 'Chilanka', cursive; font-weight: bold; animation: floatAndFade 8s infinite ease-in-out; filter: blur(0.5px); }
-        @keyframes floatAndFade {
-            0% { opacity: 0; transform: scale(0.6) translateY(30px) rotate(-10deg); }
-            30% { opacity: 0.15; transform: scale(1.1) translateY(0) rotate(5deg); }
-            70% { opacity: 0.15; transform: scale(1) translateY(-15px) rotate(0deg); }
-            100% { opacity: 0; transform: scale(0.8) translateY(-40px) rotate(10deg); }
-        }
+        @keyframes floatAndFade { 0% { opacity: 0; transform: scale(0.6) translateY(30px) rotate(-10deg); } 30% { opacity: 0.15; transform: scale(1.1) translateY(0) rotate(5deg); } 70% { opacity: 0.15; transform: scale(1) translateY(-15px) rotate(0deg); } 100% { opacity: 0; transform: scale(0.8) translateY(-40px) rotate(10deg); } }
+        
         .login-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; max-width: 400px; width: 90%; position: relative; z-index: 10; backdrop-filter: blur(10px); }
         .login-logo { width: 60px; height: 60px; background-color: var(--accent-color); color: var(--text-on-accent); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; margin: 0 auto 20px auto; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); }
         .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); }
@@ -112,6 +108,12 @@
         .tool-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .tool-btn:hover, .tool-btn.active { background-color: var(--accent-light); color: var(--text-primary); }
         .divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 4px; }
+        
+        /* Dropdown Toolbar Items */
+        .dropdown-tool { position: relative; display: inline-flex; align-items: center; }
+        .dropdown-tool-content { display: none; position: absolute; top: 110%; left: 0; background: var(--bg-main); border: 1px solid var(--border-color); box-shadow: var(--shadow); border-radius: 8px; z-index: 100; flex-direction: row; padding: 5px; gap: 5px; min-width: max-content;}
+        .dropdown-tool.show .dropdown-tool-content { display: flex; }
+
         .select-format { border: 1px solid var(--border-color); padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: var(--bg-main); color: var(--text-primary); outline: none; }
         
         .color-picker-container { display: flex; align-items: center; gap: 6px; background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 20px; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;}
@@ -135,21 +137,20 @@
         .suggestion-item.predictive { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; font-size: 0.95rem; }
         body.dark-theme .suggestion-item.predictive { background: #0c4a6e; border-color: #0284c7; color: #bae6fd; }
 
-        /* RICH TEXT EDITOR */
-        #editor { flex-grow: 1; width: 100%; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); overflow-y: auto; }
+        /* Editor Wrapper for Better Read Only mode integration */
+        #editor-container { flex-grow: 1; overflow-y: auto; width: 100%; background: var(--bg-main); position: relative;}
+        #editor-wrapper-inner { width: 100%; min-height: 100%; display: flex; flex-direction: column; }
+        #editor { flex-grow: 1; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); }
         #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
         
-        /* Drop Cap Styling */
         .drop-cap::first-letter { float: left; font-size: 3.5em; line-height: 0.8; margin: 0.1em 0.1em 0 0; color: var(--accent-color); font-weight: bold; }
         
-        /* Image Editing Styling inside Editor */
         #editor img { transition: all 0.2s ease; cursor: pointer; max-width: 100%; }
         #editor img.img-float-left { float: left; margin: 10px 20px 10px 0; max-width: 50%; }
         #editor img.img-float-right { float: right; margin: 10px 0 10px 20px; max-width: 50%; }
         #editor img.img-center { display: block; margin: 10px auto; float: none; }
         #editor img.selected { outline: 3px dashed var(--accent-color); }
         
-        /* Image Control Floating Toolbar */
         #img-toolbar { position: absolute; display: none; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow); padding: 5px; z-index: 100; gap: 5px; }
         #img-toolbar button { background: transparent; border: none; padding: 6px; cursor: pointer; color: var(--text-primary); font-size: 1.2rem; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         #img-toolbar button:hover { background: var(--accent-light); color: var(--accent-color); }
@@ -186,7 +187,6 @@
         .modal-btn { background: var(--accent-color); color: var(--text-on-accent); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;}
         .modal-btn:hover { background: var(--accent-hover); }
 
-        /* PDF PREVIEW MODAL (A4 Style) */
         .pdf-modal-content { max-width: 800px; width: 95%; max-height: 90vh; overflow: hidden; background: #e5e7eb; padding: 0; }
         .pdf-modal-header { background: var(--bg-main); padding: 15px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;}
         .pdf-preview-container { padding: 20px; overflow-y: auto; max-height: calc(90vh - 140px); display: flex; justify-content: center; }
@@ -197,14 +197,26 @@
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- READ ONLY MODE STYLES (FOR SHARED LINKS) --- */
+        /* --- READ ONLY MODE STYLES & COVER PAGE --- */
         body.read-only-mode { display: block; overflow-y: auto; background: var(--bg-sidebar); }
         .read-only-mode .sidebar, .read-only-mode .toolbar, .read-only-mode .status-bar, .read-only-mode .suggestion-bar, .read-only-mode .mobile-header { display: none !important; }
         .read-only-mode .workspace { width: 100%; display: block; }
-        .read-only-mode #editor { max-width: 800px; margin: 40px auto; background: var(--bg-main); box-shadow: var(--shadow); border-radius: 12px; padding: 60px; min-height: calc(100vh - 80px); outline: none; }
-        .read-only-badge { display: none; position: fixed; bottom: 20px; right: 20px; background: var(--accent-color); color: var(--text-on-accent); padding: 10px 20px; border-radius: 20px; font-weight: bold; text-decoration: none; box-shadow: var(--shadow); z-index: 1000; font-family: 'Inter', sans-serif;}
-        .read-only-mode .read-only-badge { display: flex; align-items: center; gap: 8px;}
         
+        .read-only-cover { display: none; height: 60vh; width: 100%; position: relative; overflow: hidden; align-items: center; justify-content: center; text-align: center; color: white; background: linear-gradient(135deg, #1e293b, #4b5563); border-radius: 12px 12px 0 0; }
+        .read-only-cover::before { content: ""; position: absolute; top:0; left:0; right:0; bottom:0; background: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=1200&auto=format&fit=crop') center/cover; opacity: 0.4; mix-blend-mode: overlay;}
+        .read-only-cover-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px;}
+        .cover-title { font-size: 3.5rem; font-weight: 700; font-family: 'Manjari', sans-serif; text-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 20px; line-height: 1.2;}
+        .cover-brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 600; font-family: 'Inter', sans-serif; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);}
+        .cover-brand .logo { background: var(--accent-color); color: var(--text-on-accent); width: 28px; height: 28px; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+
+        .read-only-mode #editor-container { background: var(--bg-sidebar); padding: 40px 20px; }
+        .read-only-mode #editor-wrapper-inner { max-width: 800px; margin: 0 auto; background: var(--bg-main); box-shadow: var(--shadow); border-radius: 12px; overflow: hidden; }
+        .read-only-mode #editor { padding: 60px; min-height: auto; }
+        
+        .read-only-badge { display: none; position: fixed; bottom: 20px; right: 20px; background: var(--accent-color); color: var(--text-on-accent); padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; text-decoration: none; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.4); z-index: 1000; font-family: 'Inter', sans-serif;}
+        .read-only-mode .read-only-badge { display: flex; align-items: center; gap: 8px;}
+        .read-only-badge:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(163, 230, 53, 0.5); }
+
         /* --- MOBILE RESPONSIVE TWEAKS --- */
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -260px; top: 0; }
@@ -231,8 +243,11 @@
             .status-group { justify-content: center; width: 100%; }
 
             .pdf-paper { width: 100%; padding: 10px; }
-            
-            .read-only-mode #editor { padding: 30px 20px; margin: 0; min-height: 100vh; border-radius: 0; }
+            .read-only-mode #editor-container { padding: 0; }
+            .read-only-mode #editor-wrapper-inner { border-radius: 0; }
+            .read-only-mode #editor { padding: 30px 20px; }
+            .read-only-cover { border-radius: 0; height: 50vh; }
+            .cover-title { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -251,7 +266,7 @@
         </div>
 
         <div class="login-box">
-            <div class="login-logo">മ</div>
+            <div class="login-logo">ള</div>
             <h1 class="login-title">Welcome to Thooval</h1>
             <p class="login-subtitle">Sign in to save your documents to the cloud and access them from anywhere.</p>
             <button class="btn-google" id="btn-google-login">
@@ -265,7 +280,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <aside class="sidebar" id="sidebar">
-        <div class="brand"><div class="brand-logo">മ</div> Thooval</div>
+        <div class="brand"><div class="brand-logo">ള</div> Thooval</div>
         <button class="new-file-btn" id="btn-new-file"><i class="ph ph-plus"></i> New File</button>
         
         <div class="file-list" id="cloud-file-list">
@@ -298,7 +313,7 @@
         <header class="mobile-header">
             <button class="mobile-menu-toggle" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
             <div class="mobile-brand">
-                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">തൂ</div> Thooval
+                <div class="brand-logo" style="width:26px; height:26px; font-size:1rem;">ള</div> Thooval
             </div>
             <div class="mobile-user-profile">
                 <div class="avatar mobile-avatar" id="mobile-user-avatar" style="width:28px; height:28px;">G</div>
@@ -316,6 +331,26 @@
                 <button class="tool-btn" onclick="document.execCommand('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
                 <div class="divider"></div>
                 
+                <div class="dropdown-tool" id="align-dropdown-wrapper">
+                    <button class="tool-btn" title="Alignment"><i class="ph ph-text-align-left"></i> <i class="ph ph-caret-down" style="font-size:0.8rem; margin-left:2px;"></i></button>
+                    <div class="dropdown-tool-content">
+                        <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
+                        <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
+                        <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
+                        <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
+                    </div>
+                </div>
+
+                <div class="dropdown-tool" id="list-dropdown-wrapper">
+                    <button class="tool-btn" title="Lists"><i class="ph ph-list-bullets"></i> <i class="ph ph-caret-down" style="font-size:0.8rem; margin-left:2px;"></i></button>
+                    <div class="dropdown-tool-content">
+                        <button class="tool-btn" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="ph ph-list-bullets"></i></button>
+                        <button class="tool-btn" onclick="document.execCommand('insertOrderedList')" title="Numbered List (1,2,3)"><i class="ph ph-list-numbers"></i></button>
+                        <button class="tool-btn" id="btn-abc-list" title="Alphabet List (a,b,c)"><span style="font-weight:700; font-family:serif; font-size:1.1rem; line-height:1;">a</span></button>
+                    </div>
+                </div>
+                <div class="divider"></div>
+
                 <button class="tool-btn" id="btn-dropcap" title="Drop Cap (First Letter Big)"><span style="font-weight:900; font-family:serif; font-size:1.2rem; line-height:1;">A<span style="font-size:0.6rem; vertical-align:middle;">≡</span></span></button>
                 <div class="divider"></div>
 
@@ -330,15 +365,7 @@
 
             <div class="toolbar-secondary" id="toolbar-secondary">
                 <div class="divider" style="display: block;"></div>
-                <button class="tool-btn" onclick="document.execCommand('justifyLeft')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
-                <button class="tool-btn" onclick="document.execCommand('justifyCenter')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
-                <button class="tool-btn" onclick="document.execCommand('justifyRight')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
-                <button class="tool-btn" onclick="document.execCommand('justifyFull')" title="Justify"><i class="ph ph-text-align-justify"></i></button>
-                <div class="divider"></div>
-                <button class="tool-btn" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="ph ph-list-bullets"></i></button>
-                <button class="tool-btn" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="ph ph-list-numbers"></i></button>
-                <div class="divider"></div>
-
+                
                 <select class="select-format" onchange="document.execCommand('fontName', false, this.value)" title="Font Family">
                     <option value="'Manjari', sans-serif" style="font-family: 'Manjari', sans-serif;">Manjari (മഞ്ചരി)</option>
                     <option value="'Chilanka', cursive" style="font-family: 'Chilanka', cursive;">Chilanka (ചിലങ്ക)</option>
@@ -391,9 +418,22 @@
             <span class="suggestion-placeholder">Type in English (e.g., 'namaskaram')...</span>
         </div>
 
-        <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
+        <div id="editor-container">
+            <div id="editor-wrapper-inner">
+                
+                <div id="read-only-cover" class="read-only-cover">
+                    <div class="read-only-cover-content">
+                        <div class="cover-brand"><div class="logo">തൂ</div> Thooval Story</div>
+                        <h1 class="cover-title" id="cover-title">Story Title</h1>
+                        <div style="font-size: 0.9rem; opacity: 0.8; font-family: 'Inter', sans-serif;"><i class="ph ph-caret-double-down" style="animation: pulse 1.5s infinite;"></i> Scroll to Read</div>
+                    </div>
+                </div>
+                
+                <div id="editor" contenteditable="true" placeholder="Start typing Malayalam here..."></div>
+            </div>
+        </div>
         
-        <a href="?" class="read-only-badge"><div class="brand-logo" style="width:20px;height:20px;font-size:0.8rem;">തൂ</div> Build with Thooval</a>
+        <a href="?" class="read-only-badge"><div class="brand-logo" style="width:20px;height:20px;font-size:0.8rem; background:white; color:var(--text-on-accent);">തൂ</div> Build with Thooval</a>
 
         <div id="img-toolbar">
             <button id="img-left" title="Wrap Text Left"><i class="ph ph-align-left"></i></button>
@@ -499,26 +539,28 @@
         const isReadOnly = (viewUser && viewFile);
 
         if (isReadOnly) {
-            // Activate Read-Only View
             $('body').addClass('read-only-mode');
             $('#editor').attr('contenteditable', 'false').html('<p style="text-align:center; margin-top:50px;"><i class="ph ph-spinner-gap" style="animation: spin 1s linear infinite; font-size:2rem;"></i><br>Loading story...</p>');
             $('#login-overlay').hide();
             
-            // Fetch Document from Cloud
             const fileRef = doc(db, `users/${viewUser}/files/${viewFile}`);
             getDoc(fileRef).then((docSnap) => {
                 if (docSnap.exists()) {
                     $('#editor').html(docSnap.data().content);
                     document.title = docSnap.data().title + " | Thooval";
+                    $('#cover-title').text(docSnap.data().title);
+                    $('#read-only-cover').css('display', 'flex'); 
                 } else {
                     $('#editor').html('<p style="text-align:center; margin-top:50px;">Document not found or deleted by owner.</p>');
+                    $('#read-only-cover').hide();
                 }
             }).catch(e => {
                 $('#editor').html('<p style="text-align:center; margin-top:50px; color:red;">Error loading document.</p>');
+                $('#read-only-cover').hide();
             });
         } 
         
-        // --- AUTH OBSERVER (Only triggers if NOT in read-only mode) ---
+        // --- AUTH OBSERVER ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
@@ -545,7 +587,6 @@
             }
         });
 
-        // --- LOGIN & LOGOUT ---
         $('#btn-google-login').click(function() {
             signInWithPopup(auth, new GoogleAuthProvider()).catch((error) => {
                 console.error("Login Error:", error);
@@ -620,7 +661,6 @@
             if(!currentUserId || !currentFileId || currentFileId === 'local-draft') {
                 return alert("Please log in with Google and save the file to cloud before sharing.");
             }
-            // Generate standard clean URL without query params, then append them
             let shareUrl = window.location.origin + window.location.pathname + '?u=' + currentUserId + '&f=' + currentFileId;
             $('#share-link-input').val(shareUrl);
             $('#share-modal').css('display', 'flex').hide().fadeIn(200);
@@ -676,11 +716,27 @@
                 $(this).html($('body').hasClass('dark-theme') ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
             });
 
-            // Mobile Toggles
+            // Mobile & Dropdown Toggles
             $('#btn-toolbar-expand').click(function() { $('#toolbar-secondary').toggleClass('expanded'); $(this).find('i').toggleClass('ph-caret-down ph-caret-up'); });
             $('#btn-status-expand').click(function() { $('#status-bar-content').toggleClass('expanded'); $(this).find('i').toggleClass('ph-caret-up ph-caret-down'); });
             $('#mobile-menu-btn').click(() => { $('#sidebar, #sidebar-overlay').addClass('open'); });
             $('#sidebar-overlay').click(() => { $('#sidebar, #sidebar-overlay').removeClass('open'); });
+
+            $('#align-dropdown-wrapper').click(function(e) { e.stopPropagation(); $(this).toggleClass('show'); $('#list-dropdown-wrapper').removeClass('show'); });
+            $('#list-dropdown-wrapper').click(function(e) { e.stopPropagation(); $(this).toggleClass('show'); $('#align-dropdown-wrapper').removeClass('show'); });
+            $(document).click(function() { $('.dropdown-tool').removeClass('show'); });
+
+            // --- ABC LIST LOGIC ---
+            $('#btn-abc-list').click(function() {
+                document.execCommand('insertOrderedList');
+                let sel = window.getSelection();
+                if(sel.rangeCount > 0) {
+                    let node = sel.getRangeAt(0).commonAncestorContainer;
+                    let blockNode = (node.nodeType === 1) ? node : node.parentNode;
+                    let ol = $(blockNode).closest('ol');
+                    if(ol.length) { ol.attr('type', 'a'); }
+                }
+            });
 
             // --- DROP CAP LOGIC ---
             $('#btn-dropcap').click(function() {
@@ -757,9 +813,9 @@
             function restoreSelection() { if (savedRange) { let sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(savedRange); } }
             $('#editor').on('keyup mouseup blur', saveSelection);
 
-            $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
-            $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); $('#editor').focus(); });
-            $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); $('#editor').focus(); });
+            $('#btn-lang-en').click(function() { currentLang = 'en'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); if(!isReadOnly)$('#editor').focus(); });
+            $('#btn-lang-ml').click(function() { currentLang = 'ml'; $('.lang-btn').removeClass('active'); $(this).addClass('active'); clearSuggestions(); if(!isReadOnly)$('#editor').focus(); });
+            $('input[name="kbd"]').change(function() { currentKeyboard = $(this).val(); clearSuggestions(); if(!isReadOnly)$('#editor').focus(); });
             
             // Dictionary
             let dictTimer;
@@ -866,11 +922,11 @@
                 text = text.replace(/ണ്\u200D/g, "Æ").replace(/ന്\u200D/g, "³").replace(/ര്\u200D/g, "À").replace(/ല്\u200D/g, "Â").replace(/ള്\u200D/g, "Ä").replace(/[\u200C\u200D]/g, '');
 
                 const conjuncts = { 'ദ്ദ': '±', 'ബ്ര': '{_', 'ന്ത്ര': '{´', 'ന്മ': '·', 'ട്ര': '{S', 'ത്സ': 'Õ', 'ന്ദ്ര': '{µ', 'ണ്ണ': '®', 'ന്ദ': 'µ', 'ന്ത': '´', 'ഗ്ര': '{K', 'ദ്ര്യ': '{Zy', 'ക്ല': '¢', 'ബ്ല': '»', 'സ്റ്റ': 'kvä', 'സ്ഥ': 'Ø', 'ജ്ജ': 'Ö', 'ക്ക': '¡', 'ക്ഷ': '£', 'ഗ്ഗ': '¤', 'ഗ്ന': '¥', 'ങ്ങ': '§', 'ച്ച': '¨', 'ഞ്ഞ': 'ª', 'ട്ട': '«', 'ത്ത': '¯', 'ന്ന': '¶', 'പ്പ': '¸', 'ബ്ബ': '³', 'ഭ്ഭ': '´', 'മ്മ': '½', 'യ്യ': '¿', 'ല്ല': 'Ã', 'വ്വ': 'Æ', 'ശ്ശ': 'È', 'സ്സ': 'Ê', 'ള്ള': 'Å', 'റ്റ': 'ä', 'ങ്ക': '¦', 'ഞ്ച': '©', 'ണ്ട': 'ï', 'മ്പ': '¼', 'ക്യ': 'Iy', 'ക്ര': '{I', 'ക്വ': 'Iz', 'ച്ഛ': 'b', 'ജ്ഞ': 'P', 'ഡ്ഡ': '«', 'ദ്ധ': '²', 'സ്ക': 'kv', 'സ്ത': 'kvX', 'സ്ന': 'kv\\', 'സ്പ': 'kv]', 'സ്മ': 'kvv', 'സ്വ': 'kzt', 'ശ്ര': '{i', 'സ്ര': '{k', 'ത്ര': '{X', 'പ്യ': ']y', 'പ്വ': ']z', 'പ്ല': ']v', 'പ്ര': '{]', 'ർഗ': 'ÀK', 'ന്റ': 'â', 'ൻ്റ': 'â', '്യ': 'y', '്ര': '{', '്വ': 'z' };
-                for (let [ml, ascii] of Object.entries(conjuncts)) text = text.split(ml).join(ascii);
+                for (let [ml, ascii] of Object.entries(conjuncts)) { text = text.split(ml).join(ascii); }
 
                 const fmlMap = { 'അ':'A', 'ആ':'B', 'ഇ':'C', 'ഈ':'Cu', 'ഉ':'D', 'ഊ':'Du', 'ഋ':'E', 'എ':'F', 'ഏ':'G', 'ഐ':'sF', 'ഒ':'H', 'ഓ':'Hm', 'ഔ':'Hu', 'ക':'I', 'ഖ':'J', 'ഗ':'K', 'ഘ':'L', 'ങ':'M', 'ച':'N', 'ഛ':'O', 'ജ':'P', 'ഝ':'Q', 'ഞ':'R', 'ട':'S', 'ഠ':'T', 'ഡ':'U', 'ഢ':'V', 'ണ':'W', 'ത':'X', 'ഥ':'Y', 'ദ':'Z', 'ധ':'[', 'ന':'\\', 'പ':']', 'ഫ':'^', 'ബ':'_', 'ഭ':'`', 'മ':'a', 'യ':'b', 'ര':'c', 'റ':'d', 'ല':'e', 'ള':'f', 'ഴ':'g', 'വ':'h', 'ശ':'i', 'ഷ':'j', 'സ':'k', 'ഹ':'l', '\u0D46':'s', '\u0D47':'t', '\u0D48':'ss', '\u0D3F':'n', '\u0D40':'o', '\u0D41':'p', '\u0D42':'q', '\u0D43':'r', '\u0D3E':'m', '\u0D57':'u', '\u0D4D':'v', '\u0D02':'w', '\u0D03':'x', 'ർ':'À', 'ൽ':'Â', 'ൾ':'Ä', 'ൺ':'¬', 'ൻ':'³' };
                 let fmlOutput = "";
-                for (let i = 0; i < text.length; i++) fmlOutput += (text[i].length === 1 && fmlMap[text[i]]) ? fmlMap[text[i]] : text[i];
+                for (let i = 0; i < text.length; i++) { let char = text[i]; fmlOutput += (fmlMap[char]) ? fmlMap[char] : char; }
 
                 $('#fml-output-area').val(fmlOutput); $('#fml-modal').fadeIn(200).css("display", "flex");
             });
