@@ -148,8 +148,8 @@
         .suggestion-item.predictive { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; font-size: 0.95rem; }
         body.dark-theme .suggestion-item.predictive { background: #0c4a6e; border-color: #0284c7; color: #bae6fd; }
 
-        /* EDITOR CONTAINER */
-        #editor-container { flex-grow: 1; overflow-y: auto; width: 100%; background: var(--bg-main); min-height: 0; position: relative;}
+        /* EDITOR CONTAINER - Scroll Adjustments */
+        #editor-container { flex-grow: 1; overflow-y: auto; width: 100%; background: var(--bg-main); min-height: 0; position: relative; scroll-behavior: smooth;}
         #editor-wrapper-inner { width: 100%; min-height: 100%; display: flex; flex-direction: column; }
         #editor { flex-grow: 1; padding: 40px; border: none; outline: none; font-family: 'Manjari', sans-serif; font-size: 18px; line-height: 1.8; color: var(--text-primary); }
         #editor:empty:before { content: attr(placeholder); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
@@ -208,7 +208,7 @@
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- READ ONLY MODE STYLES (WITH SCROLL FIX) --- */
+        /* --- READ ONLY MODE STYLES --- */
         body.read-only-mode { display: block; height: auto; min-height: 100vh; overflow-y: auto !important; background: var(--bg-sidebar); }
         .read-only-mode .sidebar, .read-only-mode .toolbar, .read-only-mode .status-bar, .read-only-mode .suggestion-bar, .read-only-mode .mobile-header { display: none !important; }
         .read-only-mode .workspace { width: 100%; display: block; height: auto; min-height: 100vh; overflow: visible !important; }
@@ -261,6 +261,9 @@
             .read-only-mode #editor-wrapper-inner { border-radius: 0; }
             .read-only-mode #editor { padding: 30px 20px; }
             .cover-title { font-size: 2.2rem; }
+            
+            /* ADDED PADDING FOR MOBILE KEYBOARD SCROLL FIX */
+            #editor { padding-bottom: 60vh !important; }
         }
     </style>
 </head>
@@ -401,6 +404,14 @@
                     <option value="4">Large</option>
                     <option value="5">Huge</option>
                 </select>
+                
+                <select class="select-format" id="line-spacing-select" title="Line Spacing">
+                    <option value="1.2">↕ 1.2 Space</option>
+                    <option value="1.5">↕ 1.5 Space</option>
+                    <option value="1.8" selected>↕ 1.8 Space</option>
+                    <option value="2.0">↕ 2.0 Space</option>
+                    <option value="2.5">↕ 2.5 Space</option>
+                </select>
                 <div class="divider"></div>
 
                 <div class="color-picker-container" title="Highlight Color">
@@ -535,7 +546,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -556,6 +567,14 @@
         let saveTimeout;
         let currentLang = 'ml'; 
         let currentKeyboard = 'phonetic';
+
+        // Fix for Mobile Auth Redirect Result
+        getRedirectResult(auth).then((result) => {
+            if (result !== null) { console.log("Mobile redirect successful"); }
+        }).catch((error) => {
+            console.error("Redirect Error:", error);
+            alert("Login failed! \n\nPlease Ensure kishorepk45229.github.io is added to Firebase Authorized Domains. \n\n(Error: " + error.message + ")");
+        });
 
         // Word Count Updater
         function updateWordCount() {
@@ -621,7 +640,7 @@
             }
         });
 
-        // --- NEW LOGIN SYSTEM WITH ACCOUNT SELECTION & PERSISTENCE ---
+        // --- NEW LOGIN SYSTEM (MOBILE POPUP FIX) ---
         async function handleLogin(promptSelectAccount = false) {
             const keepSignedIn = $('#keep-signed-in').is(':checked');
             const persistenceType = keepSignedIn ? browserLocalPersistence : browserSessionPersistence;
@@ -629,13 +648,19 @@
             try {
                 await setPersistence(auth, persistenceType);
                 const provider = new GoogleAuthProvider();
-                if (promptSelectAccount) {
-                    provider.setCustomParameters({ prompt: 'select_account' });
+                if (promptSelectAccount) { provider.setCustomParameters({ prompt: 'select_account' }); }
+                
+                // Use Redirect for Mobile devices to bypass Safari Popup Blockers
+                if (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                    signInWithRedirect(auth, provider);
+                } else {
+                    await signInWithPopup(auth, provider);
                 }
-                await signInWithPopup(auth, provider);
             } catch (error) {
                 console.error("Login Error:", error);
-                alert("Login failed! Ensure your domain is added to Firebase Authorized Domains.");
+                let msg = "Login failed! \n\nEnsure your domain is added to Firebase Authorized Domains.";
+                if(error.code === 'auth/popup-blocked') msg = "Popup blocked! Please allow popups for this site.";
+                alert(msg + " \n\n(Error Details: " + error.message + ")");
             }
         }
 
@@ -707,8 +732,7 @@
             let newTitle = prompt("Enter new file name:", oldTitle);
             
             if(newTitle && newTitle.trim() !== "" && newTitle !== oldTitle) {
-                try {
-                    await updateDoc(doc(db, `users/${currentUserId}/files`, fileId), { title: newTitle });
+                try { await updateDoc(doc(db, `users/${currentUserId}/files`, fileId), { title: newTitle });
                 } catch(error) { console.error("Error renaming file:", error); }
             }
         });
@@ -813,7 +837,7 @@
                 $(this).html($('body').hasClass('dark-theme') ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>');
             });
 
-            // Mobile & Dropdown Toggles (FIXED)
+            // Mobile & Dropdown Toggles
             $('#btn-toolbar-expand').click(function() { 
                 $('#toolbar-secondary').toggleClass('expanded'); 
                 $(this).find('i').toggleClass('ph-caret-down ph-caret-up'); 
@@ -828,6 +852,30 @@
             $('#align-dropdown-wrapper').click(function(e) { e.stopPropagation(); $(this).toggleClass('show'); $('#list-dropdown-wrapper').removeClass('show'); });
             $('#list-dropdown-wrapper').click(function(e) { e.stopPropagation(); $(this).toggleClass('show'); $('#align-dropdown-wrapper').removeClass('show'); });
             $(document).click(function() { $('.dropdown-tool').removeClass('show'); });
+
+            // --- LINE SPACING LOGIC ---
+            $('#line-spacing-select').change(function() {
+                $('#editor').css('line-height', $(this).val());
+            });
+
+            // --- MOBILE AUTO-SCROLL UX FIX ---
+            function autoScrollMobile() {
+                if(window.innerWidth <= 768 && !isReadOnly) {
+                    let sel = window.getSelection();
+                    if(!sel.rangeCount) return;
+                    let range = sel.getRangeAt(0);
+                    let rect = range.getBoundingClientRect();
+                    let container = document.getElementById('editor-container');
+                    let containerRect = container.getBoundingClientRect();
+
+                    // If cursor gets hidden behind keyboard, scroll container down
+                    if(rect.bottom > containerRect.bottom - 60) {
+                        container.scrollTop += (rect.bottom - containerRect.bottom + 80);
+                    }
+                }
+            }
+            // Bind to events when cursor might move down
+            $('#editor').on('input keyup click', autoScrollMobile);
 
             // --- ABC LIST LOGIC ---
             $('#btn-abc-list').click(function() {
