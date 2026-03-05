@@ -1,0 +1,21 @@
+{
+  "name": "Thooval Editor",
+  "short_name": "Thooval",
+  "description": "Advanced Manglish Rich Text Editor",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#a3e635",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
